@@ -7,6 +7,8 @@
         cd <project_name>
         git init
         git submodule add https://github.com/profile-lab/Lc5
+        git submodule add https://github.com/profile-lab/lc5-admin-assets public/
+
 
 ## Base Configuration 
 
