@@ -10,6 +10,6 @@ namespace Config;
 
 if (file_exists(APPPATH . 'Routes/web.php')) {
 	require APPPATH . 'Routes/web.php';
-}else if (file_exists(ROOTPATH.'lc5/Web/Routes/web.php')) {
-	require ROOTPATH.'lc5/Web/Routes/web.php';
+}else if (file_exists(ROOTPATH.'Lc5/Web/Routes/web.php')) {
+	require ROOTPATH.'Lc5/Web/Routes/web.php';
 }
