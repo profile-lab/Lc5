@@ -106,9 +106,9 @@ class MediaModel extends MasterModel
 
 	public function getThumbForType($tipo_file = null)
 	{
-		$thumb_path = 'assets/lc/img/thumb-default.png';
+		$thumb_path = 'assets/lc-admin-assets/img/thumb-default.png';
 		if ($tipo_file) {
-			$thumb_path = 'assets/lc/img/thumb-' . $tipo_file . '.png';
+			$thumb_path = 'assets/lc-admin-assets/img/thumb-' . $tipo_file . '.png';
 		}
 		return $thumb_path;
 	}

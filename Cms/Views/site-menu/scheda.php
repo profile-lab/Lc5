@@ -59,8 +59,8 @@
 
 <?= $this->endSection() ?>
 <?= $this->section('footer_script') ?>
-<script src="<?= '/assets/lc/js/jquery.nestable.min.js' ?>"></script>
-<link rel="stylesheet" href="<?= '/assets/lc/js/jquery.nestable.min.css' ?>" />
+<script src="<?= '/assets/lc-admin-assets/js/jquery.nestable.min.js' ?>"></script>
+<link rel="stylesheet" href="<?= '/assets/lc-admin-assets/js/jquery.nestable.min.css' ?>" />
 <script type="text/javascript">
     $(document).ready(function() {
         $('.add_custom_link').on('click', function(e) {

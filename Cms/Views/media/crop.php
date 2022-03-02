@@ -66,7 +66,7 @@
 
 <?= $this->endSection() ?>
 <?= $this->section('footer_script') ?>
-<link rel="stylesheet" href="<?= '/assets/lc/js/cropper.min.css' ?>" />
+<link rel="stylesheet" href="<?= '/assets/lc-admin-assets/js/cropper.min.css' ?>" />
 
 <style>
     #media_original {
@@ -112,7 +112,7 @@
     }
 </style>
 
-<script src="<?= '/assets/lc/js/cropper.min.js' ?>"></script>
+<script src="<?= '/assets/lc-admin-assets/js/cropper.min.js' ?>"></script>
 <script type="text/javascript">
     let zoomate = 0;
     let zoomByClick = false;

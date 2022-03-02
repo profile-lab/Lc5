@@ -130,7 +130,7 @@
             const uri_api_delete_vimeo_video = "<?= site_url(route_to('lc_api_video_delete_vimeo_w_rel', 'pages', $entity->id)) ?>";
         </script>
         <script src="https://cdn.jsdelivr.net/npm/tus-js-client@2.3.0/dist/tus.js"></script>
-        <script src="/assets/lc/js/vimeo-uploader.js"></script>
+        <script src="/assets/lc-admin-assets/js/vimeo-uploader.js"></script>
     <?php } ?>
 <?php } ?>
 

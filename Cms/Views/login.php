@@ -13,7 +13,7 @@
         <div id="layoutAuthentication_content">
             <main>
                 <div class="container">
-	                <img class="logo_login" src="/assets/lc/img/lc5_logo_vertical.svg" />
+	                <img class="logo_login" src="/assets/lc-admin-assets/img/lc5_logo_vertical.svg" />
                     <div class="row justify-content-center">
                         <div class="col-lg-5">
                             <div class="card shadow-lg border-0 rounded-lg mt-5">

@@ -19,7 +19,7 @@ extract($item);
     <?php if (isset($src) && trim($src)) { ?>
         <img class="preview-img img-thumbnail" src="<?= site_url( $src) ?>" alt="<?= (isset($placeholder) ? $placeholder : 'placeholder') ?>" />
     <?php } else { ?>
-        <img class="preview-img img-thumbnail" src="<?= site_url('assets/lc/img/thumb-default.png') ?>" alt="<?= (isset($placeholder) ? $placeholder : 'placeholder') ?>" />
+        <img class="preview-img img-thumbnail" src="<?= site_url('assets/lc-admin-assets/img/thumb-default.png') ?>" alt="<?= (isset($placeholder) ? $placeholder : 'placeholder') ?>" />
     <?php } ?>
 </a>
 <a href="#" class="remove-single-img"><span class="oi oi-x"></span></a>
