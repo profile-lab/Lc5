@@ -46,7 +46,9 @@ $routes->add('archivio/(:segment)', '\Lc5\Web\Controllers\Posts::index/$1', ['as
 $routes->add('archivio', '\Lc5\Web\Controllers\Posts::archivioDefault', ['as' => 'web_posts_archivie_default']);
 //
 $routes->add('(:any)', '\Lc5\Web\Controllers\Pages::page/$1', ['as' => 'web_page']);
-$routes->add('', '\Lc5\Web\Controllers\Pages::index', ['as' => 'web_homepage']);
+$routes->get('/', '\Lc5\Web\Controllers\Pages::index', ['as' => 'web_homepage']);
+$routes->add('', '\Lc5\Web\Controllers\Pages::index');
+
 
 $routes->setDefaultNamespace('\Lc5\Web\Controllers\Pages');
 $routes->setDefaultController('Pages');
