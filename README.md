@@ -3,6 +3,9 @@
 
 ## Install git submodule
 
+        composer create-project codeigniter4/appstarter <project_name>  --no-dev
+        cd <project_name>
+        git init
         git submodule add https://github.com/profile-lab/Lc5
 
 ## Base Configuration 
