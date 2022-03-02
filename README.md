@@ -1,5 +1,10 @@
 # Levelcomplete 5 Corebase Module
 
+
+## Install git submodule
+
+        git submodule add https://github.com/profile-lab/Lc5
+
 ## Base Configuration 
 
 Add Supported Lang in App\Config\App.php
