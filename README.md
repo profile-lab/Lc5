@@ -55,6 +55,27 @@ Add LC5 services in App\Config\Services.php
                 return new \Lc5\Web\Controllers\Shop\Cart();
         }
 
+## Base Controller 
+
+Add helpers requirements in App\Controllers\BaseController.php
+
+        protected $helpers = ['html', 'text', 'form', 'profile', 'lc_view', 'web_view', 'custom_frontend'];
+
+Add getShopSettings method in App\Controllers\BaseController.php
+
+        //--------------------------------------------------------------------
+        protected function getShopSettings()
+        {
+                // 
+                $shop_settings_model = new \Lc5\Data\Models\ShopSettingsModel();
+                if (!$shop_settings_entity = $shop_settings_model->asObject()->where('id_app', __web_app_id__ )->first()) {
+                        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+                }
+                // 
+                return $shop_settings_entity;
+        }
+
+
 ## Server Requirements
 
 PHP version 7.4 or higher is required, with the following extensions installed:
