@@ -191,6 +191,14 @@ $routes->group('lc-admin', ['namespace' => 'Lc5\Cms\Controllers', 'filter' => 'a
 			$routes->match(['get', 'post'], 'newpost', 'Lcapps::newpost', ['as' => 'lc_apps_new']);
 			$routes->get('', 'Lcapps::index', ['as' => 'lc_apps']);
 		});
+		// 
+		// 
+		$routes->match(['get', 'post'], 'db-table-structure/(:any)', 'Migrate::tableStructure/$1', ['as' => 'lc_table_structure']);
+		$routes->match(['get', 'post'], 'db-table-structure', 'Migrate::tableStructure', ['as' => 'lc_tables_structure']);
+
+		
+		// 
+		// 
 	});
 	$routes->match(['get', 'post'], 'settings', 'AppSettings::edit', ['as' => 'lc_app_settings']); //, ['filter' => 'noauth']
 
