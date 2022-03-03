@@ -5,18 +5,8 @@ namespace Lc5\Web\Controllers;
 use App\Controllers\BaseController;
 use Lc5\Data\Entities\WebUiData;
 
-// use Lc5\Data\Models\LanguagesModel;
-// use Lc5\Data\Models\LcappsModel;
-
-// use Lc5\Data\Models\PagesModel;
 use Lc5\Data\Models\RowsModel;
 use Lc5\Data\Models\MediaModel;
-// use Lc5\Data\Models\RowcolorModel;
-// use Lc5\Data\Models\RowsstyleModel;
-// use Lc5\Data\Models\MediaformatModel;
-
-// use Lc5\Data\Models\PoststypesModel;
-
 use Lc5\Data\Models\PostsModel;
 use Lc5\Data\Models\PostscategoriesModel;
 use Lc5\Data\Models\PostTagsModel;
@@ -35,7 +25,7 @@ class MasterWeb extends BaseController
 	//--------------------------------------------------------------------
 	public function __construct()
 	{
-		$this->base_view_folder = (getenv('custom.web_base_folder')) ? 'Lc5\Web\Views/' . getenv('custom.web_base_folder') : 'Lc5\Web\Views\web/';
+		$this->base_view_folder = (getenv('custom.web_base_folder')) ? 'Lc5\Web\Views/' . getenv('custom.web_base_folder') : '';
 		$this->base_assets_folder = (getenv('custom.base_assets_folder')) ?: '/assets/web/';
 		$this->req = \Config\Services::request();
 		$locale = $this->req->getLocale();
