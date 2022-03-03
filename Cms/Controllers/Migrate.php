@@ -32,7 +32,9 @@ class Migrate extends \CodeIgniter\Controller
 
 	//
 	public function tableStructure($table_name = null)
-	{	
+	{
+		helper('inflector');
+
 		echo '<!DOCTYPE html>
 		<html lang="en">
 		<head>
@@ -45,11 +47,30 @@ class Migrate extends \CodeIgniter\Controller
 		$db = \Config\Database::connect();
 		if ($table_name) {
 			if ($db->tableExists($table_name)) {
-				
-				$entity_string = 'protected $attributes = [';
-				$model_string = 'protected $attributes = [';
-					
-					
+
+				$entity_string = '<?php
+namespace App\Entities;
+use CodeIgniter\Entity\Entity;
+
+class ' . pascalize(singular($table_name)) . '  extends Entity
+{
+	protected $attributes = [';
+				$model_string = '<?php
+namespace App\Models;
+use CodeIgniter\Model;
+
+class ' . pascalize(plural($table_name)) . 'Model  extends Model
+{
+	protected $table				= \''.$table_name.'\';
+	protected $primaryKey			= \'id\';
+	protected $useSoftDeletes		= true;
+	protected $createdField			= \'created_at\';
+	protected $updatedField			= \'updated_at\';
+	protected $deletedField			= \'deleted_at\';
+
+	protected $returnType           = \'' . ( "Entities\\" . pascalize(singular($table_name))  ) . '\';
+	protected $allowedFields = [';
+
 				$table_structure = [];
 				$fields = $db->getFieldData($table_name);
 				foreach ($fields as $field) {
@@ -59,31 +80,49 @@ class Migrate extends \CodeIgniter\Controller
 						'null' => ($field->nullable) ? true : false,
 						'default' => $field->default,
 					];
-					$entity_string .="
-	'".$field->name."' => null, ";
-					$model_string .="
-	'".$field->name."', ";
-				}
-				$entity_string .='
+					if( $field->name != "created_at" && $field->name != "updated_at" && $field->name != "deleted_at" ){
 
-];';
-				$model_string .='
-				
-];';
+						$entity_string .= "
+		'" . $field->name . "' => null, ";
+						$model_string .= "
+		'" . $field->name . "', ";
+					}
+
+				}
+				$entity_string .= '
+
+	];
+}';
+				$model_string .= '
+
+	];
+	protected $beforeInsert         = [];
+	protected $afterInsert          = [];
+	protected $beforeUpdate         = [];
+	protected $afterUpdate          = [];
+	protected $beforeFind           = [];
+	protected $afterFind            = [];
+	protected $beforeDelete         = [];
+	protected $afterDelete          = [];
+
+}';
+
+				echo '<h3>Entity Base Code</h3>';
+				echo '<textarea cols="100" rows="40">' . $entity_string . '</textarea>';
+				echo '<hr /><hr />';
+				echo '<h3>Model Base Code</h3>';
+				echo '<textarea cols="100" rows="40">' . $model_string . '</textarea>';
+				echo '<hr /><hr />';
 				echo '<h3>Table structure</h3>';
 				echo '<pre>';
 				print_r($table_structure);
 				echo '</pre>';
-				echo '<h3>Entity Base Code</h3>';
-				echo '<pre>'. $entity_string . '</pre>';
-				echo '<h3>Model Base Code</h3>';
-				echo '<pre>'. $model_string . '</pre>';
 			}
 		} else {
 			$tables = $db->listTables();
 			echo '<ul>';
 			foreach ($tables as $table) {
-				echo '<li><a href="'.route_to('lc_table_structure', $table).'">'.$table.'</li>';
+				echo '<li><a href="' . route_to('lc_table_structure', $table) . '">' . $table . '</li>';
 			}
 			echo '</ul>';
 		}
@@ -91,6 +130,6 @@ class Migrate extends \CodeIgniter\Controller
 		</html>
 		';
 
-		return ;
+		return;
 	}
 }
