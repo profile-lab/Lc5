@@ -9,6 +9,7 @@ class Migrate extends \CodeIgniter\Controller
                 $migrate = \Config\Services::migrations();
                 // $migrate->latest();
                 $migrate->setNamespace('Lc5\Cms')->latest();
+                $migrate->setNamespace('App')->latest();
                 $this->datiBase();
 
                 return redirect()->to(route_to('lc_dashboard').'?action_result=DatabaseUpdateOK' );
