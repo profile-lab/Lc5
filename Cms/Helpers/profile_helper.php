@@ -86,7 +86,7 @@ function number_to_currency(float $num, string $currency, string $locale = null,
 function user_mess($_ui_mess = '', $_ui_mess_type = null)
 {
     $htmlCode = '';
-    if (trim($_ui_mess)) {
+    if (isset($_ui_mess) && trim($_ui_mess)) {
         $htmlCode = '<div class="alert user_mess ' . (($_ui_mess_type) ? 'alert-' . $_ui_mess_type . ' user_mess_' . $_ui_mess_type . ' ' . $_ui_mess_type : '') . '">' . $_ui_mess . '</div>';
     }
 

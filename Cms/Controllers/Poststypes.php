@@ -135,7 +135,7 @@ class Poststypes extends MasterLc
 		}
 		// 
 		$entity_fields_conf = [];
-		$entity_fields_conf_byjson = json_decode($curr_entity->fields_config);
+		$entity_fields_conf_byjson = json_decode(($curr_entity->fields_config) ?: '' );
 		if(json_last_error() === JSON_ERROR_NONE) {
 			$entity_fields_conf = $entity_fields_conf_byjson->fields;
 		}

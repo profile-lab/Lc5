@@ -1,7 +1,7 @@
 <?php 
 $fake_item = [
     'id' => null,
-    'name' => null,
+    'name' => '',
     'value' => null,
     'label' => null,
     'input_class' => null,

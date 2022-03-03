@@ -233,7 +233,7 @@ class MasterLc extends BaseController
 		if ($rows_styles_css_data = $rows_style_model->findAll()) {
 			foreach ($rows_styles_css_data as $row_style_data) {
 				$fields_to_hide = [];
-				$entity_fields_conf_byjson = json_decode($row_style_data->fields_config);
+				$entity_fields_conf_byjson = json_decode(($row_style_data->fields_config) ?: '');
 				if (json_last_error() === JSON_ERROR_NONE) {
 					$fields_to_hide = $entity_fields_conf_byjson->fields;
 				}
