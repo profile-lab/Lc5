@@ -68,7 +68,7 @@ class ' . pascalize(plural($table_name)) . 'Model  extends Model
 	protected $updatedField			= \'updated_at\';
 	protected $deletedField			= \'deleted_at\';
 
-	protected $returnType           = \'' . ( "Entities\\" . pascalize(singular($table_name))  ) . '\';
+	protected $returnType           = \'' . ( "App\Entities\\" . pascalize(singular($table_name))  ) . '\';
 	protected $allowedFields = [';
 
 				$table_structure = [];
