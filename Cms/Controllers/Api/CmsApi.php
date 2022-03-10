@@ -221,6 +221,8 @@ class CmsApi extends MasterLc
                         $this->moveVideoOnVimeoFolder($video_vimeo_id);
                         // 
                         $video_entity->vimeo_id = $video_vimeo_id;
+                        $video_entity->nome = $video_name;
+                        $video_entity->guid = $video_vimeo_id;
                         $video_entity->vimeo_path = $video_vimeo_path;
                         $video_entity->vimeo_video_status = $vimeo_resonse['body']['status'];
                         $video_entity->vimeo_upload_form_action = $vimeo_resonse['body']['upload']['upload_link'];

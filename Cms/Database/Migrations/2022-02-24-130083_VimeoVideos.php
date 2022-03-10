@@ -53,12 +53,12 @@ class VimeoVideos extends Migration
             'nome' => [
                 'type' => 'VARCHAR',
                 'constraint' => '150',
-                'null' => FALSE,
+                'null' => true,
             ],
             'guid' => [
                 'type' => 'VARCHAR',
                 'constraint' => '100',
-                'null' => FALSE,
+                'null' => true,
             ],
             'titolo' => [
                 'type' => 'VARCHAR',
@@ -82,9 +82,11 @@ class VimeoVideos extends Migration
             ],
             'vimeo_upload_form_action' => [
                 'type' => 'TEXT',
+                'null' => true,
             ],
             'vimeo_upload_form_code' => [
                 'type' => 'TEXT',
+                'null' => true,
             ],
             'vimeo_size' => [
                 'type' => 'INT',
