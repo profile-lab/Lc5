@@ -17,7 +17,7 @@ class MasterWeb extends BaseController
 {
 	protected $base_view_folder = 'web/';
 	protected $base_assets_folder = 'assets/web/';
-	protected $web_ui_date;
+	public $web_ui_date;
 	protected $route_prefix;
 	protected $module_name;
 	protected $req;
@@ -44,6 +44,11 @@ class MasterWeb extends BaseController
 		// $this->web_ui_date->__set('curr_lc_app', $this->getCurrApp());
 		// $this->web_ui_date->__set('lc_languages', $this->getLcLanguages());
 		// $this->web_ui_date->__set('curr_lc_lang', $this->getCurrLang());
+
+
+		if (file_exists(APPPATH . 'Controllers/CustomAppContoller.php')) {
+			new \App\Controllers\CustomAppContoller($this);		
+		}
 
 	}
 
