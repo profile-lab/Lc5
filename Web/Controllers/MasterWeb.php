@@ -26,7 +26,7 @@ class MasterWeb extends BaseController
 	public function __construct()
 	{
 		$this->base_view_folder = (getenv('custom.web_base_folder')) ? 'Lc5\Web\Views/' . getenv('custom.web_base_folder') : '';
-		$this->base_assets_folder = (getenv('custom.base_assets_folder')) ?: '/assets/web/';
+		$this->base_assets_folder = (getenv('custom.base_assets_folder')) ?: '/assets/';
 		$this->req = \Config\Services::request();
 		$locale = $this->req->getLocale();
 		define('__locale__', $locale);
