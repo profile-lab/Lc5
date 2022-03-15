@@ -16,4 +16,8 @@
 */ ?>
 <link rel="stylesheet" href="<?= '/assets/lc-admin-assets/css/pf-style.css' ?>" />
 
+<?php if(file_exists(FCPATH.'/assets/css/lc_custom_style.css')){ ?>
+<link rel="stylesheet" href="<?= '/assets/css/lc_custom_style.css' ?>" />
+<?php } ?>
+
 <title>LevelComplete 5</title>
