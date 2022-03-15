@@ -20,8 +20,16 @@
                     <div class="list_item_row">
                         <div class="list_item_id"><?= $item->id ?></div>
                         <div class="list_item_nome">
-                            <a class="btn-link text-white" href="<?= site_url(route_to($route_prefix . '_edit', $post_type_guid, $item->id)) ?>"><?= $item->nome ?></a>
+                            <a class="btn-link text-white" href="<?= site_url(route_to($route_prefix . '_edit', $post_type_guid, $item->id)) ?>"><?= $item->nome ?>
+                            </a>
+                            <?php if( isset( $item->category_object ) && $item->category_object  ) { ?>
+                                <br />
+                                <div class="my_text-light my_text-min">
+                                    <?= $item->category_object->nome ?>
+                                </div>
+                            <?php } ?>
                         </div>
+
                         <div class="list_item_tools">
                             <div class="btn-group mr-2 dropstart">
                                 <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

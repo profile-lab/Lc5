@@ -127,6 +127,14 @@ class PostsModel extends MasterModel
 					}
 				}
 			}
+			// 
+			if (isset($item->category) && $item->category > 0) {
+				$category_model = new PostscategoriesModel(); 
+				if($category = $category_model->select(['id', 'nome', 'guid','titolo'])->asObject()->find($item->category)){
+					$item->category_object = $category;
+				}
+			}
+			// 
 			// $item->multi_categories = json_decode($item->multi_categories);
 			$item->multi_categories = (isset($item->multi_categories) && $item->multi_categories && trim($item->multi_categories) && isJson($item->multi_categories)) ?  json_decode($item->multi_categories) : [];
 			if (isset($item->tags) && $item->tags && trim($item->tags) && isJson($item->tags)) {
