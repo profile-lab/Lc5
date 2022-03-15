@@ -1,5 +1,5 @@
 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-    <div class="sb-sidenav-tools">
+    <div class="sb-sidenav-tools sb-sidenav-tools-languages">
         <?php if (isset($lc_languages) && is_iterable($lc_languages)) { ?>
             <div class="form-group col-md-12">
                 <label>Lingua</label>
@@ -17,18 +17,18 @@
             <?php if (isset($lc_admin_menu) && is_iterable($lc_admin_menu)) { ?>
                 <?php foreach ($lc_admin_menu as $menu_item) { ?>
                     <?php if (isset($menu_item->items) && is_iterable($menu_item->items)) { ?>
-                        <a class="nav-link collapsed <?= ($currernt_module == $menu_item->module) ? 'active' : '' ?>" data-bs-toggle="collapse" href="#collapse_<?= $menu_item->module ?>">
+                        <a class="nav-link nav-link-<?= $menu_item->module ?> collapsed <?= ($currernt_module == $menu_item->module) ? 'active' : '' ?>" data-bs-toggle="collapse" href="#collapse_<?= $menu_item->module ?>">
                             <span class="oi oi-<?= $menu_item->ico ?>"></span><?= $menu_item->label ?>
                         </a>
                         <div class="collapse <?= ($currernt_module == $menu_item->module) ? 'show' : '' ?>" id="collapse_<?= $menu_item->module ?>">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <?php foreach ($menu_item->items as $submenu_item) { ?>
-                                    <a class="nav-link <?= ( ($currernt_module == $menu_item->module) && ($currernt_module_action == $submenu_item->module_action) ) ? 'active' : '' ?>" href="<?= $submenu_item->route ?>"><?= $submenu_item->label ?></a>
+                                    <a class="nav-link nav-link-<?= $menu_item->module ?>-<?= $submenu_item->module_action ?> <?= ( ($currernt_module == $menu_item->module) && ($currernt_module_action == $submenu_item->module_action) ) ? 'active' : '' ?>" href="<?= $submenu_item->route ?>"><?= $submenu_item->label ?></a>
                                 <?php } ?>
                             </nav>
                         </div>
                     <?php } else { ?>
-                        <a class="nav-link <?= ($currernt_module == $menu_item->module) ? 'active' : '' ?>" href="<?= $menu_item->route ?>">
+                        <a class="nav-link nav-link-<?= $menu_item->module ?> <?= ($currernt_module == $menu_item->module) ? 'active' : '' ?>" href="<?= $menu_item->route ?>">
                             <span class="oi oi-<?= $menu_item->ico ?>"></span><?= $menu_item->label ?>
                         </a>
                     <?php } ?>
@@ -37,7 +37,7 @@
         </div>
     </div>
 
-    <div class="sb-sidenav-tools">
+    <div class="sb-sidenav-tools sb-sidenav-tools-apps">
         <?php if (isset($lc_apps) && is_iterable($lc_apps)) { ?>
             <div class="form-group col-md-12">
                 <label>Apps</label>
