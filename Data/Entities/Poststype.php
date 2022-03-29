@@ -79,6 +79,7 @@ class Poststype extends Entity
 		'seo_title' => [
 			'label' => 'SEO title',
 			'name' => 'seo_title',
+			'placeholder' => 'Titolo SEO (max 70 caratteri - consigliato 50 / 60)',
 			'w' => '12',
 			'view_side' => 'foot',
 			'type' => 'text'
@@ -87,6 +88,7 @@ class Poststype extends Entity
 		'seo_description' => [
 			'label' => 'SEO description',
 			'name' => 'seo_description',
+			'placeholder' => 'SEO META DESCRIPTION (max 160 caratteri - consigliato 90 / 150)',
 			'w' => '12',
 			'view_side' => 'foot',
 			'type' => 'text-area'
@@ -108,6 +110,24 @@ class Poststype extends Entity
 			'view_side' => 'side',
 			'type' => 'number',
 		],
+
+		'is_evi' => [
+			'label' => 'In Evidenza',
+			'name' => 'is_evi',
+			'w' => '12',
+			'view_side' => 'side',
+			'type' => 'checkbox-bool',
+		],
+		// 'is_evi' => [
+		// 	'label' => 'In Evidenza',
+		// 	'name' => 'is_evi',
+		// 	'w' => '12',
+		// 	'view_side' => 'side',
+		// 	'type' => 'select',
+		// 	'sources' => 'bool_values',
+		// 	'no_empty' => TRUE,
+		// ],
+
 		'data_pub' => [
 			'label' => 'Data pubblicazione',
 			'name' => 'data_pub',

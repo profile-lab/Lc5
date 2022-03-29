@@ -34,10 +34,11 @@
                             'name' => $c_field->name,
                             'value' => $entity->{$c_field->name},
                             'width' => 'col-md-' . $c_field->w,
-                            'placeholder' => '',
+                            'placeholder' => (isset($c_field->placeholder)) ? $c_field->placeholder : '',
                             'src' => (isset($c_field->src_attr)) ? $entity->{$c_field->src_attr} : null,
                             'gallery_obj' => (isset($c_field->gallery_obj)) ? $entity->{$c_field->gallery_obj} : [],
                             'sources' => (isset($c_field->sources)) ? $entity->{$c_field->sources} : [],
+                            'no_empty' => (isset($c_field->no_empty)) ? TRUE : FALSE,
                         ]]) ?>
                     <?php } ?>
                 </div>
@@ -83,10 +84,11 @@
                                     'name' => $c_field->name,
                                     'value' => $entity->{$c_field->name},
                                     'width' => 'col-md-' . $c_field->w,
-                                    'placeholder' => '',
+                                    'placeholder' => (isset($c_field->placeholder)) ? $c_field->placeholder : '',
                                     'src' => (isset($c_field->src_attr)) ? $entity->{$c_field->src_attr} : null,
                                     'gallery_obj' => (isset($c_field->gallery_obj)) ? $entity->{$c_field->gallery_obj} : [],
                                     'sources' => (isset($c_field->sources)) ? $entity->{$c_field->sources} : [],
+                                    'no_empty' => (isset($c_field->no_empty)) ? TRUE : FALSE,
                                 ]]) ?>
                                 <?php $conta_in_main++; ?>
                             <?php } ?>
@@ -102,10 +104,12 @@
                                 'name' => $c_field->name,
                                 'value' => $entity->{$c_field->name},
                                 'width' => 'col-md-' . $c_field->w,
-                                'placeholder' => '',
+                                'placeholder' => (isset($c_field->placeholder)) ? $c_field->placeholder : '',
                                 'src' => (isset($c_field->src_attr)) ? $entity->{$c_field->src_attr} : null,
                                 'gallery_obj' => (isset($c_field->gallery_obj)) ? $entity->{$c_field->gallery_obj} : [],
                                 'sources' => (isset($c_field->sources)) ? $entity->{$c_field->sources} : [],
+                                'no_empty' => (isset($c_field->no_empty)) ? TRUE : FALSE,
+
                             ]]) ?>
                             <?php $conta_in_main++; ?>
                         <?php } ?>
@@ -202,10 +206,12 @@
                                     'name' => $c_field->name,
                                     'value' => $entity->{$c_field->name},
                                     'width' => 'col-md-' . $c_field->w,
-                                    'placeholder' => '',
+                                    'placeholder' => (isset($c_field->placeholder)) ? $c_field->placeholder : '',
                                     'src' => (isset($c_field->src_attr)) ? $entity->{$c_field->src_attr} : null,
                                     'gallery_obj' => (isset($c_field->gallery_obj)) ? $entity->{$c_field->gallery_obj} : [],
                                     'sources' => (isset($c_field->sources)) ? $entity->{$c_field->sources} : [],
+                                    'no_empty' => (isset($c_field->no_empty)) ? TRUE : FALSE,
+
                                 ]]) ?>
                             <?php } ?>
                         <?php } ?>

@@ -101,6 +101,10 @@ class Posts extends MasterLc
 		$curr_entity = new Post();
 		// 
 		$post_type_entity = $this->getPostType($post_type_val);
+		$curr_entity->bool_values =[
+			"0" => (object) ["nome" => "NO", "val" => "0"],
+			"1" => (object) ["nome" => "YES", "val" => "1"]
+		];
 		$curr_entity->poststype_categories_list = $this->getListPoststypeCategories($post_type_entity->id);
 		$curr_entity->poststype_tags_list = $this->getListPoststypeTags($post_type_entity->id);
 		$curr_entity->parents_list = $this->getListParents($post_type_entity->id);
@@ -166,6 +170,10 @@ class Posts extends MasterLc
 		}
 
 		$post_type_entity = $this->getPostType($post_type_val);
+		$curr_entity->bool_values =[
+			"0" => (object) ["nome" => "NO", "val" => "0"],
+			"1" => (object) ["nome" => "YES", "val" => "1"]
+		];
 		$curr_entity->poststype_categories_list = $this->getListPoststypeCategories($post_type_entity->id);
 		$curr_entity->poststype_tags_list = $this->getListPoststypeTags($post_type_entity->id);
 		$curr_entity->parents_list = $this->getListParents($post_type_entity->id, $id);
