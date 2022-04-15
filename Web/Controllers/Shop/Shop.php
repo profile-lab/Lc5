@@ -40,12 +40,17 @@ class Shop extends \Lc5\Web\Controllers\MasterWeb
         $this->shop_settings = $this->getShopSettings();
         // 
         $this->shop_products_cat_model = new ShopProductsCategoriesModel();
+        $this->shop_products_cat_model->setForFrontemd();
         $this->shop_products_model = new ShopProductsModel();
+        $this->shop_products_model->setForFrontemd();
         $this->shop_products_model->shop_settings = $this->shop_settings;
 
         $this->shop_products_tags_model = new ShopProductsTagsModel();
+        $this->shop_products_tags_model->setForFrontemd();
         $this->shop_products_colors_model = new ShopProductsColorsModel();
+        $this->shop_products_colors_model->setForFrontemd();
         $this->shop_products_sizes_model = new ShopProductsSizesModel();
+        $this->shop_products_sizes_model->setForFrontemd();
         // 
         $this->cart = Services::shopcart(); // new Cart();
         // 
@@ -103,6 +108,7 @@ class Shop extends \Lc5\Web\Controllers\MasterWeb
             }
         } else {
             $pages_model = new PagesModel();
+            $pages_model->setForFrontemd();
             if ($curr_entity = $pages_model->asObject()->orderBy('id', 'DESC')->where('guid', 'shop')->first()) {
                 $pages_entity_rows = $this->getEntityRows($curr_entity->id, 'pages');
             } else {
@@ -208,6 +214,7 @@ class Shop extends \Lc5\Web\Controllers\MasterWeb
         // $products_archive_qb->where('(parent IS NULL OR parent <  1 )');
 
         $pages_model = new PagesModel();
+        $pages_model->setForFrontemd();
         if ($curr_entity = $pages_model->asObject()->orderBy('id', 'DESC')->where('guid', 'cart')->first()) {
             $pages_entity_rows = $this->getEntityRows($curr_entity->id, 'pages');
         } else {
@@ -237,6 +244,7 @@ class Shop extends \Lc5\Web\Controllers\MasterWeb
     // {
     //     // 
     //     $shop_settings_model = new ShopSettingsModel();
+    //     $shop_settings_model->setForFrontemd();
     //     if (!$shop_settings_entity = $shop_settings_model->asObject()->where('id_app', __web_app_id__ )->first()) {
     //         throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
     //     }

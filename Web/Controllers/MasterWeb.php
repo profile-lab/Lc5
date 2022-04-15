@@ -57,7 +57,9 @@ class MasterWeb extends BaseController
 	{
 		// 
 		$rows_model = new RowsModel();
+		$rows_model->setForFrontemd();
 		$media_model = new MediaModel();
+		$media_model->setForFrontemd();
 
 		// 
 		$processedRow = $rows_model
@@ -136,9 +138,13 @@ class MasterWeb extends BaseController
 			// 
 
 			$poststypes_model = new PoststypesModel();
+			$poststypes_model->setForFrontemd();
 			$postcat_model = new PostscategoriesModel();
+			$postcat_model->setForFrontemd();
 			$post_tags_model = new PostTagsModel();
+			$post_tags_model->setForFrontemd();
 			$posts_model = new PostsModel();
+			$posts_model->setForFrontemd();
 			if ($posts_archive_type = $poststypes_model->where('val', $curr_entity->is_posts_archive)->asObject()->first()) {
 				// 
 				$this->getPoststypesFieldsConfig($posts_archive_type);

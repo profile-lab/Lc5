@@ -50,7 +50,7 @@ class PostscategoriesModel extends MasterModel
 	{
 		// $data = $this->beforeSave($data);
 		if($data['singleton'] == true){
-			$data['data'] = $this->extendData($data['data']);
+			$data['data'] = $this->extendData($data['data'], true);
 		}else{
 			foreach($data['data'] as $item){
 				$item = $this->extendData($item);
@@ -60,7 +60,7 @@ class PostscategoriesModel extends MasterModel
 		
 	}
 	
-	private function extendData($item)
+	private function extendData($item, $is_singleton = false)
 	{
 		if($item){
 			$media_model = new MediaModel();
@@ -137,6 +137,24 @@ class PostscategoriesModel extends MasterModel
 				$item->gallery = $updated_gallery_json;
 			}
 			// 
+			if ($this->is_for_frontend) {
+				if ($is_singleton) {
+					if (isset($item->seo_title) && !trim($item->seo_title)) {
+						if (isset($item->titolo) && trim($item->titolo)) {
+							$item->seo_title = $item->titolo;
+						}else if (isset($item->nome) && trim($item->nome)) {
+							$item->seo_title = $item->nome;
+						}
+					}
+					if (isset($item->seo_description) && !trim($item->seo_description)) {
+						if (isset($item->titolo) && trim($item->titolo)) {
+							$item->seo_description = $item->titolo;
+						}else if (isset($item->nome) && trim($item->nome)) {
+							$item->seo_description = $item->nome;
+						}
+					}
+				}
+			}
 		}
 
 		return $item;

@@ -27,6 +27,7 @@ class Posts extends MasterWeb
     public function archivioDefault()
     {
         $poststypes_model = new PoststypesModel();
+        $poststypes_model->setForFrontemd();
         if (!$curr_entity = $poststypes_model->asObject()->first()) {
 
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
@@ -46,8 +47,11 @@ class Posts extends MasterWeb
 
 
         $poststypes_model = new PoststypesModel();
+        $poststypes_model->setForFrontemd();
         $postscategory_model = new PostscategoriesModel();
+        $postscategory_model->setForFrontemd();
         $posttags_model = new PostTagsModel();
+        $posttags_model->setForFrontemd();
         if (!$curr_entity = $poststypes_model->where('val', $post_type_val)->asObject()->first()) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -76,6 +80,7 @@ class Posts extends MasterWeb
         }
         // 
         $posts_model = new PostsModel();
+        $posts_model->setForFrontemd();
         $posts_qb = $posts_model->where('post_type', $curr_entity->id);
         if ($cur_post_cat_obj) {
             $posts_qb->where('category', $cur_post_cat_obj->id);
@@ -127,9 +132,13 @@ class Posts extends MasterWeb
     {
         // 
         $poststypes_model = new PoststypesModel();
+        $poststypes_model->setForFrontemd();
         $postscategory_model = new PostscategoriesModel();
+        $postscategory_model->setForFrontemd();
         $posttags_model = new PostTagsModel();
+        $posttags_model->setForFrontemd();
         $posts_model = new PostsModel();
+        $posts_model->setForFrontemd();
         if (!$curr_post_type = $poststypes_model->where('val', $post_type_val)->asObject()->first()) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }

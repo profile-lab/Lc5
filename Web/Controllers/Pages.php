@@ -29,6 +29,7 @@ class Pages extends MasterWeb
 		$guid = $this->parseGuid($seg1, $seg2, $seg3, $seg4, $seg5);
 		// 
 		$pages_model = new PagesModel();
+		$pages_model->setForFrontemd();
 		$qb = $pages_model->asObject()->orderBy('id', 'DESC');
 		if ($guid) {
 			$qb->where('guid', $guid);

@@ -117,6 +117,7 @@ class Cart extends ShopMaster
             $shop_settings = $this->getShopSettings();
             // 
             $shop_products_model = new ShopProductsModel();
+            $shop_products_model->setForFrontemd();
             $shop_products_model->shop_settings = $shop_settings;
             if (is_iterable($cart)) {
                 foreach ($cart as $key => $qnt) {

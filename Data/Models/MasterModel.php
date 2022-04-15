@@ -6,6 +6,8 @@ use CodeIgniter\Model;
 
 class MasterModel extends Model
 {
+	public $is_for_frontend 		= false;
+
 	protected $DBGroup              = 'default';
 	// protected $primaryKey           = 'id';
 	protected $useAutoIncrement     = true;
@@ -24,6 +26,13 @@ class MasterModel extends Model
 	// Callbacks
 	protected $allowCallbacks       = TRUE;
 
+
+
+	//----------------------------------------------------------------
+	public function setForFrontemd($_is_for_frontend = true)
+	{
+		$this->is_for_frontend = $_is_for_frontend;
+	}
 
 	//----------------------------------------------------------------
 	protected function checkAppAndLang()
@@ -63,9 +72,9 @@ class MasterModel extends Model
 	{
 		if (in_array('lang', $this->allowedFields)) {
 			if ($curr_lc_lang = session()->get('curr_lc_lang')) {
-				if(isset($data['data']['lang']) ){
+				if (isset($data['data']['lang'])) {
 					// dd($data['data']);
-				}else{
+				} else {
 					$data['data']['lang'] = $curr_lc_lang;
 				}
 			}
