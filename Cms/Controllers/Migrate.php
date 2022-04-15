@@ -7,27 +7,36 @@ class Migrate extends \CodeIgniter\Controller
 	public function update()
 	{
 		$migrate = \Config\Services::migrations();
-		// $migrate->latest();
-		$migrate->setNamespace('Lc5\Cms')->latest();
-		$migrate->setNamespace('App')->latest();
-		$this->datiBase();
 
-		return redirect()->to(route_to('lc_dashboard') . '?action_result=DatabaseUpdateOK');
+		try {
+            $migrate->setNamespace('Lc5\Data')->latest();
+			$this->datiBase();
+			return redirect()->to(route_to('lc_dashboard') . '?action_result=DatabaseUpdateOK');
+        } catch (\Throwable $e) {
+            // Do something with the error here...
+        }
+
+
+		// $migrate->latest();
+		// $migrate->setNamespace('Lc5\Cms')->latest();
+		// $migrate->setNamespace('App')->latest();
+		// $this->datiBase();
+
 	}
 	//
 	public function datiBase()
 	{
 		$seeder = \Config\Database::seeder();
 
-		$seeder->call('\Lc5\Cms\Database\Seeds\Lcapps');
-		$seeder->call('\Lc5\Cms\Database\Seeds\LcappSettings');
-		$seeder->call('\Lc5\Cms\Database\Seeds\Pagestype');
-		$seeder->call('\Lc5\Cms\Database\Seeds\Rowsstyle');
-		$seeder->call('\Lc5\Cms\Database\Seeds\Mediaformats');
-		$seeder->call('\Lc5\Cms\Database\Seeds\Poststypes');
-		$seeder->call('\Lc5\Cms\Database\Seeds\Language');
-		$seeder->call('\Lc5\Cms\Database\Seeds\Sitemenus');
-		$seeder->call('\Lc5\Cms\Database\Seeds\ShopAliquote');
+		$seeder->call('\Lc5\Data\Database\Seeds\Lcapps');
+		$seeder->call('\Lc5\Data\Database\Seeds\LcappSettings');
+		$seeder->call('\Lc5\Data\Database\Seeds\Pagestype');
+		$seeder->call('\Lc5\Data\Database\Seeds\Rowsstyle');
+		$seeder->call('\Lc5\Data\Database\Seeds\Mediaformats');
+		$seeder->call('\Lc5\Data\Database\Seeds\Poststypes');
+		$seeder->call('\Lc5\Data\Database\Seeds\Language');
+		$seeder->call('\Lc5\Data\Database\Seeds\Sitemenus');
+		$seeder->call('\Lc5\Data\Database\Seeds\ShopAliquote');
 	}
 
 	//
