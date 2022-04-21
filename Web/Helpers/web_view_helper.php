@@ -150,7 +150,7 @@ function single_img($image_path, $format_folder = null, $css_class = '', $alt_la
 {
     $return_html = '';
     if ($img_src = single_img_url($image_path, $format_folder, $def_image)) {
-        return '<img src="' . $img_src . '" alt="' . $alt_label . '" />';
+        return '<figure class="'.$css_class.'"><img src="' . $img_src . '" alt="' . $alt_label . '" /></figure>';
     }
     // if (isset($image_path) && $image_path != '' && $image_path != null ) {
     //     $return_html.=''. env('custom.media_root_path') .  (($format_folder)? $format_folder .'/' : '') . $image_path .'" alt="img" />';
