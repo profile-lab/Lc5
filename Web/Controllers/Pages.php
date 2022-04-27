@@ -57,6 +57,14 @@ class Pages extends MasterWeb
 		$this->web_ui_date->fill((array)$curr_entity);
 		// 
 		$this->web_ui_date->entity_rows = $this->getEntityRows($curr_entity->id, 'pages');
+		// 
+		if(isset($this->custom_app_contoller) && $this->custom_app_contoller ){
+			$custom_app_contoller_method = lcfirst(str_replace(' ', '', ucwords(preg_replace('/[\s_]+/', ' ', str_replace(['-', '_'], ' ', $curr_entity->type)))));
+
+			if (method_exists($this->custom_app_contoller, $custom_app_contoller_method)) {
+				$this->custom_app_contoller->{$custom_app_contoller_method}($this);
+			}
+		}
 		//
 		if (appIsFile('Views/' .  $this->base_view_folder . 'page-' . $curr_entity->type . '.php')) {
 			return view($this->base_view_folder . 'page-' .  $curr_entity->type, $this->web_ui_date->toArray());

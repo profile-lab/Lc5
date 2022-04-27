@@ -22,6 +22,9 @@ class MasterWeb extends BaseController
 	protected $module_name;
 	protected $req;
 
+	public $custom_app_contoller = null;
+
+
 	//--------------------------------------------------------------------
 	public function __construct()
 	{
@@ -47,7 +50,7 @@ class MasterWeb extends BaseController
 
 
 		if (file_exists(APPPATH . 'Controllers/CustomAppContoller.php')) {
-			new \App\Controllers\CustomAppContoller($this);		
+			$this->custom_app_contoller = new \App\Controllers\CustomAppContoller($this);		
 		}
 
 	}
