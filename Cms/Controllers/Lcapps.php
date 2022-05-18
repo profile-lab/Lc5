@@ -64,11 +64,11 @@ class Lcapps extends MasterLc
 				// if (!$id_app = session()->get('new_app_created_id')) { 
 				// 	$id_app = 1;
 				// }
-				$seeder->call('Pagestype');
-				$seeder->call('Rowsstyle');
-				$seeder->call('Mediaformats');
-				$seeder->call('Poststypes');
-				$seeder->call('Language');
+				$seeder->call('\Lc5\Data\Database\Seeds\Pagestype');
+				$seeder->call('\Lc5\Data\Database\Seeds\Rowsstyle');
+				$seeder->call('\Lc5\Data\Database\Seeds\Mediaformats');
+				$seeder->call('\Lc5\Data\Database\Seeds\Poststypes');
+				$seeder->call('\Lc5\Data\Database\Seeds\Language');
 
 				// 
 				$this->createBeseAppSettings($new_id);
