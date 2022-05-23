@@ -16,9 +16,16 @@ class Sitemenus extends Seeder
         $has_dati_query = $this->db->table($db_table)->where('id_app', $id_app)->select('id')->get(1, 0);
         if (!$has_dati_query->getFirstRow()) {
             $base_menu_structure = [];
+             // 
+            if (!$__t_lang = session()->get('curr_lc_lang')) {
+                $__t_lang = (getenv('app.defaultLocale')) ? getenv('app.defaultLocale') : 'it';
+            }
+            // 
+
+
             $data = [
 				'id_app' => $id_app,
-                'lang' => 'it',
+                'lang' => $__t_lang,
                 'nome' => 'Main Menu',
                 // 'json_data' => json_encode((object) ['fields' => $base_menu_structure]),
                 'json_data' => '[]',

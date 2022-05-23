@@ -15,7 +15,7 @@ class LcappSettings extends Seeder
 		}
         // 
         if (!$lang = session()->get('curr_lc_lang')) {
-			$lang = 'it';
+			$lang = (getenv('app.defaultLocale')) ? getenv('app.defaultLocale') : 'it';
 		}
         // 
         $db_table = 'lcapps_settings';
