@@ -41,6 +41,15 @@ class MasterWeb extends BaseController
 		// 
 		$this->web_ui_date = new WebUiData();
 
+
+		if($maintenance_view = $this->checkIsInMaintenance()){
+			if($maintenance_view == 'RETURN-TO-HP'){
+				exit();
+			}else{
+				exit($maintenance_view);
+			}
+		}
+
 		$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
 		// $this->web_ui_date->__set('lc_admin_menu', $this->getLcAdminMenu());
 		// $this->web_ui_date->__set('lc_apps', $this->getLcApps());
@@ -53,6 +62,40 @@ class MasterWeb extends BaseController
 			$this->custom_app_contoller = new \App\Controllers\CustomAppContoller($this);		
 		}
 
+	}
+
+	//--------------------------------------------------------------------
+	protected function checkIsInMaintenance()
+	{
+		// 
+		$is_in_maintenance = FALSE;
+		if(ENVIRONMENT != 'production'){
+			$admins = \Config\Services::admins();
+			if($this->req->getPath() == 'add-maintainer'){
+				$data = [
+					'maintainer_user' => 'maintainer_'.uniqid()
+				];
+				session()->set($data);
+				return FALSE;
+			}elseif(session()->__get('maintainer_user')){
+				return FALSE;
+			}elseif (!$admins->user_id()) {
+				$is_in_maintenance = TRUE;
+			}
+		}
+
+
+		if($is_in_maintenance){
+			if (is_file(APPPATH.'Views/' .  $this->base_view_folder . 'maintenance.php')) {
+				return view($this->base_view_folder . 'maintenance', $this->web_ui_date->toArray());
+			}else{
+				$this->base_view_folder = '\Lc5\Web\Views\default/';
+				$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
+				return view($this->base_view_folder.'maintenance', $this->web_ui_date->toArray());
+			}
+		}
+
+		return FALSE;
 	}
 
 	//--------------------------------------------------------------------
