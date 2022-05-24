@@ -43,11 +43,11 @@ class MasterWeb extends BaseController
 
 
 		if($maintenance_view = $this->checkIsInMaintenance()){
-			if($maintenance_view == 'RETURN-TO-HP'){
-				exit();
-			}else{
+			// if($maintenance_view == 'RETURN-TO-HP'){
+			// 	exit();
+			// }else{
 				exit($maintenance_view);
-			}
+			// }
 		}
 
 		$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
@@ -69,13 +69,9 @@ class MasterWeb extends BaseController
 	{
 		// 
 		$is_in_maintenance = FALSE;
-		if(ENVIRONMENT != 'production'){
+		if(ENVIRONMENT != 'production' || env('custom.maintenance_mode') == 'ACTIVE'){
 			$admins = \Config\Services::admins();
 			if($this->req->getPath() == 'add-maintainer'){
-				$data = [
-					'maintainer_user' => 'maintainer_'.uniqid()
-				];
-				session()->set($data);
 				return FALSE;
 			}elseif(session()->__get('maintainer_user')){
 				return FALSE;

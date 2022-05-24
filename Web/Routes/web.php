@@ -39,6 +39,8 @@ if (env('custom.has_shop') === TRUE) {
 	$routes->add('shop/(:segment)', '\Lc5\Web\Controllers\Shop\Shop::index/$1', ['as' => 'web_shop_category']);
 	$routes->add('shop', '\Lc5\Web\Controllers\Shop\Shop::index', ['as' => 'web_shop_home']);
 }
+// 
+$routes->add('add-maintainer', '\Lc5\Web\Controllers\Pages::addMaintainer');
 //
 $routes->add('archivio/(:segment)/(:segment)/', '\Lc5\Web\Controllers\Posts::post/$1/$2', ['as' => 'web_posts_single']);
 $routes->add('archivio/(:segment)', '\Lc5\Web\Controllers\Posts::index/$1', ['as' => 'web_posts_archive']);

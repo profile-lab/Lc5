@@ -22,6 +22,16 @@ class Pages extends MasterWeb
 	{
 		return $this->page();
 	}
+	//--------------------------------------------------------------------
+	public function addMaintainer()
+	{
+		$data = [
+			'maintainer_user' => 'maintainer_'.uniqid()
+		];
+		session()->set($data);
+		return redirect()->route('web_homepage');
+		// return $this->page();
+	}
 
 	//--------------------------------------------------------------------
 	public function page($seg1 = false, $seg2 = false, $seg3 = false, $seg4 = false, $seg5 = false)
