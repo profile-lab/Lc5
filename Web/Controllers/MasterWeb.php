@@ -69,7 +69,7 @@ class MasterWeb extends BaseController
 	{
 		// 
 		$is_in_maintenance = FALSE;
-		if(ENVIRONMENT != 'production' || env('custom.maintenance_mode') == 'ACTIVE'){
+		if((ENVIRONMENT != 'production' && env('custom.maintenance_mode') != 'DISABLED') || env('custom.maintenance_mode') == 'ACTIVE'){
 			$admins = \Config\Services::admins();
 			if($this->req->getPath() == 'add-maintainer'){
 				return FALSE;
