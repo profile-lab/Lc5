@@ -75,7 +75,7 @@ class MasterWeb extends BaseController
 				return FALSE;
 			}elseif(session()->__get('maintainer_user')){
 				return FALSE;
-			}elseif (!$admins->user_id()) {
+			}elseif (!isset($admins) || !$admins->user_id()) {
 				$is_in_maintenance = TRUE;
 			}
 		}
