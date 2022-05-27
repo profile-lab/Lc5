@@ -178,6 +178,98 @@ class CmsApi extends MasterLc
         return (object) $vimeo_image_file_object;
     }
 
+    //--------------------------------------------------------------------
+    use ResponseTrait;
+    public function newVideoByUrl($rel_item_type = null, $rel_item_id)
+    {
+        $rel_item_model = null;
+        $rel_item_entity = null;
+        if ($rel_item_type && $rel_item_id) {
+            if ($rel_item_type == 'pages') {
+                $rel_item_model = new \Lc5\Data\Models\PagesModel();
+            } else if ($rel_item_type = 'posts') {
+                $rel_item_model = new \Lc5\Data\Models\PostsModel();
+            }
+            // 
+            if ($rel_item_model) {
+                $rel_item_entity = $rel_item_model->allowCallbacks(FALSE)->select(['id', 'nome', 'vimeo_video_id'])->find($rel_item_id);
+            }
+        }
+        // 
+        $video_model = new VimeoVideosModel();
+        $video_entity = new VimeoVideo();
+        $request = \Config\Services::request();
+        if ($request->getMethod() == 'post') {
+            $returnObject = (object)[
+                'status' => 500,
+                'body' => (object)[
+                    'message' => 'internal server error'
+                ]
+            ];
+            // 
+            $video_name = $request->getPost('video_name');
+            $id_video_vimeo = $request->getPost('id_video_vimeo');
+            
+            $video_name = (trim($video_name)) ? $video_name : 'video';
+
+                    if ($id_video_vimeo && $vimeo_resonse = $this->getVideoInfoOnVimeo($id_video_vimeo)) {
+
+
+                        $video_vimeo_path = $vimeo_resonse['body']['uri'];
+                        $video_entity->vimeo_id = $id_video_vimeo;
+                        $video_entity->nome = $video_name;
+                        $video_entity->guid = $id_video_vimeo;
+                        $video_entity->vimeo_path = $video_vimeo_path;
+                        $video_entity->vimeo_video_status = $vimeo_resonse['body']['status'];
+                        $video_entity->vimeo_upload_form_action = $vimeo_resonse['body']['upload']['upload_link'];
+                        $video_model->save($video_entity);
+
+                        if ($rel_item_entity) {
+                            $rel_item_entity->vimeo_video_id = $id_video_vimeo;
+                            // $rel_item_entity->vimeo_video_url = null;
+                            $rel_item_model->allowCallbacks(FALSE)->save($rel_item_entity);
+                        }
+
+                        // // 
+                        // $video_entity->vimeo_id = $id_video_vimeo;
+                        // $video_entity->vimeo_path = $video_vimeo_path;
+                        // // $video_entity->lezione_id = $lezione_entity->id;
+                        // $video_entity->vimeo_video_status = $vimeo_resonse['body']['status'];
+                        // $video_entity->vimeo_upload_form_action = $vimeo_resonse['body']['upload']['upload_link'];
+                        // $video_model->save($video_entity);
+                        // // 
+                        // // 
+                        // $rel_item_entity->video_code = $id_video_vimeo;
+                        // $rel_item_model->save($rel_item_entity);
+                        // 
+                        // 
+                        $returnObject = (object)[
+                            'status' => 201,
+                            'body' => (object)[
+                                'video_name' => $video_name,
+                                'video_vimeo_id' => $id_video_vimeo,
+                                'video_uri' => $vimeo_resonse['body']['uri'],
+                                'vimeo_resonse' => $vimeo_resonse,
+                                'video_path' => $video_entity->video_path,
+                                'cover_path' => $video_entity->cover_path,
+                                'vimeo_video_status' => $video_entity->vimeo_video_status,
+                            ]
+                            // 'body' => (object)[
+                            //     'video_name' => $video_name,
+                            //     'video_vimeo_id' => $id_video_vimeo,
+                            //     'video_uri' => $vimeo_resonse['body']['uri'],
+                            //     'vimeo_resonse' => $vimeo_resonse,
+                            //     'video_path' => $video_entity->video_path,
+                            //     'cover_path' => $video_entity->cover_path,
+                            //     'vimeo_video_status' => $video_entity->vimeo_video_status,
+                            // ]
+                        ];
+                    }
+            
+            return $this->respond($returnObject);
+        }
+        return $this->respond($this->unauthorizedResult);
+    }
 
     //--------------------------------------------------------------------
     use ResponseTrait;

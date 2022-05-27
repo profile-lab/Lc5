@@ -14,6 +14,7 @@ $routes->group('lc-admin', ['namespace' => 'Lc5\Cms\Controllers', 'filter' => 'a
 		
 		$routes->match(['get', 'post'], 'video-info', 'Api\CmsApi::getInfoVimeo', ['as' => 'lc_api_video_info_vimeo']);
 		$routes->match(['get', 'post'], 'new-tus-video/(:segment)/(:num)', 'Api\CmsApi::newTusVimeo/$1/$2', ['as' => 'lc_api_new_tus_vimeo_w_rel']);
+		$routes->match(['get', 'post'], 'new-video-by-url/(:segment)/(:num)', 'Api\CmsApi::newVideoByUrl/$1/$2', ['as' => 'lc_api_new_vimeo_by_url']);
 		$routes->match(['get', 'post'], 'new-tus-video', 'Api\CmsApi::newTusVimeo', ['as' => 'lc_api_new_tus_vimeo']);
 		$routes->match(['get', 'post'], 'video-delete/(:segment)/(:num)', 'Api\CmsApi::removeVideo/$1/$2', ['as' => 'lc_api_video_delete_vimeo_w_rel']);
 		$routes->match(['get', 'post'], 'video-delete', 'Api\CmsApi::removeVideo', ['as' => 'lc_api_video_delete_vimeo']);

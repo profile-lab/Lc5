@@ -46,6 +46,18 @@ extract($item);
                 <button class="btn btn-sm btn-success" type="button" id="upload_on_vimeo_btn" name="upload_on_vimeo" value="upload_on_vimeo">Carica video</button>
             </div>
         </div>
+        <div id="set_vimeo_by_vimeo_video_url_cnt">
+            <div id="get_vimeo_video_label">Collega Video</div>
+            <div id="get_vimeo_video_input_cnt">
+                <input type="text" class="form-control" name="vimeo_video_url" id="vimeo_video_url" value="" placeholder="Es. https://vimeo.com/0xxxxx00 / https://vimeo.com/videos/0xxxxx00 / https://vimeo.com/manage/videos/0xxxxx00" />
+            </div>
+            <div id="get_vimeo_video_btn_cnt">
+                <button class="btn btn-sm btn-success" type="button" id="set_vimeo_by_vimeo_video_url_btn" meta-rel="vimeo_video_url" name="set_vimeo_by_vimeo_video_url" value="set_vimeo_by_vimeo_video_url">Collega video</button>
+            </div>
+        </div>
+
+        
+
     <?php } else { ?>
         <div id="vimeo_video_row">
             <div id="vimeo_video_thumb_cnt">

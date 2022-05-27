@@ -127,6 +127,8 @@
         <script type="text/javascript">
             const uri_api_refresh_video_info = "<?= site_url(route_to('lc_api_video_info_vimeo')) ?>";
             const uri_api_create_new_tus_vimeo = "<?= site_url(route_to('lc_api_new_tus_vimeo_w_rel', 'pages', $entity->id)) ?>";
+            const uri_api_create_new_vimeo_by_url = "<?= site_url(route_to('lc_api_new_vimeo_by_url',  'pages', $entity->id)) ?>";
+
             const uri_api_delete_vimeo_video = "<?= site_url(route_to('lc_api_video_delete_vimeo_w_rel', 'pages', $entity->id)) ?>";
         </script>
         <script src="https://cdn.jsdelivr.net/npm/tus-js-client@2.3.0/dist/tus.js"></script>
