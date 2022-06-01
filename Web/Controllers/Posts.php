@@ -115,7 +115,9 @@ class Posts extends MasterWeb
             }
             $curr_entity->posts_archive = $posts_archive;
         }
-        $curr_entity->pager =  $posts_qb->pager;
+        if($posts_qb->pager->getTotal() > $posts_qb->pager->getPerPage() ){
+            $curr_entity->pager =  $posts_qb->pager;
+        }
         $this->web_ui_date->fill((array)$curr_entity);
 
 

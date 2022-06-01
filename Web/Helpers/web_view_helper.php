@@ -140,7 +140,7 @@ function getMediaByType($media_path, $media_type = null, $css_class = '')
         } else if ($media_type == 'svg') {
             $return_html = single_img($media_path, '', $css_class);
         } else {
-            $return_html .= '<a target="_blank" class="download_file download_file_' . $media_type . ' ' . $css_class . '" href="' . env('custom.media_root_path') . $media_path . '" title=""><span class="label-download">Download</span></a>';
+            $return_html .= '<a target="_blank" class="download_file download_file_' . $media_type . ' ' . $css_class . '" href="' . env('custom.media_root_path') . $media_path . '" title=""><span class="label-download">Download</span> <span class="label-download-type">' . $media_type . '</span></a>';
         }
     }
     return $return_html;
