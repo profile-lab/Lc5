@@ -1,13 +1,19 @@
 <?php
 //--------------------------------------------------
-function printLangsMenu($menu, $menu_name = 'languages-menu')
+function printLangsMenu($menu, $menu_name = 'languages-menu', $has_flags = FALSE)
 {
     $return_html = '';
     if (isset($menu) && is_array($menu) && count($menu) > 0) {
         $return_html .= '<ul class="' . $menu_name . '" id="' . $menu_name . '">';
         foreach ($menu as $lang) {
             $return_html .= '<li>';
-            $return_html .= '<a class="' . (($lang->is_default) ? 'default_lang' : '') . ' ' . (($lang->is_current) ? 'current_lang' : '') . ' ' . $menu_name . '-' . $lang->id . '" href="' . $lang->parameter . '">' . $lang->label . '</a>';
+            $return_html .= '<a class="' . (($lang->is_default) ? 'default_lang' : '') . ' ' . (($lang->is_current) ? 'current_lang' : '') . ' ' . $menu_name . '-' . $lang->id . '" href="' . $lang->parameter . '">';
+            if($has_flags){
+                $return_html .= '<img src="' . site_url('/assets/img/'.$lang->label_mini.'.svg').'" alt="' . $lang->label . '" title="' . $lang->label . '" />';
+            }else{
+                $return_html .= '' . $lang->label . '';
+            }
+            $return_html .='</a>';
             $return_html .= '</li>';
         }
         $return_html .= '</ul>';
