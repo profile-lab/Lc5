@@ -45,14 +45,19 @@ function printSiteMenu($menu, $menu_name = null, $menu_id = null)
     if (!$menu_id) {
         $menu_id = $menu_name;
     }
+    $current_url = current_url();
+    if($current_url ==  site_url(__locale_uri__ )){
+        
+        $current_url = null;
+    }
     $return_html = '';
     if (isset($menu) && isset($menu->data) && is_array($menu->data) && count($menu->data) > 0) {
-        $return_html .= printChildrenMenuItems($menu->data, $menu_name, 0, $menu_id);
+        $return_html .= printChildrenMenuItems($menu->data, $menu_name, 0,  $current_url, $menu_id);
     }
     return $return_html;
 }
 //--------------------------------------------------
-function printChildrenMenuItems($childrens, $menu_name, $depth = 0, $menu_id = null)
+function printChildrenMenuItems($childrens, $menu_name, $depth = 0, $current_url = null, $menu_id = null)
 {
     $return_html = '';
     if (isset($childrens) &&  is_array($childrens) && count($childrens) > 0) {
@@ -62,10 +67,12 @@ function printChildrenMenuItems($childrens, $menu_name, $depth = 0, $menu_id = n
             $sub_menu_code  = '';
             if((isset($c_row->children) && is_iterable($c_row->children))){
                 $has_submenu = true;
-                $sub_menu_code  =  printChildrenMenuItems($c_row->children, $menu_name, $depth + 1) ;
+                $sub_menu_code  =  printChildrenMenuItems($c_row->children, $menu_name, $depth + 1, $current_url) ;
             }
+            $menu_item_url =site_url(__locale_uri__ . $c_row->parameter);
+            //  strpos($menu_item_url,  $current_url) !== false 
             $return_html .= '<li class="'.(($has_submenu == true) ? 'has_submenu' : 'last_child_depth').'">';
-            $return_html .= '<a class="menu-item-' . $c_row->id . ' menu-item-type-' . $c_row->type . ' ' . ((isset($c_row->is_home) && $c_row->is_home == 1) ? 'link_home' : '') . ' ' . $menu_name . '-' . $c_row->id . '" href="' . site_url(__locale_uri__ . $c_row->parameter) . '">' . $c_row->label . '</a>';
+            $return_html .= '<a class="menu-item-' . $c_row->id . ' menu-item-type-' . $c_row->type . ' ' . ((isset($c_row->is_home) && $c_row->is_home == 1) ? 'link_home' : ( ($current_url && ($menu_item_url == $current_url) ) ? 'is_current' : '')) . ' ' . $menu_name . '-' . $c_row->id . '" href="' . $menu_item_url . '">' . $c_row->label . '</a>';
             $return_html .= $sub_menu_code;
             $return_html .= '</li>';
         }
