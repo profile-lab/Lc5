@@ -42,11 +42,11 @@ class MasterWeb extends BaseController
 		$this->web_ui_date = new WebUiData();
 
 
-		if($maintenance_view = $this->checkIsInMaintenance()){
+		if ($maintenance_view = $this->checkIsInMaintenance()) {
 			// if($maintenance_view == 'RETURN-TO-HP'){
 			// 	exit();
 			// }else{
-				exit($maintenance_view);
+			exit($maintenance_view);
 			// }
 		}
 
@@ -59,9 +59,8 @@ class MasterWeb extends BaseController
 
 
 		if (file_exists(APPPATH . 'Controllers/CustomAppContoller.php')) {
-			$this->custom_app_contoller = new \App\Controllers\CustomAppContoller($this);		
+			$this->custom_app_contoller = new \App\Controllers\CustomAppContoller($this);
 		}
-
 	}
 
 	//--------------------------------------------------------------------
@@ -69,25 +68,25 @@ class MasterWeb extends BaseController
 	{
 		// 
 		$is_in_maintenance = FALSE;
-		if((ENVIRONMENT != 'production' && env('custom.maintenance_mode') != 'DISABLED') || env('custom.maintenance_mode') == 'ACTIVE'){
+		if ((ENVIRONMENT != 'production' && env('custom.maintenance_mode') != 'DISABLED') || env('custom.maintenance_mode') == 'ACTIVE') {
 			$admins = \Config\Services::admins();
-			if($this->req->getPath() == 'add-maintainer'){
+			if ($this->req->getPath() == 'add-maintainer') {
 				return FALSE;
-			}elseif(session()->__get('maintainer_user')){
+			} elseif (session()->__get('maintainer_user')) {
 				return FALSE;
-			}elseif (!isset($admins) || !$admins->user_id()) {
+			} elseif (!isset($admins) || !$admins->user_id()) {
 				$is_in_maintenance = TRUE;
 			}
 		}
 
 
-		if($is_in_maintenance){
-			if (is_file(APPPATH.'Views/' .  $this->base_view_folder . 'maintenance.php')) {
+		if ($is_in_maintenance) {
+			if (is_file(APPPATH . 'Views/' .  $this->base_view_folder . 'maintenance.php')) {
 				return view($this->base_view_folder . 'maintenance', $this->web_ui_date->toArray());
-			}else{
+			} else {
 				$this->base_view_folder = '\Lc5\Web\Views\default/';
 				$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
-				return view($this->base_view_folder.'maintenance', $this->web_ui_date->toArray());
+				return view($this->base_view_folder . 'maintenance', $this->web_ui_date->toArray());
 			}
 		}
 
@@ -111,19 +110,21 @@ class MasterWeb extends BaseController
 			->where('modulo', $modulo)
 			->findAll();
 		foreach ($processedRow as $row) {
-			$row->data_object = json_decode($row->json_data);
-			if ($row->data_object && is_iterable($row->data_object)) {
-				foreach ($row->data_object as $data_object_item) {
-					$data_object_item->guid = url_title($data_object_item->title, '-', TRUE);
-					// 
-					$data_object_item->img_path = null;
-					$data_object_item->img_obj = null;
-					if (isset($data_object_item->img_id) && $data_object_item->img_id > 0) {
-						if ($data_object_item->img_obj = $media_model->find($data_object_item->img_id)) {
-							$data_object_item->img_path = $data_object_item->img_obj->path;
+			if (isset($row->json_data) && $row->json_data && $row->json_data != '') {
+				$row->data_object = json_decode($row->json_data);
+				if ($row->data_object && is_iterable($row->data_object)) {
+					foreach ($row->data_object as $data_object_item) {
+						$data_object_item->guid = url_title($data_object_item->title, '-', TRUE);
+						// 
+						$data_object_item->img_path = null;
+						$data_object_item->img_obj = null;
+						if (isset($data_object_item->img_id) && $data_object_item->img_id > 0) {
+							if ($data_object_item->img_obj = $media_model->find($data_object_item->img_id)) {
+								$data_object_item->img_path = $data_object_item->img_obj->path;
+							}
 						}
+						// 
 					}
-					// 
 				}
 			}
 			// 
@@ -197,7 +198,7 @@ class MasterWeb extends BaseController
 				$curr_entity->posts_archive_name = $posts_archive_type->nome;
 				if ($posts_archive_type->has_archive) {
 					if ($posts_archive_type->archive_root) {
-						$curr_entity->posts_archive_index = site_url(__locale_uri__ . '/'. $posts_archive_type->archive_root);
+						$curr_entity->posts_archive_index = site_url(__locale_uri__ . '/' . $posts_archive_type->archive_root);
 					} else {
 						$curr_entity->posts_archive_index = route_to(__locale_uri__ . 'web_posts_archive', $posts_archive_type->val);
 					}
