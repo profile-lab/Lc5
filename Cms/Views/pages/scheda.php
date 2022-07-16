@@ -49,6 +49,7 @@
                     <div class="row border badge-light mt-4 mx-1 p-3">
                         <?php /* <div class="col-md-12"><h5>SEO &amp; Options</h5></div> */ ?>
                         <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'SEO title', 'name' => 'seo_title', 'value' => $entity->seo_title, 'width' => 'col-md-12', 'placeholder' => 'seo title', 'id' => null]]) ?>
+                        <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'SEO Keyword', 'name' => 'seo_keyword', 'value' => $entity->seo_keyword, 'width' => 'col-md-12', 'placeholder' => 'seo keyword', 'id' => null]]) ?>
                         <?= view('Lc5\Cms\Views\form-cmp/text-area', ['item' => ['label' => 'SEO description', 'name' => 'seo_description', 'value' => $entity->seo_description, 'width' => 'col-md-12', 'placeholder' => 'SEO description', 'id' => null]]) ?>
                         <?php if (isset($custom_fields_keys_pages) && is_array($custom_fields_keys_pages) && count($custom_fields_keys_pages) > 0) { ?>
                             <!-- CAMPI CUSTOM FIELD -->
