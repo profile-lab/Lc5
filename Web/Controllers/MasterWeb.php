@@ -231,6 +231,10 @@ class MasterWeb extends BaseController
 						$post->abstract = word_limiter(strip_tags($post->testo), 20);
 						$post->permalink = route_to(__locale_uri__ . 'web_posts_single', $posts_archive_type->val, $post->guid);
 						// 
+						if (env('custom.has_entity_rows_in_archive') === TRUE) {
+							$post->entity_rows = $this->getEntityRows($post->id, 'posts');
+						}
+						// 
 						$custom_parameters = null;
 						if (isset($post->entity_free_values_object) && is_array($post->entity_free_values_object) && count($post->entity_free_values_object) > 0) {
 							$custom_parameters = new \stdClass();
