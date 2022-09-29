@@ -15,6 +15,29 @@ class SiteUser extends Entity
 		'name' => null, // varchar(100) DEFAULT NULL,
 		'surname' => null, // varchar(100) DEFAULT NULL,
 		'id_app' => 0, // int(11) DEFAULT NULL,
+
+		'role' => 'APP-USER',
+        'permissions' => '{}',
+        'profili_attivi' => 0,
+        'last_login' => null,
+
+        'cf' => null,
+		'piva' => null,
+		'address' => null,
+		'city' => null,
+		'cap' => null,
+		'tel_num' => null,
+
+		't_e_c' => 0,
+		'autorizzo_1' => 0,
+		'autorizzo_2' => 0,
+		'autorizzo_3' => 0,
+		'autorizzo_4' => 0,
+		'autorizzo_5' => 0,
+
+		'activation_token' => null,
+        'activated_at' => null,
+
     ];
 	protected $datamap = [];
 	protected $dates   = [

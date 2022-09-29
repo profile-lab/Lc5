@@ -20,6 +20,29 @@ class SiteUsersModel extends MasterModel
 		'name', // varchar(100) DEFAULT NULL,
 		'surname', // varchar(100) DEFAULT NULL,
 		'id_app', // int(11) DEFAULT NULL,
+
+		'role',
+		'permissions',
+		'profili_attivi',
+		'last_login',
+		
+        'cf',
+		'piva',
+		'address',
+		'city',
+		'cap',
+		'tel_num',
+		
+		't_e_c',
+		'autorizzo_1',
+		'autorizzo_2',
+		'autorizzo_3',
+		'autorizzo_4',
+		'autorizzo_5',
+		
+		'activation_token',
+		'activated_at',
+
 	];
 
 	

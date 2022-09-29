@@ -13,8 +13,15 @@ use Lc5\Data\Models\PostTagsModel;
 use Lc5\Data\Models\PoststypesModel;
 use stdClass;
 
+use Lc5\Web\Controllers\Users\UserTools;
+
+use CodeIgniter\Email\Email;
+
+
 class MasterWeb extends BaseController
 {
+	protected $redex_codfis="/^(?:[A-Z][AEIOU][AEIOUX]|[AEIOU]X{2}|[B-DF-HJ-NP-TV-Z]{2}[A-Z]){2}(?:[\dLMNP-V]{2}(?:[A-EHLMPR-T](?:[04LQ][1-9MNP-V]|[15MR][\dLMNP-V]|[26NS][0-8LMNP-U])|[DHPS][37PT][0L]|[ACELMRT][37PT][01LM]|[AC-EHLMPR-T][26NS][9V])|(?:[02468LNQSU][048LQU]|[13579MPRTV][26NS])B[26NS][9V])(?:[A-MZ][1-9MNP-V][\dLMNP-V]{2}|[A-M][0L](?:[1-9MNP-V][\dLMNP-V]|[0L][1-9MNP-V]))[A-Z]$/i";
+
 	protected $base_view_folder = 'web/';
 	protected $base_assets_folder = 'assets/web/';
 	public $web_ui_date;
@@ -24,10 +31,18 @@ class MasterWeb extends BaseController
 
 	public $custom_app_contoller = null;
 
+	protected $user_tools;
+
+	protected $send_mail_config;
+
 
 	//--------------------------------------------------------------------
 	public function __construct()
 	{
+
+		$this->user_tools = new UserTools();
+
+
 		$this->base_view_folder = (getenv('custom.web_base_folder')) ? 'Lc5\Web\Views/' . getenv('custom.web_base_folder') : '';
 		$this->base_assets_folder = (getenv('custom.base_assets_folder')) ?: '/assets/';
 		$this->req = \Config\Services::request();
@@ -38,6 +53,8 @@ class MasterWeb extends BaseController
 		define('__web_app_id__', getenv('custom.web_app_id'));
 		define('__post_per_page__', (getenv('custom.post_per_page')) ?: 25);
 		define('__base_assets_folder__', $this->base_assets_folder);
+		// 
+		$this->send_mail_config = $this->getEnvEmailConfig();
 		// 
 		$this->web_ui_date = new WebUiData();
 
@@ -264,5 +281,43 @@ class MasterWeb extends BaseController
 			}
 		}
 		// 
+	}
+	
+	
+	//--------------------------------------------------------------------
+	protected function inviaEmailSMTP($toAddres, $mailSubject,  $htmlbody)
+	{
+		
+		$email = new Email($this->send_mail_config);
+		$email->setFrom(env('custom.from_address'), env('custom.from_name'));
+		$email->setTo($toAddres);
+		
+		$email->setSubject($mailSubject);
+		$email->setMessage($htmlbody);
+		$email->setAltMessage('Questa email è stata inviata in formato HTML. Visualizzi questo messaggio perché il tuo client di posta non supporta queste funzionalità.');
+		if($email->send()){
+			return TRUE;
+		}
+		
+	}
+	
+	//--------------------------------------------------------------------
+	private function getEnvEmailConfig()
+	{
+		if(env('custom.email.protocol') == 'smtp'){
+			return [
+	
+				'mailType' => 'html',
+				'protocol' => env('custom.email.protocol'),
+				'SMTPUser' => env('custom.email.SMTPUser'),
+				'SMTPPass' => env('custom.email.SMTPPass'),
+				'SMTPHost' => env('custom.email.SMTPHost'),
+				'SMTPPort' => env('custom.email.SMTPPort'),
+	
+			];
+		}
+
+
+		return FALSE;
 	}
 }

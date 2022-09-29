@@ -33,6 +33,60 @@ function appLabel($label, $labels, $force_return = false)
     return '';
 }
 //--------------------------------------------------
+function getReq(?string $key = null)
+{
+    if ($key) {
+        return service('request')->getPostGet($key);
+    }
+    return NULL;
+}
+//--------------------------------------------------
+function getPost(?string $key = null)
+{
+    if ($key) {
+        return service('request')->getPost($key);
+    }
+    return NULL;
+}
+//--------------------------------------------------
+function getGet(?string $key = null)
+{
+    if ($key) {
+        return service('request')->getGet($key);
+    }
+    return NULL;
+}
+//--------------------------------------------------
+function composeQueryString($key = null, $value = null)
+{
+    // $complete_current_app_url = current_url();
+    // if ($query_string = \Config\Services::request()->getUri()->getQuery()) {
+    //     $complete_current_app_url .= '?' . $query_string;
+    // }
+    $uri = new \CodeIgniter\HTTP\URI(current_url(true));
+    // 
+    if ($key) {
+        if (is_array($key)) {
+            foreach($key as $k => $v){
+                $uri->addQuery($k, $v);
+            }
+        }else {
+            $__value = '';
+            if ($value) {
+                $__value = $value;
+            }
+            $uri->addQuery($key, $__value);
+        }
+
+        // d($uri->getQuery());
+        return $uri->getQuery();
+    }
+    return NULL;
+}
+
+
+
+//--------------------------------------------------
 function printSiteMenu($menu, $menu_name = null, $menu_id = null)
 {
     if (!$menu_name) {

@@ -21,6 +21,10 @@ class LcUiData extends Entity
             'admin_id' => session()->get('admin_id'),
             'admin_data' => session()->get('admin_data'),
             'isAdminLoggedIn' => session()->get('isAdminLoggedIn'),
+            'bool_values' => [ 
+                "0" => (object) ["nome" => "NO", "val" => "0"],
+                "1" => (object) ["nome" => "YES", "val" => "1"]
+            ],
             // 
             // 'currernt_module' => $uri->setSilent()->getSegment($this->module_folder_index),
 

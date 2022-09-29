@@ -83,6 +83,27 @@ function number_to_currency(float $num, string $currency, string $locale = null,
     ]);
 }
 
+
+//--------------------------------------------------
+function getServerMessage()
+{
+    if ($ui_mess = session()->getFlashdata('ui_mess')) {
+        if (is_array($ui_mess)) {
+            $ui_mess_text = '';
+            foreach ($ui_mess as $ui_mess_key => $ui_mess_item_text) {
+                $ui_mess_text .= '<div class="alert-item alert-item-' . $ui_mess_key . '">' . $ui_mess_item_text . '</div>';
+            }
+        } else {
+            $ui_mess_text = $ui_mess;
+        }
+        if (!$ui_mess_type = session()->getFlashdata('ui_mess_type')) {
+            $ui_mess_type = 'alert alert-info';
+        }
+        return '<div class="' . $ui_mess_type . '" role="alert">' . $ui_mess_text . '</div>';
+    }
+    return NULL;
+}
+
 function user_mess($_ui_mess = '', $_ui_mess_type = null)
 {
     $htmlCode = '';
