@@ -80,9 +80,9 @@ class WebUiData extends Entity
         $base_attributes = [
             'app' => $app,
             //
-            'web_user_id' => session()->get('admweb_user_idin_id'),
-            'web_user_data' => session()->get('web_user_data'),
-            'web_user_isLoggedIn' => session()->get('web_user_isLoggedIn'),
+            'web_user_id' => session()->get('user_id'),
+            'web_user_data' => session()->get('user_data'),
+            'web_user_isLoggedIn' => session()->get('isUserLoggedIn'),
             // 
             'site_menus' => $menus_arr,
             'lang_menu' => $menu_lang,
