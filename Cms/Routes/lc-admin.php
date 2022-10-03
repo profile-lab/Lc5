@@ -29,6 +29,12 @@ $routes->group('lc-admin', ['namespace' => 'Lc5\Cms\Controllers', 'filter' => 'a
 		$routes->match(['get', 'post'], 'newpost', 'AdminUsers::newpost', ['as' => 'lc_admin_users_new']);
 		$routes->get('', 'AdminUsers::index', ['as' => 'lc_admin_users']);
 	});
+	$routes->group('site-users', function ($routes) {
+		$routes->get('delete/(:num)', 'SiteUsers::delete/$1', ['as' => 'lc_site_users_delete']);
+		$routes->match(['get', 'post'], 'edit/(:num)', 'SiteUsers::edit/$1', ['as' => 'lc_site_users_edit']);
+		$routes->match(['get', 'post'], 'newpost', 'SiteUsers::newpost', ['as' => 'lc_site_users_new']);
+		$routes->get('', 'SiteUsers::index', ['as' => 'lc_site_users']);
+	});
 	$routes->group('menus', function ($routes) {
 		$routes->get('delete/(:num)', 'Sitemenus::delete/$1', ['as' => 'lc_menus_delete']);
 		$routes->match(['get', 'post'], 'edit/(:num)', 'Sitemenus::edit/$1', ['as' => 'lc_menus_edit']);
