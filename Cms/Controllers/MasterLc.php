@@ -604,6 +604,52 @@ class MasterLc extends BaseController
 		];
 		//
 
+		if(isset($this->custom_app_modules) && is_array($this->custom_app_modules)){
+			foreach($this->custom_app_modules as $cm_key => $custom_modulo_arr){
+				$custom_modulo = (object) $custom_modulo_arr;
+
+				// Posts 
+				$menu_data_arr['custom_' . $custom_modulo->nome] = (object) [
+					'label' => $custom_modulo->nome,
+					'route' => site_url(route_to($custom_modulo->lc_base_route)),
+					'module' => $cm_key,
+					'ico' => 'pin',
+					'items' => [
+						(object) [
+							'label' => 'Lista ',
+							'route' => site_url(route_to($custom_modulo->lc_base_route)),
+							'module_action' => 'index',
+						],
+						// (object) [
+						// 	'label' => 'New ' . $post_type->nome,
+						// 	'route' => site_url(route_to('lc_posts_new', $post_type->val)),
+						// 	'module_action' => 'newpost',
+						// ],
+						// (object) [
+						// 	'label' => 'Categorie',
+						// 	'route' => site_url(route_to('lc_posts_cat', $post_type->val)),
+						// 	'module_action' => 'postscategories',
+						// ],
+						// (object) [
+						// 	'label' => 'Tags',
+						// 	'route' => site_url(route_to('lc_posts_tags', $post_type->val)),
+						// 	'module_action' => 'poststags',
+						// ]
+					]
+				];
+				// 
+
+
+				// 'corsi' => (object)[
+				// 	'nome' => 'Corsi',
+				// 	'controller' => 'Corsi',
+				// 	'lc_base_route' => 'lc_admin_corsi'
+				// ]
+
+			}
+		}
+
+
 		// Tools 
 		$menu_data_arr['tools'] = (object) [
 			'label' => 'Tools',
@@ -674,6 +720,26 @@ class MasterLc extends BaseController
 		];
 		// 
 
+		// Menu 
+		$menu_data_arr['users'] = (object) [
+			'label' => 'Utenti',
+			'route' => site_url(route_to('lc_site_users')),
+			'module' => 'siteusers',
+			'ico' => 'people',
+			'items' => [
+				(object) [
+					'label' => 'Lista Utenti',
+					'route' => site_url(route_to('lc_site_users')),
+					'module_action' => 'index',
+				],
+				(object) [
+					'label' => 'Nuovo Utente',
+					'route' => site_url(route_to('lc_site_users_new')),
+					'module_action' => 'newpost',
+				]
+			]
+		];
+		//
 		// Menu 
 		$menu_data_arr['admins'] = (object) [
 			'label' => 'Admins',
