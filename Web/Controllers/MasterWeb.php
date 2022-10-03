@@ -31,7 +31,7 @@ class MasterWeb extends BaseController
 
 	public $custom_app_contoller = null;
 
-	protected $user_tools;
+	public $user_tools;
 
 	protected $send_mail_config;
 
