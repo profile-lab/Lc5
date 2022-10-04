@@ -15,7 +15,7 @@ class UserTools extends BaseController
 	public function user_id()
 	{
 		if ($userID = session()->get('user_id')) {
-			return $userID;
+			return  intval($userID);
 		}
 		return null;
 	}
