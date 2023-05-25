@@ -229,10 +229,10 @@ $routes->group('lc-admin', ['namespace' => 'Lc5\Cms\Controllers', 'filter' => 'a
 		$routes->get('ajax-list', 'Media::ajaxList', ['as' => 'lc_media_ajax_list']);
 		$routes->get('', 'Media::index', ['as' => 'lc_media']);
 	});
-	$routes->get('/', 'Dashboard::index');
+	$routes->get('/', 'Dashboard::index', ['as' => 'lc_dashboard']);
 	$routes->get('change-lang/(:any)', 'MasterLc::cambiaLang/$1', ['as' => 'lc_cambia_lang']);
 	$routes->get('change-app/(:any)', 'MasterLc::cambiaApp/$1', ['as' => 'lc_cambia_app']);
-	$routes->get('', 'Dashboard::index', ['as' => 'lc_dashboard']);
+	$routes->get('', 'Dashboard::index');//, ['as' => 'lc_dashboard']
 	$routes->get('', 'Dashboard::index', ['as' => 'lc_root']);
 });
 

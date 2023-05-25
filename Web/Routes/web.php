@@ -109,7 +109,6 @@ $routes->add('(:any)', '\Lc5\Web\Controllers\Pages::page/$1', ['as' => 'web_page
 $routes->get('/', '\Lc5\Web\Controllers\Pages::index', ['as' => 'web_homepage']);
 $routes->add('', '\Lc5\Web\Controllers\Pages::index');
 
-
 $routes->setDefaultNamespace('\Lc5\Web\Controllers\Pages');
 $routes->setDefaultController('Pages');
 $routes->setDefaultMethod('index');
