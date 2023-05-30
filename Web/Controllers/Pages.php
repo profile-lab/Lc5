@@ -76,11 +76,6 @@ class Pages extends MasterWeb
 			}
 		}
 		//
-		d($this->base_view_filesystem . 'page-' . $curr_entity->type . '.php');
-		d(appIsFile($this->base_view_filesystem . 'page-' . $curr_entity->type . '.php'));
-		d($this->base_view_filesystem . 'page-default.php');
-		d(appIsFile($this->base_view_filesystem . 'page-default.php'));
-
 		if (appIsFile($this->base_view_filesystem . 'page-' . $curr_entity->type . '.php')) {
 			return view($this->base_view_namespace . 'page-' .  $curr_entity->type, $this->web_ui_date->toArray());
 		}
