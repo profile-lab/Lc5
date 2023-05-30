@@ -33,14 +33,14 @@ class UserDashboard extends UserMaster
 		// 
 	}
 
-    //--------------------------------------------------------------------
+	//--------------------------------------------------------------------
 	public function personalDashboard()
 	{
 		$curr_entity = (object) [
-            'titolo' => 'Benvenuto',
-            'descrizione' => '',
-            'type' => 'user_dashboard'
-        ];
+			'titolo' => 'Benvenuto',
+			'descrizione' => '',
+			'type' => 'user_dashboard'
+		];
 
 		if (!$logged_user = $this->user_tools->get_current_user()) {
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
@@ -80,7 +80,7 @@ class UserDashboard extends UserMaster
 		$this->web_ui_date->fill((array)$curr_entity);
 		// 
 		// 
-		if(isset($this->custom_app_contoller) && $this->custom_app_contoller ){
+		if (isset($this->custom_app_contoller) && $this->custom_app_contoller) {
 			$custom_app_contoller_method = lcfirst(str_replace(' ', '', ucwords(preg_replace('/[\s_]+/', ' ', str_replace(['-', '_'], ' ', $curr_entity->type)))));
 			if (method_exists($this->custom_app_contoller, $custom_app_contoller_method)) {
 				$this->custom_app_contoller->{$custom_app_contoller_method}($this);
@@ -89,11 +89,10 @@ class UserDashboard extends UserMaster
 		//
 		if (appIsFile('Views/' .  $this->base_view_folder . 'users/user-dashboard.php')) {
 			return view($this->base_view_folder . 'users/user-dashboard', $this->web_ui_date->toArray());
-		
-		}else{
-			$this->base_view_folder = '\Lc5\Web\Views/';
+		} else {
+			$this->base_view_folder = $this->lc5_views_namespace;
 			$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
-			return view($this->base_view_folder.'users/user-dashboard', $this->web_ui_date->toArray());
+			return view($this->base_view_folder . 'users/user-dashboard', $this->web_ui_date->toArray());
 		}
 	}
 
@@ -101,16 +100,16 @@ class UserDashboard extends UserMaster
 	//--------------------------------------------------------------------
 	public function login()
 	{
-        $curr_entity = (object) [
-            'titolo' => 'Login',
-            'descrizione' => 'Login',
-            'type' => 'user_login'
-        ];
+		$curr_entity = (object) [
+			'titolo' => 'Login',
+			'descrizione' => 'Login',
+			'type' => 'user_login'
+		];
 		if ($this->user_tools->is_logged_in()) {
 			return redirect()->route('web_dashboard');
 		}
 
-        
+
 		$users_model = new SiteUsersModel();
 		$request = \Config\Services::request();
 		$this->web_ui_date->__set('request', $request);
@@ -163,7 +162,7 @@ class UserDashboard extends UserMaster
 		$this->web_ui_date->fill((array)$curr_entity);
 		// 
 		// 
-		if(isset($this->custom_app_contoller) && $this->custom_app_contoller ){
+		if (isset($this->custom_app_contoller) && $this->custom_app_contoller) {
 			$custom_app_contoller_method = lcfirst(str_replace(' ', '', ucwords(preg_replace('/[\s_]+/', ' ', str_replace(['-', '_'], ' ', $curr_entity->type)))));
 
 			if (method_exists($this->custom_app_contoller, $custom_app_contoller_method)) {
@@ -173,11 +172,10 @@ class UserDashboard extends UserMaster
 		//
 		if (appIsFile('Views/' .  $this->base_view_folder . 'users/login.php')) {
 			return view($this->base_view_folder . 'users/login', $this->web_ui_date->toArray());
-		
-		}else{
-			$this->base_view_folder = '\Lc5\Web\Views/';
+		} else {
+			$this->base_view_folder = ;
 			$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
-			return view($this->base_view_folder.'users/login', $this->web_ui_date->toArray());
+			return view($this->base_view_folder . 'users/login', $this->web_ui_date->toArray());
 		}
 	}
 
@@ -186,10 +184,10 @@ class UserDashboard extends UserMaster
 	{
 		helper('text');
 		$curr_entity = (object) [
-            'titolo' => 'ISCRIVITI',
-            'descrizione' => '',
-            'type' => 'user_sign_up'
-        ];
+			'titolo' => 'ISCRIVITI',
+			'descrizione' => '',
+			'type' => 'user_sign_up'
+		];
 		if ($this->user_tools->is_logged_in()) {
 			return redirect()->route('web_dashboard');
 		}
@@ -237,9 +235,9 @@ class UserDashboard extends UserMaster
 					$htmlbody = str_replace('{{surname}}', $body_params['surname'], $htmlbody);
 					$htmlbody = str_replace('{{email}}', $body_params['email'], $htmlbody);
 					$htmlbody = str_replace('{{activation_link}}', $body_params['activation_link'], $htmlbody);
-					$email_subject = 'Benvenuto in '.env('custom.app_name').' - Verifica il tuo account';
+					$email_subject = 'Benvenuto in ' . env('custom.app_name') . ' - Verifica il tuo account';
 					if ($this->sendAccountVerificationEmail($entity->email, $email_subject, $htmlbody)) {
-					// if ($this->sendAccountVerificationEmail($entity->email, $entity->name . ' ' . $entity->surname, $this->from_address, $this->from_name, $email_subject, $htmlbody, $body_params)) {
+						// if ($this->sendAccountVerificationEmail($entity->email, $entity->name . ' ' . $entity->surname, $this->from_address, $this->from_name, $email_subject, $htmlbody, $body_params)) {
 						session()->setFlashdata('ui_mess', 'Ti abbiamo inviato una mail per poter verificare i tuoi dati e attivare il tuo account.');
 						session()->setFlashdata('ui_mess_type', 'alert alert-ok');
 						return redirect()->route('web_login');
@@ -259,7 +257,7 @@ class UserDashboard extends UserMaster
 		$this->web_ui_date->fill((array)$curr_entity);
 		// 
 		// 
-		if(isset($this->custom_app_contoller) && $this->custom_app_contoller ){
+		if (isset($this->custom_app_contoller) && $this->custom_app_contoller) {
 			$custom_app_contoller_method = lcfirst(str_replace(' ', '', ucwords(preg_replace('/[\s_]+/', ' ', str_replace(['-', '_'], ' ', $curr_entity->type)))));
 
 			if (method_exists($this->custom_app_contoller, $custom_app_contoller_method)) {
@@ -269,27 +267,25 @@ class UserDashboard extends UserMaster
 		//
 		if (appIsFile('Views/' .  $this->base_view_folder . 'users/sign_up.php')) {
 			return view($this->base_view_folder . 'users/sign_up', $this->web_ui_date->toArray());
-		
-		}else{
-			$this->base_view_folder = '\Lc5\Web\Views/';
+		} else {
+			$this->base_view_folder = $this->lc5_views_namespace;
 			$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
-			return view($this->base_view_folder.'users/sign_up', $this->web_ui_date->toArray());
+			return view($this->base_view_folder . 'users/sign_up', $this->web_ui_date->toArray());
 		}
-		
 	}
 
 	//--------------------------------------------------------------------
 	public function attivaAccount($activation_token)
 	{
 		$curr_entity = (object) [
-            'titolo' => 'ISCRIVITI',
-            'descrizione' => '',
-            'type' => 'user_attiva_account'
-        ];
+			'titolo' => 'ISCRIVITI',
+			'descrizione' => '',
+			'type' => 'user_attiva_account'
+		];
 		if ($this->user_tools->is_logged_in()) {
 			return redirect()->route('web_dashboard');
 		}
-		
+
 
 
 		$users_model = new SiteUsersModel();
@@ -303,11 +299,10 @@ class UserDashboard extends UserMaster
 			//
 			if (appIsFile('Views/' .  $this->base_view_folder . 'users/user-mess.php')) {
 				return view($this->base_view_folder . 'users/user-mess', $this->web_ui_date->toArray());
-			
-			}else{
-				$this->base_view_folder = '\Lc5\Web\Views/';
+			} else {
+				$this->base_view_folder = $this->lc5_views_namespace;
 				$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
-				return view($this->base_view_folder.'users/user-mess', $this->web_ui_date->toArray());
+				return view($this->base_view_folder . 'users/user-mess', $this->web_ui_date->toArray());
 			}
 		}
 		$user->activated_at =  Time::now()->toLocalizedString('yyyy-MM-dd HH:mm:ss');
@@ -326,7 +321,7 @@ class UserDashboard extends UserMaster
 		$this->web_ui_date->fill((array)$curr_entity);
 		// 
 		// 
-		if(isset($this->custom_app_contoller) && $this->custom_app_contoller ){
+		if (isset($this->custom_app_contoller) && $this->custom_app_contoller) {
 			$custom_app_contoller_method = lcfirst(str_replace(' ', '', ucwords(preg_replace('/[\s_]+/', ' ', str_replace(['-', '_'], ' ', $curr_entity->type)))));
 
 			if (method_exists($this->custom_app_contoller, $custom_app_contoller_method)) {
@@ -336,11 +331,10 @@ class UserDashboard extends UserMaster
 		//
 		if (appIsFile('Views/' .  $this->base_view_folder . 'users/user-mess.php')) {
 			return view($this->base_view_folder . 'users/user-mess', $this->web_ui_date->toArray());
-		
-		}else{
-			$this->base_view_folder = '\Lc5\Web\Views/';
+		} else {
+			$this->base_view_folder = $this->lc5_views_namespace;
 			$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
-			return view($this->base_view_folder.'users/user-mess', $this->web_ui_date->toArray());
+			return view($this->base_view_folder . 'users/user-mess', $this->web_ui_date->toArray());
 		}
 	}
 

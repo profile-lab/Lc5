@@ -20,9 +20,13 @@ use CodeIgniter\Email\Email;
 
 class MasterWeb extends BaseController
 {
-	protected $redex_codfis="/^(?:[A-Z][AEIOU][AEIOUX]|[AEIOU]X{2}|[B-DF-HJ-NP-TV-Z]{2}[A-Z]){2}(?:[\dLMNP-V]{2}(?:[A-EHLMPR-T](?:[04LQ][1-9MNP-V]|[15MR][\dLMNP-V]|[26NS][0-8LMNP-U])|[DHPS][37PT][0L]|[ACELMRT][37PT][01LM]|[AC-EHLMPR-T][26NS][9V])|(?:[02468LNQSU][048LQU]|[13579MPRTV][26NS])B[26NS][9V])(?:[A-MZ][1-9MNP-V][\dLMNP-V]{2}|[A-M][0L](?:[1-9MNP-V][\dLMNP-V]|[0L][1-9MNP-V]))[A-Z]$/i";
+	protected $redex_codfis = "/^(?:[A-Z][AEIOU][AEIOUX]|[AEIOU]X{2}|[B-DF-HJ-NP-TV-Z]{2}[A-Z]){2}(?:[\dLMNP-V]{2}(?:[A-EHLMPR-T](?:[04LQ][1-9MNP-V]|[15MR][\dLMNP-V]|[26NS][0-8LMNP-U])|[DHPS][37PT][0L]|[ACELMRT][37PT][01LM]|[AC-EHLMPR-T][26NS][9V])|(?:[02468LNQSU][048LQU]|[13579MPRTV][26NS])B[26NS][9V])(?:[A-MZ][1-9MNP-V][\dLMNP-V]{2}|[A-M][0L](?:[1-9MNP-V][\dLMNP-V]|[0L][1-9MNP-V]))[A-Z]$/i";
 
-	protected $base_view_folder = 'web/';
+	protected $lc5_views_namespace = '\Lc5\Web\Views/';
+	protected $base_view_folder = null;
+
+
+
 	protected $base_assets_folder = 'assets/web/';
 	public $web_ui_date;
 	protected $route_prefix;
@@ -43,7 +47,7 @@ class MasterWeb extends BaseController
 		$this->user_tools = new UserTools();
 
 
-		$this->base_view_folder = (getenv('custom.web_base_folder')) ? 'Lc5\Web\Views/' . getenv('custom.web_base_folder') :  '\Lc5\Web\Views/';
+		$this->base_view_folder = $this->lc5_views_namespace . (getenv('custom.web_base_folder')) ?  getenv('custom.web_base_folder') . '/' : '';
 		$this->base_assets_folder = (getenv('custom.base_assets_folder')) ?: '/assets/';
 		$this->req = \Config\Services::request();
 		$locale = $this->req->getLocale();
@@ -101,7 +105,7 @@ class MasterWeb extends BaseController
 			if (is_file(APPPATH . 'Views/' .  $this->base_view_folder . 'maintenance.php')) {
 				return view($this->base_view_folder . 'maintenance', $this->web_ui_date->toArray());
 			} else {
-				$this->base_view_folder = '\Lc5\Web\Views/';
+				$this->base_view_folder = $this->lc5_views_namespace;
 				$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
 				return view($this->base_view_folder . 'maintenance', $this->web_ui_date->toArray());
 			}
@@ -159,8 +163,10 @@ class MasterWeb extends BaseController
 			if ($row->type != 'component') {
 				if (appIsFile('Views/' .  $this->base_view_folder . 'rows/' . $row->type . '-' . $row->css_class . '.php')) {
 					$row->view = $this->base_view_folder . 'rows/' . $row->type . '-' . $row->css_class;
-				} else {
+				} else if (appIsFile('Views/' .  $this->base_view_folder . 'rows/' . $row->type . '-' . $row->css_class . '.php')) {
 					$row->view = $this->base_view_folder . 'rows/' . $row->type;
+				} else {
+					$row->view = $this->lc5_views_namespace . 'rows/' . $row->type;
 				}
 			} else {
 				if (appIsFile('Views/' .  $this->base_view_folder . 'rows/php-component/' . $row->component . '.php')) {
@@ -282,38 +288,37 @@ class MasterWeb extends BaseController
 		}
 		// 
 	}
-	
-	
+
+
 	//--------------------------------------------------------------------
 	protected function inviaEmailSMTP($toAddres, $mailSubject,  $htmlbody)
 	{
-		
+
 		$email = new Email($this->send_mail_config);
 		$email->setFrom(env('custom.from_address'), env('custom.from_name'));
 		$email->setTo($toAddres);
-		
+
 		$email->setSubject($mailSubject);
 		$email->setMessage($htmlbody);
 		$email->setAltMessage('Questa email è stata inviata in formato HTML. Visualizzi questo messaggio perché il tuo client di posta non supporta queste funzionalità.');
-		if($email->send()){
+		if ($email->send()) {
 			return TRUE;
 		}
-		
 	}
-	
+
 	//--------------------------------------------------------------------
 	private function getEnvEmailConfig()
 	{
-		if(env('custom.email.protocol') == 'smtp'){
+		if (env('custom.email.protocol') == 'smtp') {
 			return [
-	
+
 				'mailType' => 'html',
 				'protocol' => env('custom.email.protocol'),
 				'SMTPUser' => env('custom.email.SMTPUser'),
 				'SMTPPass' => env('custom.email.SMTPPass'),
 				'SMTPHost' => env('custom.email.SMTPHost'),
 				'SMTPPort' => env('custom.email.SMTPPort'),
-	
+
 			];
 		}
 

@@ -82,7 +82,7 @@ class Pages extends MasterWeb
 		if (appIsFile('Views/' .  $this->base_view_folder . 'page-default.php')) {
 			return view($this->base_view_folder . 'page-default', $this->web_ui_date->toArray());
 		}else{
-			$this->base_view_folder = '\Lc5\Web\Views/';
+			$this->base_view_folder = $this->lc5_views_namespace;
 			$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
 			return view($this->base_view_folder.'page-default', $this->web_ui_date->toArray());
 		}
