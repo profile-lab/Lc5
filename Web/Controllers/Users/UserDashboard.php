@@ -91,7 +91,7 @@ class UserDashboard extends UserMaster
 			return view($this->base_view_folder . 'users/user-dashboard', $this->web_ui_date->toArray());
 		
 		}else{
-			$this->base_view_folder = '\Lc5\Web\Views\default/';
+			$this->base_view_folder = '\Lc5\Web\Views/';
 			$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
 			return view($this->base_view_folder.'users/user-dashboard', $this->web_ui_date->toArray());
 		}
@@ -175,7 +175,7 @@ class UserDashboard extends UserMaster
 			return view($this->base_view_folder . 'users/login', $this->web_ui_date->toArray());
 		
 		}else{
-			$this->base_view_folder = '\Lc5\Web\Views\default/';
+			$this->base_view_folder = '\Lc5\Web\Views/';
 			$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
 			return view($this->base_view_folder.'users/login', $this->web_ui_date->toArray());
 		}
@@ -271,7 +271,7 @@ class UserDashboard extends UserMaster
 			return view($this->base_view_folder . 'users/sign_up', $this->web_ui_date->toArray());
 		
 		}else{
-			$this->base_view_folder = '\Lc5\Web\Views\default/';
+			$this->base_view_folder = '\Lc5\Web\Views/';
 			$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
 			return view($this->base_view_folder.'users/sign_up', $this->web_ui_date->toArray());
 		}
@@ -305,7 +305,7 @@ class UserDashboard extends UserMaster
 				return view($this->base_view_folder . 'users/user-mess', $this->web_ui_date->toArray());
 			
 			}else{
-				$this->base_view_folder = '\Lc5\Web\Views\default/';
+				$this->base_view_folder = '\Lc5\Web\Views/';
 				$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
 				return view($this->base_view_folder.'users/user-mess', $this->web_ui_date->toArray());
 			}
@@ -338,7 +338,7 @@ class UserDashboard extends UserMaster
 			return view($this->base_view_folder . 'users/user-mess', $this->web_ui_date->toArray());
 		
 		}else{
-			$this->base_view_folder = '\Lc5\Web\Views\default/';
+			$this->base_view_folder = '\Lc5\Web\Views/';
 			$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
 			return view($this->base_view_folder.'users/user-mess', $this->web_ui_date->toArray());
 		}

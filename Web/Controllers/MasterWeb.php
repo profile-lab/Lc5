@@ -43,7 +43,7 @@ class MasterWeb extends BaseController
 		$this->user_tools = new UserTools();
 
 
-		$this->base_view_folder = (getenv('custom.web_base_folder')) ? 'Lc5\Web\Views/' . getenv('custom.web_base_folder') : '';
+		$this->base_view_folder = (getenv('custom.web_base_folder')) ? 'Lc5\Web\Views/' . getenv('custom.web_base_folder') :  '\Lc5\Web\Views/';
 		$this->base_assets_folder = (getenv('custom.base_assets_folder')) ?: '/assets/';
 		$this->req = \Config\Services::request();
 		$locale = $this->req->getLocale();
@@ -101,7 +101,7 @@ class MasterWeb extends BaseController
 			if (is_file(APPPATH . 'Views/' .  $this->base_view_folder . 'maintenance.php')) {
 				return view($this->base_view_folder . 'maintenance', $this->web_ui_date->toArray());
 			} else {
-				$this->base_view_folder = '\Lc5\Web\Views\default/';
+				$this->base_view_folder = '\Lc5\Web\Views/';
 				$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
 				return view($this->base_view_folder . 'maintenance', $this->web_ui_date->toArray());
 			}
