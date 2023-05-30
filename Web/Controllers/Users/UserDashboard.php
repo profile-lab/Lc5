@@ -87,12 +87,12 @@ class UserDashboard extends UserMaster
 			}
 		}
 		//
-		if (appIsFile('Views/' .  $this->base_view_folder . 'users/user-dashboard.php')) {
-			return view($this->base_view_folder . 'users/user-dashboard', $this->web_ui_date->toArray());
+		if (appIsFile($this->base_view_filesystem . 'users/user-dashboard.php')) {
+			return view($this->base_view_namespace . 'users/user-dashboard', $this->web_ui_date->toArray());
 		} else {
-			$this->base_view_folder = $this->lc5_views_namespace;
-			$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
-			return view($this->base_view_folder . 'users/user-dashboard', $this->web_ui_date->toArray());
+			$this->base_view_namespace = $this->lc5_views_namespace;
+			$this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
+			return view($this->base_view_namespace . 'users/user-dashboard', $this->web_ui_date->toArray());
 		}
 	}
 
@@ -170,12 +170,12 @@ class UserDashboard extends UserMaster
 			}
 		}
 		//
-		if (appIsFile('Views/' .  $this->base_view_folder . 'users/login.php')) {
-			return view($this->base_view_folder . 'users/login', $this->web_ui_date->toArray());
+		if (appIsFile($this->base_view_filesystem . 'users/login.php')) {
+			return view($this->base_view_namespace . 'users/login', $this->web_ui_date->toArray());
 		} else {
-			$this->base_view_folder = ;
-			$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
-			return view($this->base_view_folder . 'users/login', $this->web_ui_date->toArray());
+			$this->base_view_namespace = $this->lc5_views_namespace;
+			$this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
+			return view($this->base_view_namespace . 'users/login', $this->web_ui_date->toArray());
 		}
 	}
 
@@ -265,12 +265,12 @@ class UserDashboard extends UserMaster
 			}
 		}
 		//
-		if (appIsFile('Views/' .  $this->base_view_folder . 'users/sign_up.php')) {
-			return view($this->base_view_folder . 'users/sign_up', $this->web_ui_date->toArray());
+		if (appIsFile($this->base_view_filesystem . 'users/sign_up.php')) {
+			return view($this->base_view_namespace . 'users/sign_up', $this->web_ui_date->toArray());
 		} else {
-			$this->base_view_folder = $this->lc5_views_namespace;
-			$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
-			return view($this->base_view_folder . 'users/sign_up', $this->web_ui_date->toArray());
+			$this->base_view_namespace = $this->lc5_views_namespace;
+			$this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
+			return view($this->base_view_namespace . 'users/sign_up', $this->web_ui_date->toArray());
 		}
 	}
 
@@ -297,12 +297,12 @@ class UserDashboard extends UserMaster
 			$this->web_ui_date->fill((array)$curr_entity);
 			// 
 			//
-			if (appIsFile('Views/' .  $this->base_view_folder . 'users/user-mess.php')) {
-				return view($this->base_view_folder . 'users/user-mess', $this->web_ui_date->toArray());
+			if (appIsFile($this->base_view_filesystem . 'users/user-mess.php')) {
+				return view($this->base_view_namespace . 'users/user-mess', $this->web_ui_date->toArray());
 			} else {
-				$this->base_view_folder = $this->lc5_views_namespace;
-				$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
-				return view($this->base_view_folder . 'users/user-mess', $this->web_ui_date->toArray());
+				$this->base_view_namespace = $this->lc5_views_namespace;
+				$this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
+				return view($this->base_view_namespace . 'users/user-mess', $this->web_ui_date->toArray());
 			}
 		}
 		$user->activated_at =  Time::now()->toLocalizedString('yyyy-MM-dd HH:mm:ss');
@@ -329,12 +329,12 @@ class UserDashboard extends UserMaster
 			}
 		}
 		//
-		if (appIsFile('Views/' .  $this->base_view_folder . 'users/user-mess.php')) {
-			return view($this->base_view_folder . 'users/user-mess', $this->web_ui_date->toArray());
+		if (appIsFile($this->base_view_filesystem . 'users/user-mess.php')) {
+			return view($this->base_view_namespace . 'users/user-mess', $this->web_ui_date->toArray());
 		} else {
-			$this->base_view_folder = $this->lc5_views_namespace;
-			$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
-			return view($this->base_view_folder . 'users/user-mess', $this->web_ui_date->toArray());
+			$this->base_view_namespace = $this->base_view_namespace;
+			$this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
+			return view($this->base_view_namespace . 'users/user-mess', $this->web_ui_date->toArray());
 		}
 	}
 
@@ -400,7 +400,7 @@ class UserDashboard extends UserMaster
 		// 
 		$this->web_ui_date->fill($this->page_data_arr);
 		// 
-		return view($this->module_views_folder . 'recupera-password-s1', $this->web_ui_date->toArray());
+		return view($this->base_view_namespace . 'recupera-password-s1', $this->web_ui_date->toArray());
 	}
 
 	//--------------------------------------------------------------------
@@ -413,7 +413,7 @@ class UserDashboard extends UserMaster
 			$this->page_data_arr['titolo'] = 'Utente non trovato';
 			$this->web_ui_date->fill($this->page_data_arr);
 			// 
-			return view($this->module_views_folder . 'user-mess', $this->web_ui_date->toArray());
+			return view($this->base_view_namespace . 'user-mess', $this->web_ui_date->toArray());
 		}
 
 		helper('text');

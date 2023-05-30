@@ -76,15 +76,20 @@ class Pages extends MasterWeb
 			}
 		}
 		//
-		if (appIsFile('Views/' .  $this->base_view_folder . 'page-' . $curr_entity->type . '.php')) {
-			return view($this->base_view_folder . 'page-' .  $curr_entity->type, $this->web_ui_date->toArray());
+		d($this->base_view_filesystem . 'page-' . $curr_entity->type . '.php');
+		d(appIsFile($this->base_view_filesystem . 'page-' . $curr_entity->type . '.php'));
+		d($this->base_view_filesystem . 'page-default.php');
+		d(appIsFile($this->base_view_filesystem . 'page-default.php'));
+
+		if (appIsFile($this->base_view_filesystem . 'page-' . $curr_entity->type . '.php')) {
+			return view($this->base_view_namespace . 'page-' .  $curr_entity->type, $this->web_ui_date->toArray());
 		}
-		if (appIsFile('Views/' .  $this->base_view_folder . 'page-default.php')) {
-			return view($this->base_view_folder . 'page-default', $this->web_ui_date->toArray());
+		if (appIsFile($this->base_view_filesystem . 'page-default.php')) {
+			return view($this->base_view_namespace . 'page-default', $this->web_ui_date->toArray());
 		}else{
-			$this->base_view_folder = $this->lc5_views_namespace;
-			$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
-			return view($this->base_view_folder.'page-default', $this->web_ui_date->toArray());
+			$this->base_view_namespace = $this->lc5_views_namespace;
+			$this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
+			return view($this->base_view_namespace.'page-default', $this->web_ui_date->toArray());
 		}
 	}
 

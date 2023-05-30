@@ -23,7 +23,8 @@ class MasterWeb extends BaseController
 	protected $redex_codfis = "/^(?:[A-Z][AEIOU][AEIOUX]|[AEIOU]X{2}|[B-DF-HJ-NP-TV-Z]{2}[A-Z]){2}(?:[\dLMNP-V]{2}(?:[A-EHLMPR-T](?:[04LQ][1-9MNP-V]|[15MR][\dLMNP-V]|[26NS][0-8LMNP-U])|[DHPS][37PT][0L]|[ACELMRT][37PT][01LM]|[AC-EHLMPR-T][26NS][9V])|(?:[02468LNQSU][048LQU]|[13579MPRTV][26NS])B[26NS][9V])(?:[A-MZ][1-9MNP-V][\dLMNP-V]{2}|[A-M][0L](?:[1-9MNP-V][\dLMNP-V]|[0L][1-9MNP-V]))[A-Z]$/i";
 
 	protected $lc5_views_namespace = '\Lc5\Web\Views/';
-	protected $base_view_folder = null;
+	protected $base_view_namespace = null;
+	protected $base_view_filesystem = null;
 
 
 
@@ -47,8 +48,9 @@ class MasterWeb extends BaseController
 		$this->user_tools = new UserTools();
 
 
-		$this->base_view_folder = $this->lc5_views_namespace . (getenv('custom.web_base_folder')) ?  getenv('custom.web_base_folder') . '/' : '';
-		$this->base_assets_folder = (getenv('custom.base_assets_folder')) ?: '/assets/';
+		$this->base_view_namespace = $this->lc5_views_namespace . (getenv('custom.web_base_folder')) ?  getenv('custom.web_base_folder') . '/' : '';
+		$this->base_view_filesystem =  'Views'. DIRECTORY_SEPARATOR. ((getenv('custom.web_base_folder')) ?  getenv('custom.web_base_folder') . '/' : '');
+		$this->base_assets_folder = (getenv('custom.base_assets_folder')) ?  getenv('custom.base_assets_folder') . '/' : '/assets/';
 		$this->req = \Config\Services::request();
 		$locale = $this->req->getLocale();
 		define('__locale__', $locale);
@@ -71,7 +73,7 @@ class MasterWeb extends BaseController
 			// }
 		}
 
-		$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
+		$this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
 		// $this->web_ui_date->__set('lc_admin_menu', $this->getLcAdminMenu());
 		// $this->web_ui_date->__set('lc_apps', $this->getLcApps());
 		// $this->web_ui_date->__set('curr_lc_app', $this->getCurrApp());
@@ -102,12 +104,12 @@ class MasterWeb extends BaseController
 
 
 		if ($is_in_maintenance) {
-			if (is_file(APPPATH . 'Views/' .  $this->base_view_folder . 'maintenance.php')) {
-				return view($this->base_view_folder . 'maintenance', $this->web_ui_date->toArray());
+			if (is_file( $this->base_view_filesystem . 'maintenance.php')) {
+				return view($this->base_view_namespace . 'maintenance', $this->web_ui_date->toArray());
 			} else {
-				$this->base_view_folder = $this->lc5_views_namespace;
-				$this->web_ui_date->__set('base_view_folder', $this->base_view_folder);
-				return view($this->base_view_folder . 'maintenance', $this->web_ui_date->toArray());
+				$this->base_view_namespace = $this->lc5_views_namespace;
+				$this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
+				return view($this->base_view_namespace . 'maintenance', $this->web_ui_date->toArray());
 			}
 		}
 
@@ -161,15 +163,15 @@ class MasterWeb extends BaseController
 			// 
 			$row->guid = url_title($row->nome, '-', TRUE);
 			if ($row->type != 'component') {
-				if (appIsFile('Views/' .  $this->base_view_folder . 'rows/' . $row->type . '-' . $row->css_class . '.php')) {
-					$row->view = $this->base_view_folder . 'rows/' . $row->type . '-' . $row->css_class;
-				} else if (appIsFile('Views/' .  $this->base_view_folder . 'rows/' . $row->type . '-' . $row->css_class . '.php')) {
-					$row->view = $this->base_view_folder . 'rows/' . $row->type;
+				if (appIsFile($this->base_view_filesystem . 'rows/' . $row->type . '-' . $row->css_class . '.php')) {
+					$row->view = $this->base_view_namespace . 'rows/' . $row->type . '-' . $row->css_class;
+				} else if (appIsFile($this->base_view_filesystem . 'rows/' . $row->type . '-' . $row->css_class . '.php')) {
+					$row->view = $this->base_view_namespace . 'rows/' . $row->type;
 				} else {
 					$row->view = $this->lc5_views_namespace . 'rows/' . $row->type;
 				}
 			} else {
-				if (appIsFile('Views/' .  $this->base_view_folder . 'rows/php-component/' . $row->component . '.php')) {
+				if (appIsFile($this->base_view_filesystem . 'rows/php-component/' . $row->component . '.php')) {
 					if (isset($row->dynamic_component)) {
 						if (isset($row->dynamic_component->before_func) && trim($row->dynamic_component->before_func)) {
 							if (function_exists($row->dynamic_component->before_func)) {
@@ -181,9 +183,9 @@ class MasterWeb extends BaseController
 							}
 						}
 					}
-					$row->view = $this->base_view_folder . 'rows/php-component/' . $row->component;
+					$row->view = $this->base_view_namespace . 'rows/php-component/' . $row->component;
 				} else {
-					$row->view = $this->base_view_folder . 'rows/php-component/empty';
+					$row->view = $this->base_view_namespace . 'rows/php-component/empty';
 				}
 			}
 		}

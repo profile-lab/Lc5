@@ -135,7 +135,7 @@ class Shop extends \Lc5\Web\Controllers\MasterWeb
         // dd($products_archive);
         $this->web_ui_date->fill((array)$curr_entity);
         $this->web_ui_date->entity_rows = $pages_entity_rows;
-        return view($this->base_view_folder . 'shop/archive', $this->web_ui_date->toArray());
+        return view($this->base_view_namespace . 'shop/archive', $this->web_ui_date->toArray());
     }
 
     //--------------------------------------------------------------------
@@ -172,7 +172,7 @@ class Shop extends \Lc5\Web\Controllers\MasterWeb
         // dd($curr_entity);
         $this->web_ui_date->fill((array)$curr_entity);
         $this->web_ui_date->entity_rows = $pages_entity_rows;
-        return view($this->base_view_folder . 'shop/detail', $this->web_ui_date->toArray());
+        return view($this->base_view_namespace . 'shop/detail', $this->web_ui_date->toArray());
     }
 
     //--------------------------------------------------------------------
@@ -228,7 +228,7 @@ class Shop extends \Lc5\Web\Controllers\MasterWeb
         
         $this->web_ui_date->fill((array)$curr_entity);
         $this->web_ui_date->entity_rows = $pages_entity_rows;
-        return view($this->base_view_folder . 'shop/site-cart', $this->web_ui_date->toArray());
+        return view($this->base_view_namespace . 'shop/site-cart', $this->web_ui_date->toArray());
     }
 
 

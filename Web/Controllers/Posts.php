@@ -122,11 +122,11 @@ class Posts extends MasterWeb
 
 
         //
-        if (appIsFile('Views/' .  $this->base_view_folder . 'post-archive-' . $curr_entity->val . '.php')) {
-            return view($this->base_view_folder . 'post-archive-' .  $curr_entity->val, $this->web_ui_date->toArray());
+        if (appIsFile($this->base_view_filesystem . 'post-archive-' . $curr_entity->val . '.php')) {
+            return view($this->base_view_namespace . 'post-archive-' .  $curr_entity->val, $this->web_ui_date->toArray());
         }
 
-        return view($this->base_view_folder . 'post-archive-default', $this->web_ui_date->toArray());
+        return view($this->base_view_namespace . 'post-archive-default', $this->web_ui_date->toArray());
     }
 
     //--------------------------------------------------------------------
@@ -186,10 +186,10 @@ class Posts extends MasterWeb
         // 
         $this->web_ui_date->entity_rows = $this->getEntityRows($curr_entity->id, 'posts');
         //
-        if (appIsFile('Views/' .  $this->base_view_folder . 'post-' . $curr_post_type->val . '.php')) {
-            return view($this->base_view_folder . 'post-' .  $curr_post_type->val, $this->web_ui_date->toArray());
+        if (appIsFile($this->base_view_filesystem . 'post-' . $curr_post_type->val . '.php')) {
+            return view($this->base_view_namespace . 'post-' .  $curr_post_type->val, $this->web_ui_date->toArray());
         }
-        return view($this->base_view_folder . 'post-default', $this->web_ui_date->toArray());
+        return view($this->base_view_namespace . 'post-default', $this->web_ui_date->toArray());
     }
 
     //--------------------------------------------------------------------
