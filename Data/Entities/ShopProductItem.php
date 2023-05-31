@@ -10,7 +10,7 @@ class ShopProductItem extends Entity
 		'status' => null,
 		'id_app' => null,
 		'lang' => null,
-		'parent' => null,
+		'parent' => 0,
 		'ordine' => null,
 		'public' => null,
 		'is_evi' => null,
