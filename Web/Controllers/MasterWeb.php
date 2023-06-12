@@ -185,7 +185,11 @@ class MasterWeb extends BaseController
 					}
 					$row->view = $this->base_view_namespace . 'rows/php-component/' . $row->component;
 				} else {
-					$row->view = $this->base_view_namespace . 'rows/php-component/empty';
+					if (is_file( $this->base_view_filesystem . 'rows/php-component/empty.php')) {
+						$row->view = $this->base_view_namespace . 'rows/php-component/empty';
+					} else {
+						$row->view = $this->lc5_views_namespace . 'rows/php-component/empty';
+					}
 				}
 			}
 		}
