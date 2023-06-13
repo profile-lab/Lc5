@@ -1,5 +1,5 @@
 <?php if (isset($gallery_obj) && count($gallery_obj) > 0) { ?>
-    <div class="simple_gallery swiper-container">
+    <div class="swiper simple_gallery swiper-container">
         <div class="swiper-wrapper">
             <?php foreach ($gallery_obj as $gallery_img) { ?>
                 <div class="simple_gallery_img swiper-slide">
