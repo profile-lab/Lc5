@@ -23,7 +23,7 @@ class LcTools extends MasterLc
         $this->lc_ui_date->__set('module_name', $this->module_name);
         // 
         $this->lc_ui_date->__set('currernt_module', 'tools');
-        $this->lc_ui_date->__set('currernt_module_action', 'lctools');
+        $this->lc_ui_date->__set('currernt_module_action', 'lc_tools_index');
     }
 
     //--------------------------------------------------------------------

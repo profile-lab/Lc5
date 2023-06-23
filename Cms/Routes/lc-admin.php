@@ -211,7 +211,7 @@ $routes->group('lc-admin', ['namespace' => 'Lc5\Cms\Controllers', 'filter' => 'a
 			$routes->add('db',  'LcTools::dbIndex', ['as' => 'lc_tools_db']);
 
 			
-			$routes->get('', 'LcTools::index', ['as' => 'lc_tools']);
+			$routes->get('', 'LcTools::index', ['as' => 'lc_tools_index']);
 
 		});
 		// 
