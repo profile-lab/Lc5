@@ -199,6 +199,22 @@ $routes->group('lc-admin', ['namespace' => 'Lc5\Cms\Controllers', 'filter' => 'a
 			$routes->get('', 'Lcapps::index', ['as' => 'lc_apps']);
 		});
 		// 
+		$routes->group('lc-tools', function ($routes) {
+			// // $routes->get( 'delete/(:num)', 'Lcapps::delete/$1', ['as' => 'lc_apps_delete']);
+			// $routes->match(['get', 'post'], 'edit/(:num)', 'Lcapps::edit/$1', ['as' => 'lc_apps_edit']);
+			// $routes->match(['get', 'post'], 'newpost', 'Lcapps::newpost', ['as' => 'lc_apps_new']);
+			
+			$routes->add('db/dump',  'LcTools::dbDump', ['as' => 'lc_tools_db_dump']);
+			$routes->add('db/downloads/(:any)/(:any)',  'LcTools::scaricaSingleFiles/$1/$2', ['as' => 'lc_tools_db_dump_download_item'] );
+			$routes->add('db/zippa/(:any)/(:any)',  'LcTools::comprimiSingleFiles/$1/$2', ['as' => 'lc_tools_db_dump_zip'] );
+			$routes->add('db/elimina/(:any)/(:any)',  'LcTools::eliminaSingleFiles/$1/$2', ['as' => 'lc_tools_db_dump_delete_file'] );
+			$routes->add('db',  'LcTools::dbIndex', ['as' => 'lc_tools_db']);
+
+			
+			$routes->get('', 'LcTools::index', ['as' => 'lc_tools']);
+
+		});
+		// 
 		// 
 		$routes->match(['get', 'post'], 'db-table-structure/(:any)', 'Migrate::tableStructure/$1', ['as' => 'lc_table_structure']);
 		$routes->match(['get', 'post'], 'db-table-structure', 'Migrate::tableStructure', ['as' => 'lc_tables_structure']);

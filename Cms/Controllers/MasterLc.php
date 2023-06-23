@@ -707,6 +707,11 @@ class MasterLc extends BaseController
 					'route' => site_url(route_to('lc_apps')),
 					'module_action' => 'lcapps',
 				],
+				(object) [
+					'label' => 'Lc Tools',
+					'route' => site_url(route_to('lc_tools')),
+					'module_action' => 'lc_tools',
+				],
 			]
 		];
 		//

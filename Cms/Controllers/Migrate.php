@@ -2,6 +2,10 @@
 
 namespace Lc5\Cms\Controllers;
 
+use Mysqldump\Mysqldump;
+// use Ifsnop\Mysqldump as IMysqldump;
+
+
 class Migrate extends \CodeIgniter\Controller
 {
 	public function update()
@@ -9,12 +13,12 @@ class Migrate extends \CodeIgniter\Controller
 		$migrate = \Config\Services::migrations();
 
 		try {
-            $migrate->setNamespace('Lc5\Data')->latest();
+			$migrate->setNamespace('Lc5\Data')->latest();
 			$this->datiBase();
 			return redirect()->to(route_to('lc_dashboard') . '?action_result=DatabaseUpdateOK');
-        } catch (\Throwable $e) {
-            // Do something with the error here...
-        }
+		} catch (\Throwable $e) {
+			// Do something with the error here...
+		}
 
 
 		// $migrate->latest();
@@ -70,14 +74,14 @@ use CodeIgniter\Model;
 
 class ' . pascalize(plural($table_name)) . 'Model  extends Model
 {
-	protected $table				= \''.$table_name.'\';
+	protected $table				= \'' . $table_name . '\';
 	protected $primaryKey			= \'id\';
 	protected $useSoftDeletes		= true;
 	protected $createdField			= \'created_at\';
 	protected $updatedField			= \'updated_at\';
 	protected $deletedField			= \'deleted_at\';
 
-	protected $returnType           = \'' . ( "App\Entities\\" . pascalize(singular($table_name))  ) . '\';
+	protected $returnType           = \'' . ("App\Entities\\" . pascalize(singular($table_name))) . '\';
 	protected $allowedFields = [';
 
 				$table_structure = [];
@@ -89,14 +93,13 @@ class ' . pascalize(plural($table_name)) . 'Model  extends Model
 						'null' => ($field->nullable) ? true : false,
 						'default' => $field->default,
 					];
-					if( $field->name != "created_at" && $field->name != "updated_at" && $field->name != "deleted_at" ){
+					if ($field->name != "created_at" && $field->name != "updated_at" && $field->name != "deleted_at") {
 
 						$entity_string .= "
 		'" . $field->name . "' => null, ";
 						$model_string .= "
 		'" . $field->name . "', ";
 					}
-
 				}
 				$entity_string .= '
 
