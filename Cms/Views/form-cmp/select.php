@@ -22,7 +22,7 @@ view('Lc5\Cms\Views\form-cmp/select', ['name' => 'titolo', 'value' => $entity->t
 <div class="form-group <?= (isset($width)) ? $width : 'col-md-12' ?> form-field-<?= (isset($input_class)) ? $input_class : str_replace(['[',']'], '', $name) ?>">
     <label <?= (isset($id)) ? ' for="' . $id . '" ' : '' ?>><?= (isset($label)) ? $label : 'Select' ?></label>
     <?php if (isset($sources) && is_array($sources)) { ?>
-        <select name="<?= $name ?>" class="custom-select mr-sm-2 <?= (isset($input_class)) ? $input_class : '' ?>" <?= (isset($id)) ? ' id="' . $id . '" ' : '' ?>>
+        <select name="<?= $name ?>" class="custom-select mr-sm-2 <?= (isset($input_class)) ? $input_class : '' ?>" <?= (isset($id)) ? ' id="' . $id . '" ' : '' ?> <?= (isset($required) && $required != null) ? ' required ' : '' ?>>
             <?php if (!isset($no_empty) || ($no_empty == false)) { ?>
                 <option value="">Seleziona un valore</option>
             <?php } ?>
