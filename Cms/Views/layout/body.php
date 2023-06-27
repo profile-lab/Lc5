@@ -25,7 +25,7 @@
         </div>
     </div>
     <script>
-    const lc_root = '<?= site_url(route_to('lc_root')) ?>';
+    const lc_root = '<?= site_url(route_to('lc_dashboard')) ?>';
     </script>
     <?= $this->include('Lc5\Cms\Views\layout/components/footer-tag') ?>
     <?= $this->renderSection('footer_script') ?>
