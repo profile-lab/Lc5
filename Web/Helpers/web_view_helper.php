@@ -126,7 +126,7 @@ function printChildrenMenuItems($childrens, $menu_name, $depth = 0, $current_url
             $menu_item_url =site_url(__locale_uri__ . $c_row->parameter);
             //  strpos($menu_item_url,  $current_url) !== false 
             $return_html .= '<li class="'.(($has_submenu == true) ? 'has_submenu' : 'last_child_depth').'">';
-            $return_html .= '<a class="menu-item-' . $c_row->id . ' menu-item-type-' . $c_row->type . ' ' . ((isset($c_row->is_home) && $c_row->is_home == 1) ? 'link_home' : ( ($current_url && ($menu_item_url == $current_url) ) ? 'is_current' : '')) . ' ' . $menu_name . '-' . $c_row->id . '" href="' . $menu_item_url . '">' . $c_row->label . '</a>';
+            $return_html .= '<a class="menu-item-' . $c_row->id . ' menu-item-type-' . $c_row->type . ' ' . ((isset($c_row->is_home) && $c_row->is_home == 1) ? 'link_home' : '') . ' ' .(($current_url && ($menu_item_url == $current_url)) ? 'is_current' : (($current_url == '' && (isset($c_row->is_home) && $c_row->is_home == 1) ) ? 'is_current' : '' )) . ' ' . $menu_name . '-' . $c_row->id . '" href="' . $menu_item_url . '">'. $c_row->label . '</a>';
             $return_html .= $sub_menu_code;
             $return_html .= '</li>';
         }
