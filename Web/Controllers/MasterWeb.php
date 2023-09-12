@@ -165,7 +165,7 @@ class MasterWeb extends BaseController
 			if ($row->type != 'component') {
 				if (appIsFile($this->base_view_filesystem . 'rows/' . $row->type . '-' . $row->css_class . '.php')) {
 					$row->view = $this->base_view_namespace . 'rows/' . $row->type . '-' . $row->css_class;
-				} else if (appIsFile($this->base_view_filesystem . 'rows/' . $row->type . '-' . $row->css_class . '.php')) {
+				} else if (appIsFile($this->base_view_filesystem . 'rows/' . $row->type . '.php')) {
 					$row->view = $this->base_view_namespace . 'rows/' . $row->type;
 				} else {
 					$row->view = $this->lc5_views_namespace . 'rows/' . $row->type;
