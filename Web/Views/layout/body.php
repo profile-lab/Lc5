@@ -8,7 +8,10 @@
     <?= $this->include($base_view_folder.'layout/components/header-tag') ?>
 </head>
 
-<body class="">
+<body class="<?php
+    echo ((isset($type) && $type != '') ? ' pagemodel-'.$type.' ' : ''); 
+    echo ((isset($guid) && $guid != '') ? 'type-'.$guid.' ' : ''); 
+?>">
     <?= $this->include($base_view_folder.'layout/components/header') ?>
     <main id="main_container">
         <?= $this->include($base_view_folder.'layout/components/sidebar') ?>
