@@ -188,7 +188,7 @@ class ShopProductsModel extends MasterModel
 						$entity_free_values_item_data = new \stdClass();
 						$entity_free_values_item_data->key = $entity_free_values_item->key;
 						$entity_free_values_item_data->value = $entity_free_values_item->value;
-						$entity_free_values_arr[] = $entity_free_values_item_data;
+						$entity_free_values_arr[$entity_free_values_item->key] = $entity_free_values_item_data;
 						// dd($json_2_object);
 					}
 					$item->entity_free_values_object = $entity_free_values_arr;
