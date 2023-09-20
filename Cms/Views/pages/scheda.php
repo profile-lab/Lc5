@@ -26,6 +26,17 @@
             <div class="row first-row">
                 <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Nome', 'name' => 'nome', 'value' => $entity->nome, 'width' => 'col-md-12', 'placeholder' => 'Nome']]) ?>
                 <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Titolo', 'name' => 'titolo', 'value' => $entity->titolo, 'width' => 'col-md-12', 'placeholder' => 'Titolo']]) ?>
+
+                <?php if ($entity->id ) { ?>
+                    <?php if (isset($custom_fields_keys_pages) && is_array($custom_fields_keys_pages) && count($custom_fields_keys_pages) > 0) { ?>
+                        <?= view('Lc5\Cms\Views\part-cmp/custom-field-module', ['item' => [
+                            'custom_fields_keys' => $custom_fields_keys_pages,
+                            'entity' => $entity,
+                        ]]) ?>
+                    <?php } ?>
+                <?php } ?>
+
+
             </div>
             <?php if ($entity->id) { ?>
                 <div class="my_rows_container text-dark  rounded">
@@ -51,34 +62,7 @@
                         <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'SEO title', 'name' => 'seo_title', 'value' => $entity->seo_title, 'width' => 'col-md-12', 'placeholder' => 'seo title', 'id' => null]]) ?>
                         <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'SEO Keyword', 'name' => 'seo_keyword', 'value' => $entity->seo_keyword, 'width' => 'col-md-12', 'placeholder' => 'seo keyword', 'id' => null]]) ?>
                         <?= view('Lc5\Cms\Views\form-cmp/text-area', ['item' => ['label' => 'SEO description', 'name' => 'seo_description', 'value' => $entity->seo_description, 'width' => 'col-md-12', 'placeholder' => 'SEO description', 'id' => null]]) ?>
-                        <?php if (isset($custom_fields_keys_pages) && is_array($custom_fields_keys_pages) && count($custom_fields_keys_pages) > 0) { ?>
-                            <!-- CAMPI CUSTOM FIELD -->
-                            <div class="entity_custom_fields">
-                                <div class="row">
-                                    <div class="d-flex">
-                                        <h6>Campi custom</h6>
-                                        <div>
-                                            <button type="button" meta-rel-source-id="custom_field_item_code-pages" meta-rel-trg="entity_custom_items_cnt" class="btn btn-sm btn-primary add_entity_custom_item"><span class="oi oi-plus m-0"></span></button>
-                                        </div>
-                                    </div>
-                                    <?= view('Lc5\Cms\Views\form-cmp/hidden', ['item' => ['name' => 'entity_free_values', 'value' => (isset($entity->entity_free_values)) ? $entity->entity_free_values : '', 'input_class' => 'entity_free_values']]) ?>
-                                    <div class="row">
-                                        <div class="entity_custom_items_cnt">
-                                            <?php if (isset($entity->entity_free_values_object) && is_iterable($entity->entity_free_values_object)) { ?>
-                                                <?php foreach ($entity->entity_free_values_object as $entity_free_values_item) { ?>
-                                                    <?= view('Lc5\Cms\Views\part-cmp/custom-field-item', ['item' => [
-                                                        'keys_source' => $custom_fields_keys_pages,
-                                                        'key' => (isset($entity_free_values_item->key)) ? $entity_free_values_item->key : '',
-                                                        'value' => (isset($entity_free_values_item->value)) ? $entity_free_values_item->value : ''
-                                                    ]]) ?>
-                                                <?php } ?>
-                                            <?php } ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- CAMPI CUSTOM FIELD -->
-                        <?php } ?>
+                        
                     </div>
                 </div>
 
