@@ -45,6 +45,34 @@
                 <div class="row">
                     <?= view('Lc5\Cms\Views\form-cmp/html-editor', ['item' => ['label' => 'Testo', 'name' => 'testo', 'value' => (isset($entity->testo)) ? $entity->testo : '', 'width' => 'col-md-12', 'placeholder' => '...']]) ?>
                 </div>
+                <?php if (isset($post_attributes) && is_iterable($post_attributes)) { ?>
+                    <div class="row">
+                        <?php foreach ($post_attributes as $c_field_a) { ?>
+                            <?php if ($c_field_a['view_side'] == 'main') { ?>
+                                <?php $c_field =  (object) $c_field_a ?>
+                                <?= view('Lc5\Cms\Views\form-cmp/' . $c_field->type, ['item' => [
+                                    'label' => $c_field->label,
+                                    'name' => $c_field->name,
+                                    'value' => $entity->{$c_field->name},
+                                    'width' => 'col-md-' . $c_field->w,
+                                    'placeholder' => (isset($c_field->placeholder)) ? $c_field->placeholder : '',
+                                    'src' => (isset($c_field->src_attr)) ? $entity->{$c_field->src_attr} : null,
+                                    'gallery_obj' => (isset($c_field->gallery_obj)) ? $entity->{$c_field->gallery_obj} : [],
+                                    'sources' => (isset($c_field->sources)) ? $entity->{$c_field->sources} : [],
+                                    'no_empty' => (isset($c_field->no_empty)) ? TRUE : FALSE,
+                                ]]) ?>
+                            <?php } ?>
+                        <?php } ?>
+                    </div>
+                <?php } ?>
+                <?php if ($entity->id && $post_type_entity->has_custom_fields) { ?>
+                    <?php if (isset($custom_fields_keys_posts) && is_array($custom_fields_keys_posts) && count($custom_fields_keys_posts) > 0) { ?>
+                        <?= view('Lc5\Cms\Views\part-cmp/custom-field-module', ['item' => [
+                            'custom_fields_keys' => $custom_fields_keys_posts,
+                            'entity' => $entity,
+                        ]]) ?>
+                    <?php } ?>
+                <?php } ?>
             </div>
 
             <?php if ($entity->id) { ?>
@@ -65,19 +93,11 @@
                 </div>
                 <?= view('Lc5\Cms\Views\form-cmp/hidden', ['item' => ['name' => 'rows_to_del', 'value' => '', 'id' => 'rows_to_del']]) ?>
             <?php } ?>
-            <div class="last-row show-tit-if-is-no-empty">
-                <h5 class="mt-5 ">Altri strumenti</h5>
-                <style>
-                    .show-tit-if-is-no-empty {
-                        display: none;
-                    }
-                </style>
+            <div class="last-row">
                 <?php if (isset($post_attributes) && is_iterable($post_attributes)) { ?>
-
                     <div class="row">
-                        <?php $conta_in_main = 0; ?>
                         <?php foreach ($post_attributes as $c_field_a) { ?>
-                            <?php if ($c_field_a['view_side'] == 'main') { ?>
+                            <?php if ($c_field_a['view_side'] == 'foot') { ?>
                                 <?php $c_field =  (object) $c_field_a ?>
                                 <?= view('Lc5\Cms\Views\form-cmp/' . $c_field->type, ['item' => [
                                     'label' => $c_field->label,
@@ -89,71 +109,12 @@
                                     'gallery_obj' => (isset($c_field->gallery_obj)) ? $entity->{$c_field->gallery_obj} : [],
                                     'sources' => (isset($c_field->sources)) ? $entity->{$c_field->sources} : [],
                                     'no_empty' => (isset($c_field->no_empty)) ? TRUE : FALSE,
+
                                 ]]) ?>
-                                <?php $conta_in_main++; ?>
                             <?php } ?>
                         <?php } ?>
                     </div>
                 <?php } ?>
-                <div class="row border badge-light mt-4 mx-1 p-3">
-                    <?php foreach ($post_attributes as $c_field_a) { ?>
-                        <?php if ($c_field_a['view_side'] == 'foot') { ?>
-                            <?php $c_field =  (object) $c_field_a ?>
-                            <?= view('Lc5\Cms\Views\form-cmp/' . $c_field->type, ['item' => [
-                                'label' => $c_field->label,
-                                'name' => $c_field->name,
-                                'value' => $entity->{$c_field->name},
-                                'width' => 'col-md-' . $c_field->w,
-                                'placeholder' => (isset($c_field->placeholder)) ? $c_field->placeholder : '',
-                                'src' => (isset($c_field->src_attr)) ? $entity->{$c_field->src_attr} : null,
-                                'gallery_obj' => (isset($c_field->gallery_obj)) ? $entity->{$c_field->gallery_obj} : [],
-                                'sources' => (isset($c_field->sources)) ? $entity->{$c_field->sources} : [],
-                                'no_empty' => (isset($c_field->no_empty)) ? TRUE : FALSE,
-
-                            ]]) ?>
-                            <?php $conta_in_main++; ?>
-                        <?php } ?>
-                    <?php } ?>
-                    <?php if ($entity->id && $post_type_entity->has_custom_fields) { ?>
-                        <?php if (isset($custom_fields_keys_posts) && is_array($custom_fields_keys_posts) && count($custom_fields_keys_posts) > 0) { ?>
-                            <!-- CAMPI CUSTOM FIELD -->
-                            <div class="entity_custom_fields">
-                                <div class="row">
-                                    <div class="d-flex">
-                                        <h6>Campi custom</h6>
-                                        <div>
-                                            <button type="button" meta-rel-source-id="custom_field_item_code-posts" meta-rel-trg="entity_custom_items_cnt" class="btn btn-sm btn-primary add_entity_custom_item"><span class="oi oi-plus m-0"></span></button>
-                                        </div>
-                                    </div>
-                                    <?= view('Lc5\Cms\Views\form-cmp/hidden', ['item' => ['name' => 'entity_free_values', 'value' => (isset($entity->entity_free_values)) ? $entity->entity_free_values : '', 'input_class' => 'entity_free_values']]) ?>
-                                    <div class="row">
-                                        <div class="entity_custom_items_cnt">
-                                            <?php if (isset($entity->entity_free_values_object) && is_iterable($entity->entity_free_values_object)) { ?>
-                                                <?php foreach ($entity->entity_free_values_object as $entity_free_values_item) { ?>
-                                                    <?= view('Lc5\Cms\Views\part-cmp/custom-field-item', ['item' => [
-                                                        'keys_source' => $custom_fields_keys_posts,
-                                                        'key' => (isset($entity_free_values_item->key)) ? $entity_free_values_item->key : '',
-                                                        'value' => (isset($entity_free_values_item->value)) ? $entity_free_values_item->value : ''
-                                                    ]]) ?>
-                                                <?php } ?>
-                                            <?php } ?>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- CAMPI CUSTOM FIELD -->
-                            <?php $conta_in_main++; ?>
-                        <?php } ?>
-                    <?php } ?>
-                    <?php if ($conta_in_main > 0) { ?>
-                        <style>
-                            .show-tit-if-is-no-empty {
-                                display: block;
-                            }
-                        </style>
-                    <?php } ?>
-                </div>
             </div>
         </div>
         <div class="scheda-sb <?= ($entity->id && $post_type_entity->has_paragraphs) ? 'has_paragraphs' : 'margin-top-0' ?>">
@@ -232,7 +193,7 @@
         <script type="text/javascript">
             const uri_api_refresh_video_info = "<?= site_url(route_to('lc_api_video_info_vimeo')) ?>";
             const uri_api_create_new_tus_vimeo = "<?= site_url(route_to('lc_api_new_tus_vimeo_w_rel', 'posts', $entity->id)) ?>";
-            const uri_api_create_new_vimeo_by_url = "<?= site_url(route_to('lc_api_new_vimeo_by_url','posts', $entity->id)) ?>";
+            const uri_api_create_new_vimeo_by_url = "<?= site_url(route_to('lc_api_new_vimeo_by_url', 'posts', $entity->id)) ?>";
 
             const uri_api_delete_vimeo_video = "<?= site_url(route_to('lc_api_video_delete_vimeo_w_rel', 'posts', $entity->id)) ?>";
         </script>
