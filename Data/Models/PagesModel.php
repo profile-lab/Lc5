@@ -205,10 +205,13 @@ class PagesModel extends MasterModel
 	}
 	private function chechIsUniqueRun($guid, $count = null, $lang = null, $exclude_id = null)
 	{
+		$curr_app = defined('__web_app_id__') ? __web_app_id__ : session()->get('curr_lc_app');
+
 		if ($count) {
 			$guid .= '-' . $count;
 		}
 		$is_unique_qb = $this->allowCallbacks(FALSE)->select('id, guid')->where('guid', $guid);
+		$is_unique_qb->where('id_app', $curr_app);
 		if ($lang) {
 			$is_unique_qb->where('lang', $lang);
 		}

@@ -24,10 +24,12 @@
                 <?php } ?>
             </div>
             <div class="row first-row">
+                <?php /*
                 <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Nome', 'name' => 'nome', 'value' => $entity->nome, 'width' => 'col-md-12', 'placeholder' => 'Nome']]) ?>
+                */ ?>
                 <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Titolo', 'name' => 'titolo', 'value' => $entity->titolo, 'width' => 'col-md-12', 'placeholder' => 'Titolo']]) ?>
 
-                <?php if ($entity->id ) { ?>
+                <?php if ($entity->id) { ?>
                     <?php if (isset($custom_fields_keys_pages) && is_array($custom_fields_keys_pages) && count($custom_fields_keys_pages) > 0) { ?>
                         <?= view('Lc5\Cms\Views\part-cmp/custom-field-module', ['item' => [
                             'custom_fields_keys' => $custom_fields_keys_pages,
@@ -62,7 +64,7 @@
                         <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'SEO title', 'name' => 'seo_title', 'value' => $entity->seo_title, 'width' => 'col-md-12', 'placeholder' => 'seo title', 'id' => null]]) ?>
                         <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'SEO Keyword', 'name' => 'seo_keyword', 'value' => $entity->seo_keyword, 'width' => 'col-md-12', 'placeholder' => 'seo keyword', 'id' => null]]) ?>
                         <?= view('Lc5\Cms\Views\form-cmp/text-area', ['item' => ['label' => 'SEO description', 'name' => 'seo_description', 'value' => $entity->seo_description, 'width' => 'col-md-12', 'placeholder' => 'SEO description', 'id' => null]]) ?>
-                        
+
                     </div>
                 </div>
 
@@ -79,7 +81,12 @@
 
                         <div class="col-sm-8 col-lg-12">
                             <div class="row">
+                                <?= view('Lc5\Cms\Views\form-cmp/readonly', ['item' => ['label' => 'Nome', 'value' => $entity->nome, 'name' => 'nome',  'width' => 'col-12', 'placeholder' => '', 'if_active_name' => 'nome',  'enabled' => (($entity->id) ? TRUE : FALSE)]]) ?>
                                 <?= view('Lc5\Cms\Views\form-cmp/readonly', ['item' => ['label' => 'Guid', 'value' => $entity->guid, 'width' => 'col-12', 'placeholder' => '', 'if_active_name' => 'guid',  'enabled' => (($entity->id) ? TRUE : FALSE)]]) ?>
+                                <?php /*
+                                
+                                <?= view('Lc5\Cms\Views\form-cmp/readonly', ['item' => ['label' => 'Guid', 'value' => $entity->guid, 'width' => 'col-12', 'placeholder' => '']]) ?>
+                                */ ?>
                                 <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => 'Tipo', 'name' => 'type', 'value' => $entity->type, 'width' => 'col-12 col-xl-12', 'sources' => $pages_types, 'no_empty' => true]]) ?>
                                 <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => 'Genitore', 'name' => 'parent', 'value' => $entity->parent, 'width' => 'col-12 col-xl-12', 'sources' => $parents, 'no_empty' => false]]) ?>
                                 <?= view('Lc5\Cms\Views\form-cmp/number', ['item' => ['label' => 'Ordine', 'name' => 'ordine', 'value' => $entity->ordine, 'width' => 'col-12 col-xl-12', 'placeholder' => 'titolo', 'step' => '0.01']]) ?>
