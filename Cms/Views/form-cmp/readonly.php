@@ -22,11 +22,11 @@ view('Lc5\Cms\Views\form-cmp/readonly', [ 'value' => $entity->aaa, 'width' => 'c
     <label <?= (isset($id)) ? ' for="'.$id.'" ' : '' ?>><?= (isset($label)) ? $label : '&nbsp;' ?></label>
     <input type="text" 
         readonly
-        disabled
-        name="<?= $name ?>" 
+        <?= ($name && $name != '') ? '' : 'disabled' ?>
+        <?= ($name && $name != '') ? 'name="'.$name.'"' : '' ?>        
         if_active_name="<?= $if_active_name ?>" 
         value="<?= esc($value) ?>" 
-        class="form-control <?= (isset($input_class)) ? $input_class : '' ?> <?= (isset($enabled) && $enabled) ? 'readonly_enabled' : '' ?> "
+        class="form-control <?= (isset($input_class)) ? $input_class : '' ?> <?= (isset($enabled) && $enabled) ? 'readonly_enabled disabled' : '' ?> "
         <?= (isset($placeholder)) ? ' placeholder="'.$placeholder.'" ' : '' ?> 
     />
     <?= (isset($enabled) && $enabled) ? '<button class="enable_readonly"><span class="oi oi-pencil"></span></button>' : '' ?>
