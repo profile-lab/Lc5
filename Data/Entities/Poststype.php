@@ -61,7 +61,7 @@ class Poststype extends Entity
 			'label' => 'Gallery',
 			'name' => 'gallery',
 			'w' => '12',
-			'view_side' => 'foot',
+			'view_side' => 'main',
 			'type' => 'img-gallery',
 			'gallery_obj' => 'gallery_obj'
 		],
