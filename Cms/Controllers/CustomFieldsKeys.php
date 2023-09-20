@@ -29,6 +29,9 @@ class CustomFieldsKeys extends MasterLc
 		// 
 		$this->lc_ui_date->__set('entity_types', [
 			"string" => (object) [ "nome" => "String", "val" => "string" ], 
+			"text" => (object) [ "nome" => "Testo", "val" => "text" ], 
+			"html-editor" => (object) [ "nome" => "Editor", "val" => "html-editor" ], 
+			"bool" => (object) [ "nome" => "Bool", "val" => "bool" ], 
 		] );
 		// 
 	}
