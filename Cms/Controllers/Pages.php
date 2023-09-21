@@ -68,13 +68,15 @@ class Pages extends MasterLc
 		// 
 		if ($this->req->getMethod() == 'post') {
 			$validate_rules = [
-				'nome' => ['label' => 'Nome', 'rules' => 'required'],
-				// 'titolo' => ['label' => 'Titolo', 'rules' => 'required'],
+				// 'nome' => ['label' => 'Nome', 'rules' => 'required'],
+				'titolo' => ['label' => 'Titolo', 'rules' => 'required'],
 			];
 			$is_falied = TRUE;
 			$curr_entity->fill($this->req->getPost());
 			if ($this->validate($validate_rules)) {
-				$curr_entity->status = 1;
+				$curr_entity->nome = $curr_entity->titolo;
+				$curr_entity->status = 0;
+				$curr_entity->public = 0;
 				$pages_model->save($curr_entity);
 				// 
 				$new_id = $pages_model->getInsertID();
@@ -92,7 +94,7 @@ class Pages extends MasterLc
 		}
 		// 
 		$this->lc_ui_date->entity = $curr_entity;
-		return view('Lc5\Cms\Views\pages/scheda', $this->lc_ui_date->toArray());
+		return view('Lc5\Cms\Views\pages/new', $this->lc_ui_date->toArray());
 	}
 
 	//--------------------------------------------------------------------
@@ -129,7 +131,10 @@ class Pages extends MasterLc
 			$curr_entity->fill($this->req->getPost());
 			// 
 			if ($this->validate($validate_rules)) {
-				$curr_entity->status = 1;
+				if ($curr_entity->created_at == $curr_entity->updated_at) {
+					$curr_entity->status = 1;
+					$curr_entity->public = 1;
+				}
 				$pages_model->save($curr_entity);
 				// 
 				$this->editEntityRows($curr_entity->id, 'pages');

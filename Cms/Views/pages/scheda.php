@@ -24,9 +24,6 @@
                 <?php } ?>
             </div>
             <div class="row first-row">
-                <?php /*
-                <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Nome', 'name' => 'nome', 'value' => $entity->nome, 'width' => 'col-md-12', 'placeholder' => 'Nome']]) ?>
-                */ ?>
                 <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Titolo', 'name' => 'titolo', 'value' => $entity->titolo, 'width' => 'col-md-12', 'placeholder' => 'Titolo']]) ?>
 
                 <?php if ($entity->id) { ?>
@@ -131,48 +128,12 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('.add_entity_custom_item').click(function(e) {
-            e.preventDefault();
-            unbindRowActions();
-            // var current_par = $(this).closest('.content-row');
-            var trg_cnt = $(this).attr('meta-rel-trg');
-            var htmlCode = $('#' + $(this).attr('meta-rel-source-id')).html();
-            var codeStrBase = htmlCode.toString();
-            var codeStr = codeStrBase.replace(/###@###/g, '[]');
-            var newCode = $(codeStr);
-            $('.' + trg_cnt).append(newCode);
-            bindRowActions();
-        });
-
-        $('form.save_after_proc').submit(function() {
-            let json_free_values_str = '';
-            let json_free_values_arr = [];
-            let target_input = $('.entity_free_values', this);
-            $('.entity_custom_items_cnt .custom_field-row_item', this).each(function() {
-                let curr_item_obj = new Object();
-                curr_item_obj.key = $('.custom_field_key', this).val();
-                curr_item_obj.value = $('.custom_field_value', this).val();
-                json_free_values_arr.push(curr_item_obj);
-            });
-            json_free_values_str = JSON.stringify(json_free_values_arr);
-            target_input.val(json_free_values_str);
-        });
-
-
-        // 
-        $('.sortable-list-cnt').sortable({
-            // cancel: '.acc_aperto',
-            placeholder: 'row-sort-placeholder',
-            // axis: 'y',
-            cancel: "a,button,.jodit-container,input,select",
-            update: function(event, ui) {
-                setOrdineRow($('.sortable-list-cnt'));
-            }
-        });
-        // 
+        //    
         $('.more-row-content').slideUp(1);
     });
 </script>
+
+<?php /*
 
 <script type="text/html" id="blocco_simple_par_code" style="display: none;">
     <?= view('Lc5\Cms\Views\rows-cmp/simple-par', ['row' => (object) []]) ?>
@@ -186,21 +147,24 @@
 <script type="text/html" id="blocco_component_par_code" style="display: none;">
     <?= view('Lc5\Cms\Views\rows-cmp/component-par', ['row' => (object) []]) ?>
 </script>
-
 <script type="text/html" id="gallery_item_code" style="display: none;">
     <?= view('Lc5\Cms\Views\part-cmp/gallery-item', ['row' => (object) []]) ?>
 </script>
 <script type="text/html" id="colonne_item_code" style="display: none;">
     <?= view('Lc5\Cms\Views\part-cmp/column-item', ['row' => (object) []]) ?>
 </script>
+
+*/ ?>
+<?php /*
 <script type="text/html" id="custom_field_item_code-pages" style="display: none;">
     <?= view('Lc5\Cms\Views\part-cmp/custom-field-item', ['item' => ['keys_source' => $custom_fields_keys_pages]]) ?>
 </script>
+*/ ?>
 <?php /*
 <script type="text/html" id="custom_field_item_code" style="display: none;">
     <?= view('Lc5\Cms\Views\part-cmp/custom-field-item', ['item' =>  []]) ?>
-*/ ?>
 </script>
+*/ ?>
 <?php /*
 <script type="text/html" id="custom_field_item_sidebar_code" style="display: none;">
     <?= view('Lc5\Cms\Views\part-cmp/custom-field-item-sidebar', ['row' => (object) []]) ?>

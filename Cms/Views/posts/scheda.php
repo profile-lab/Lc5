@@ -24,24 +24,21 @@
                 <?php } ?>
             <?php } ?>
             <div class="first-row">
-                <div class="row">
-                    <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Nome', 'name' => 'nome', 'value' => $entity->nome, 'width' => 'col-md-12', 'placeholder' => 'Nome']]) ?>
-                    <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Titolo', 'name' => 'titolo', 'value' => $entity->titolo, 'width' => 'col-md-12', 'placeholder' => 'Titolo']]) ?>
-                    <?php if (isset($post_attributes) && isset($post_attributes['sottotitolo'])) { ?>
-                        <?php $c_field =  (object) $post_attributes['sottotitolo'] ?>
-                        <?= view('Lc5\Cms\Views\form-cmp/' . $c_field->type, ['item' => [
-                            'label' => $c_field->label,
-                            'name' => $c_field->name,
-                            'value' => $entity->{$c_field->name},
-                            'width' => 'col-md-' . $c_field->w,
-                            'placeholder' => (isset($c_field->placeholder)) ? $c_field->placeholder : '',
-                            'src' => (isset($c_field->src_attr)) ? $entity->{$c_field->src_attr} : null,
-                            'gallery_obj' => (isset($c_field->gallery_obj)) ? $entity->{$c_field->gallery_obj} : [],
-                            'sources' => (isset($c_field->sources)) ? $entity->{$c_field->sources} : [],
-                            'no_empty' => (isset($c_field->no_empty)) ? TRUE : FALSE,
-                        ]]) ?>
-                    <?php } ?>
-                </div>
+                <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Titolo', 'name' => 'titolo', 'value' => $entity->titolo, 'width' => 'col-md-12', 'placeholder' => 'Titolo']]) ?>
+                <?php if (isset($post_attributes) && isset($post_attributes['sottotitolo'])) { ?>
+                    <?php $c_field =  (object) $post_attributes['sottotitolo'] ?>
+                    <?= view('Lc5\Cms\Views\form-cmp/' . $c_field->type, ['item' => [
+                        'label' => $c_field->label,
+                        'name' => $c_field->name,
+                        'value' => $entity->{$c_field->name},
+                        'width' => 'col-md-' . $c_field->w,
+                        'placeholder' => (isset($c_field->placeholder)) ? $c_field->placeholder : '',
+                        'src' => (isset($c_field->src_attr)) ? $entity->{$c_field->src_attr} : null,
+                        'gallery_obj' => (isset($c_field->gallery_obj)) ? $entity->{$c_field->gallery_obj} : [],
+                        'sources' => (isset($c_field->sources)) ? $entity->{$c_field->sources} : [],
+                        'no_empty' => (isset($c_field->no_empty)) ? TRUE : FALSE,
+                    ]]) ?>
+                <?php } ?>
                 <div class="row">
                     <?= view('Lc5\Cms\Views\form-cmp/html-editor', ['item' => ['label' => 'Testo', 'name' => 'testo', 'value' => (isset($entity->testo)) ? $entity->testo : '', 'width' => 'col-md-12', 'placeholder' => '...']]) ?>
                 </div>
@@ -74,7 +71,6 @@
                     <?php } ?>
                 <?php } ?>
             </div>
-
             <?php if ($entity->id) { ?>
                 <?php if ($is_vimeo_enabled) { ?>
                     <?= view('Lc5\Cms\Views\part-cmp/vimeo-video-form', ['video_entity' => (isset($entity->vimeo_video_obj)) ? $entity->vimeo_video_obj : NULL]) ?>
@@ -126,7 +122,11 @@
                     <button type="submit" name="save" value="save" class="btn btn-primary bottone_salva btn_save_after_proc"><span class="oi oi-check"></span>Salva</button>
                 </div>
                 <div class="row">
+                    <?= view('Lc5\Cms\Views\form-cmp/readonly', ['item' => ['label' => 'Nome', 'value' => $entity->nome, 'name' => 'nome',  'width' => 'col-12', 'placeholder' => '', 'if_active_name' => 'nome',  'enabled' => (($entity->id) ? TRUE : FALSE)]]) ?>
+                    <?= view('Lc5\Cms\Views\form-cmp/readonly', ['item' => ['label' => 'Guid', 'value' => $entity->guid, 'width' => 'col-12', 'placeholder' => '', 'if_active_name' => 'guid',  'enabled' => (($entity->id) ? TRUE : FALSE)]]) ?>
+                    <?php /*
                     <?= view('Lc5\Cms\Views\form-cmp/readonly', ['item' => ['label' => 'Guid', 'value' => $entity->guid, 'width' => 'col-12', 'placeholder' => '']]) ?>
+                    */ ?>
                     <?php /*
                     // NON IN USO - VEDI post_attributes
                     <?php if (isset($post_categories) && is_iterable($post_categories)) { ?>
@@ -205,33 +205,6 @@
 <script type="text/javascript">
     $(document).ready(function() {
         // 
-        $('.add_entity_custom_item').click(function(e) {
-            e.preventDefault();
-            unbindRowActions();
-
-            // var current_par = $(this).closest('.content-row');
-            var trg_cnt = $(this).attr('meta-rel-trg');
-            var htmlCode = $('#' + $(this).attr('meta-rel-source-id')).html();
-            var codeStrBase = htmlCode.toString();
-            var codeStr = codeStrBase.replace(/###@###/g, '[]');
-            var newCode = $(codeStr);
-            $('.' + trg_cnt).append(newCode);
-            bindRowActions();
-        });
-        $('form.save_after_proc').submit(function() {
-            let json_free_values_str = '';
-            let json_free_values_arr = [];
-            let target_input = $('.entity_free_values', this);
-            $('.entity_custom_items_cnt .custom_field-row_item', this).each(function() {
-                let curr_item_obj = new Object();
-                curr_item_obj.key = $('.custom_field_key', this).val();
-                curr_item_obj.value = $('.custom_field_value', this).val();
-                json_free_values_arr.push(curr_item_obj);
-            });
-            json_free_values_str = JSON.stringify(json_free_values_arr);
-            target_input.val(json_free_values_str);
-        });
-        // 
         $('.select-tags').selectize({
             create: function(input, callback) {
                 if (!input.length) return callback();
@@ -254,20 +227,12 @@
             }
         });
         // 
-        $('.sortable-list-cnt').sortable({
-            // cancel: '.acc_aperto',
-            placeholder: 'row-sort-placeholder',
-            // axis: 'y',
-            cancel: "a,button,.jodit-container,input,select",
-            update: function(event, ui) {
-                setOrdineRow($('.sortable-list-cnt'));
-            }
-        });
         $('.more-row-content').slideUp(1);
     });
 </script>
 
 
+<?php /*
 
 <script type="text/html" id="blocco_simple_par_code" style="display: none;">
     <?= view('Lc5\Cms\Views\rows-cmp/simple-par', ['row' => (object) []]) ?>
@@ -281,16 +246,19 @@
 <script type="text/html" id="blocco_component_par_code" style="display: none;">
     <?= view('Lc5\Cms\Views\rows-cmp/component-par', ['row' => (object) []]) ?>
 </script>
-
 <script type="text/html" id="gallery_item_code" style="display: none;">
     <?= view('Lc5\Cms\Views\part-cmp/gallery-item', ['row' => (object) []]) ?>
 </script>
 <script type="text/html" id="colonne_item_code" style="display: none;">
     <?= view('Lc5\Cms\Views\part-cmp/column-item', ['row' => (object) []]) ?>
 </script>
+
+*/ ?>
+<?php /*
 <script type="text/html" id="custom_field_item_code-posts" style="display: none;">
     <?= view('Lc5\Cms\Views\part-cmp/custom-field-item', ['item' => ['keys_source' => $custom_fields_keys_posts]]) ?>
 </script>
+*/ ?>
 <?php /*
 <script type="text/html" id="custom_field_item_code" style="display: none;">
     <?= view('Lc5\Cms\Views\part-cmp/custom-field-item', ['row' => (object) []]) ?>

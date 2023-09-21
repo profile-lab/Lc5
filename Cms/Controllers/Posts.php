@@ -41,7 +41,7 @@ class Posts extends MasterLc
 		// 
 		// 
 		$entity_fields_conf = [];
-		$entity_fields_conf_byjson = json_decode(($post_type_entity->fields_config) ?: '' );
+		$entity_fields_conf_byjson = json_decode(($post_type_entity->fields_config) ?: '');
 		if (json_last_error() === JSON_ERROR_NONE) {
 			$entity_fields_conf = $entity_fields_conf_byjson->fields;
 		}
@@ -54,7 +54,7 @@ class Posts extends MasterLc
 		// 
 		// 
 		// $this->lc_ui_date->__set('currernt_module', 'post_' . $post_type_entity->val);
-		$this->lc_ui_date->__set('currernt_module', $this->current_lc_module.'_'.$post_type_entity->val);
+		$this->lc_ui_date->__set('currernt_module', $this->current_lc_module . '_' . $post_type_entity->val);
 
 
 		$this->lc_ui_date->__set('post_type_guid', $post_type_entity->val);
@@ -79,10 +79,10 @@ class Posts extends MasterLc
 		foreach ($list as $s_post) {
 			$s_post->frontend_guid = null;
 			if ($app_domain = $this->getAppDataField('domain')) {
-				$s_post->frontend_guid = reduce_double_slashes( $app_domain . '/' .
+				$s_post->frontend_guid = reduce_double_slashes($app_domain . '/' .
 					(($this->curr_lc_lang != $this->default_lc_lang) ? $this->curr_lc_lang . '/' : '') .
 					$this->current_archive_base_root . $post_type_entity->val . '/' .
-					$s_post->guid );
+					$s_post->guid);
 			}
 		}
 
@@ -101,7 +101,7 @@ class Posts extends MasterLc
 		$curr_entity = new Post();
 		// 
 		$post_type_entity = $this->getPostType($post_type_val);
-		$curr_entity->bool_values =[
+		$curr_entity->bool_values = [
 			"0" => (object) ["nome" => "NO", "val" => "0"],
 			"1" => (object) ["nome" => "YES", "val" => "1"]
 		];
@@ -114,33 +114,26 @@ class Posts extends MasterLc
 		// 
 		if ($this->req->getMethod() == 'post') {
 			$validate_rules = [
-				'nome' => ['label' => 'Nome', 'rules' => 'required'],
-				// 'titolo' => ['label' => 'Titolo', 'rules' => 'required'],
+				// 'nome' => ['label' => 'Nome', 'rules' => 'required'],
+				'titolo' => ['label' => 'Titolo', 'rules' => 'required'],
 			];
 			$is_falied = TRUE;
 			$curr_entity->fill($this->req->getPost());
-			$curr_entity->multi_categories = json_encode($this->req->getPost('multi_categories'));
-			$curr_entity->tags = json_encode($this->req->getPost('tags'));
+			// $curr_entity->multi_categories = json_encode($this->req->getPost('multi_categories'));
+			// $curr_entity->tags = json_encode($this->req->getPost('tags'));
 			if ($this->validate($validate_rules)) {
-				// 
-				if (!$this->req->getPost('titolo')) {
-					$curr_entity->titolo = $curr_entity->nome;
-				}
-				// 
-				if (!$this->req->getPost('ordine')) {
-					$curr_entity->ordine = 500;
-				}
-				// 
-				if (!$this->req->getPost('data_pub')) {
-					$myTime = Time::today('Europe/Rome', 'en_US');
-					$curr_entity->data_pub = $myTime;
-				}
-				// 
 
+				$curr_entity->nome = $curr_entity->titolo;
+				$curr_entity->status = 0;
+				$curr_entity->public = 0;
 
-
-				$curr_entity->status = 1;
 				$curr_entity->post_type = $post_type_entity->id;
+				$curr_entity->ordine = 500;
+				$myTime = Time::today('Europe/Rome', 'en_US');
+				$curr_entity->data_pub = $myTime;
+
+
+
 				$posts_model->save($curr_entity);
 				// 
 				$new_id = $posts_model->getInsertID();
@@ -158,7 +151,7 @@ class Posts extends MasterLc
 		}
 		// 
 		$this->lc_ui_date->entity = $curr_entity;
-		return view('Lc5\Cms\Views\posts/scheda', $this->lc_ui_date->toArray());
+		return view('Lc5\Cms\Views\posts/new', $this->lc_ui_date->toArray());
 	}
 
 	//--------------------------------------------------------------------
@@ -170,7 +163,7 @@ class Posts extends MasterLc
 		}
 
 		$post_type_entity = $this->getPostType($post_type_val);
-		$curr_entity->bool_values =[
+		$curr_entity->bool_values = [
 			"0" => (object) ["nome" => "NO", "val" => "0"],
 			"1" => (object) ["nome" => "YES", "val" => "1"]
 		];
@@ -189,17 +182,11 @@ class Posts extends MasterLc
 		if ($app_domain = $this->getAppDataField('domain')) {
 			$this->lc_ui_date->frontend_guid = reduce_double_slashes($app_domain . '/' . (($this->curr_lc_lang != $this->default_lc_lang) ? $this->curr_lc_lang . '/' : '') . $this->current_archive_base_root . $post_type_entity->val . '/' . $curr_entity->guid);
 		}
-		// 
-		// if($curr_entity->vimeo_video_id){
-		// 	$vimeo_video_model = new VimeoVideosModel();
-		// }
-		// 
+
 		if ($this->req->getMethod() == 'post') {
-			// echo '<pre>' , var_dump($_POST) , '</pre>';
-			// exit();
-			// dd($this->req->getPost('multi_categories'));
+
 			$validate_rules = [
-				'nome' => ['label' => 'Nome', 'rules' => 'required'],
+				// 'nome' => ['label' => 'Nome', 'rules' => 'required'],
 				'titolo' => ['label' => 'Titolo', 'rules' => 'required'],
 			];
 			$is_falied = TRUE;
@@ -207,8 +194,13 @@ class Posts extends MasterLc
 			$curr_entity->multi_categories = json_encode($this->req->getPost('multi_categories'));
 			$curr_entity->tags = json_encode($this->req->getPost('tags'));
 			if ($this->validate($validate_rules)) {
-				$curr_entity->status = 1;
-				// $curr_entity->post_type = $post_type_entity->id;
+
+				if ($curr_entity->created_at == $curr_entity->updated_at) {
+					$curr_entity->status = 1;
+					$curr_entity->public = 1;
+				}
+
+				$curr_entity->post_type = $post_type_entity->id;
 				$posts_model->save($curr_entity);
 				// 
 				$this->editEntityRows($curr_entity->id, 'posts');

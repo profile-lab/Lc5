@@ -194,34 +194,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('.add_entity_custom_item').click(function(e) {
-            e.preventDefault();
-            unbindRowActions();
-            // var current_par = $(this).closest('.content-row');
-            var trg_cnt = $(this).attr('meta-rel-trg');
-            var htmlCode = $('#' + $(this).attr('meta-rel-source-id')).html();
-            var codeStrBase = htmlCode.toString();
-            var codeStr = codeStrBase.replace(/###@###/g, '[]');
-            var newCode = $(codeStr);
-            $('.' + trg_cnt).append(newCode);
-            bindRowActions();
-        });
-
-        $('form.save_after_proc').submit(function() {
-            let json_free_values_str = '';
-            let json_free_values_arr = [];
-            let target_input = $('.entity_free_values', this);
-            $('.entity_custom_items_cnt .custom_field-row_item', this).each(function() {
-                let curr_item_obj = new Object();
-                curr_item_obj.key = $('.custom_field_key', this).val();
-                curr_item_obj.value = $('.custom_field_value', this).val();
-                json_free_values_arr.push(curr_item_obj);
-            });
-            json_free_values_str = JSON.stringify(json_free_values_arr);
-            target_input.val(json_free_values_str);
-        });
-
-
+        // 
         $('.select-tags-tags').selectize({
             create: function(input, callback) {
                 if (!input.length) return callback();
