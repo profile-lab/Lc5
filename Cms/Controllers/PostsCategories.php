@@ -104,7 +104,6 @@ class PostsCategories extends MasterLc
 		if (!$curr_entity = $postscat_model->find($id)) {
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
-
 		$post_type_entity = $this->getPostType($post_type_val);
 		// 
 		// 
