@@ -20,25 +20,24 @@ class PostsCategories extends MasterLc
 		$this->lc_ui_date->__set('request', $this->req);
 		$this->lc_ui_date->__set('route_prefix', $this->route_prefix);
 		$this->lc_ui_date->__set('module_name', $this->module_name);
-
 	}
-	
+
 	//--------------------------------------------------------------------
 	private function getPostType($post_type_val)
 	{
 		// 
 		$poststypes_model = new PoststypesModel();
-		
+
 		if (!$post_type_entity = $poststypes_model->where('val', $post_type_val)->first()) {
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
 		// 
-		$this->lc_ui_date->__set('currernt_module', 'posts_'.$post_type_entity->val);
+		$this->lc_ui_date->__set('currernt_module', 'posts_' . $post_type_entity->val);
 		$this->lc_ui_date->__set('currernt_module_action', 'postscategories');
 		$this->lc_ui_date->__set('post_type_guid', $post_type_entity->val);
 		return $post_type_entity;
 	}
-	
+
 	//--------------------------------------------------------------------
 	public function index($post_type_val)
 	{
@@ -47,12 +46,12 @@ class PostsCategories extends MasterLc
 		// 
 		$post_type_entity = $this->getPostType($post_type_val);
 		// 
-		$list = $postscat_model->where('post_type',$post_type_entity->id )->findAll();
+		$list = $postscat_model->where('post_type', $post_type_entity->id)->findAll();
 		$this->lc_ui_date->list = $list;
 		// 
 		return view('Lc5\Cms\Views\posts-categories/index', $this->lc_ui_date->toArray());
 	}
-	
+
 	//--------------------------------------------------------------------
 	public function newpost($post_type_val)
 	{
@@ -66,14 +65,16 @@ class PostsCategories extends MasterLc
 		// 
 		if ($this->req->getMethod() == 'post') {
 			$validate_rules = [
-				'nome' => ['label' => 'Nome', 'rules' => 'required'],
+				// 'nome' => ['label' => 'Nome', 'rules' => 'required'],
 				'titolo' => ['label' => 'Titolo', 'rules' => 'required'],
 			];
 			$is_falied = TRUE;
 			$curr_entity->fill($this->req->getPost());
 			if ($this->validate($validate_rules)) {
-				$curr_entity->status = 1;
-				$curr_entity->post_type = $post_type_entity->id ;
+				$curr_entity->nome = $curr_entity->titolo;
+				$curr_entity->status = 0;
+				$curr_entity->public = 0;
+				$curr_entity->post_type = $post_type_entity->id;
 				// $curr_entity->id_app = 1;
 				$postscat_model->save($curr_entity);
 				// 
@@ -92,7 +93,7 @@ class PostsCategories extends MasterLc
 		}
 		// 
 		$this->lc_ui_date->entity = $curr_entity;
-		return view('Lc5\Cms\Views\posts-categories/scheda', $this->lc_ui_date->toArray());
+		return view('Lc5\Cms\Views\posts-categories/new', $this->lc_ui_date->toArray());
 	}
 
 	//--------------------------------------------------------------------
@@ -107,18 +108,25 @@ class PostsCategories extends MasterLc
 		$post_type_entity = $this->getPostType($post_type_val);
 		// 
 		// 
-		// dd($this->post_attributes); 
+		if ($curr_entity->created_at == $curr_entity->updated_at) {
+			$curr_entity->public = 1;
+		}
 		// 
 		if ($this->req->getMethod() == 'post') {
 			$validate_rules = [
-				'nome' => ['label' => 'Nome', 'rules' => 'required'],
+				// 'nome' => ['label' => 'Nome', 'rules' => 'required'],
 				'titolo' => ['label' => 'Titolo', 'rules' => 'required'],
 			];
 			$is_falied = TRUE;
 			$curr_entity->fill($this->req->getPost());
 			if ($this->validate($validate_rules)) {
-				$curr_entity->status = 1;
-				$postscat_model->save($curr_entity);
+				if ($curr_entity->created_at == $curr_entity->updated_at) {
+					$curr_entity->status = 1;
+				}
+				$curr_entity->public = $this->req->getPost('public') ? 1 : 0 ;
+				if ($curr_entity->hasChanged()) {
+					$postscat_model->save($curr_entity);
+				}
 				// 
 				return redirect()->route($this->route_prefix . '_edit', [$post_type_val, $curr_entity->id]);
 			} else {
@@ -143,7 +151,6 @@ class PostsCategories extends MasterLc
 		}
 		$postscat_model->delete($curr_entity->id);
 		return redirect()->route($this->route_prefix, [$post_type_val]);
-
 	}
 
 	// //--------------------------------------------------------------------

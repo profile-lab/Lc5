@@ -4,28 +4,12 @@
     let count_rows = 0;
 </script>
 <form class="form save_after_proc" method="POST" action="">
-    <?php /*
-    <div id="scheda_tools" class="w-100 sticky-top mt-2 bg-white">
-        <div class="container-fluid bg-dark text-light p-3 mt-3 mb-4">
-            <div class="row d-md-flex justify-content-between align-items-center">
-                <div class="col-7 col-sm-auto">
-                    <?php if ($entity->id) { ?>
-                    <?php } else { ?>
-                        <h5 class="p-0 m-0">Crea nuova</h5>
-                    <?php } ?>
-                </div>
-                <div class="col-5 col-sm-auto text-right">
-                    <button type="submit" name="save" value="save" class="btn btn-primary btn_save_after_proc"><span class="oi oi-check"></span>Salva</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    */ ?>
+
     <?= user_mess($ui_mess, $ui_mess_type) ?>
     <div class="row form-row">
         <div class="scheda_body">
-        <div id="scheda_tools" class="w-100 sticky-top mt-2">
-        </div>
+            <div id="scheda_tools" class="w-100 sticky-top mt-2">
+            </div>
             <div class="first-row">
                 <div class="row">
                     <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Nome', 'name' => 'nome', 'value' => $entity->nome, 'width' => 'col-md-12', 'placeholder' => 'Nome']]) ?>
@@ -50,7 +34,9 @@
                 <button type="submit" name="save" value="save" class="btn btn-primary bottone_salva btn_save_after_proc"><span class="oi oi-check"></span>Salva</button>
             </div>
             <div class="row">
-                <?= view('Lc5\Cms\Views\form-cmp/readonly', ['item' => ['label' => 'Guid', 'value' => $entity->guid, 'width' => 'col-12', 'placeholder' => '']]) ?>
+                <?= view('Lc5\Cms\Views\form-cmp/readonly', ['item' => ['label' => 'Nome', 'value' => $entity->nome, 'name' => 'nome',  'width' => 'col-12', 'placeholder' => '', 'if_active_name' => 'nome',  'enabled' => (($entity->id) ? TRUE : FALSE)]]) ?>
+                <?= view('Lc5\Cms\Views\form-cmp/readonly', ['item' => ['label' => 'Guid', 'value' => $entity->guid, 'width' => 'col-12', 'placeholder' => '', 'if_active_name' => 'guid',  'enabled' => (($entity->id) ? TRUE : FALSE)]]) ?>
+                <?= view('Lc5\Cms\Views\form-cmp/select', [ 'item' => ['label' => 'Public', 'name' => 'public', 'input_class' => 'public', 'value' => $entity->public, 'width' => 'col-md-12', 'sources' => $bool_values, 'no_empty' => true] ]); ?>
             </div>
             <div class="row">
                 <?= view('Lc5\Cms\Views\form-cmp/img-single', ['item' => ['label' => 'Copertina', 'name' => 'main_img_id', 'value' => $entity->main_img_id, 'width' => 'col-12', 'src' => $entity->main_img_thumb]]) ?>
