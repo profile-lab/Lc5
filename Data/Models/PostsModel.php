@@ -65,6 +65,10 @@ class PostsModel extends MasterModel
 	protected function beforeFind(array $data)
 	{
 		$this->checkAppAndLang();
+		if($this->is_for_frontend == true){
+			$this->where('status !=', 0);
+			$this->where('public', 1);
+		}
 	}
 	protected function afterFind(array $data)
 	{
