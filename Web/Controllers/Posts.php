@@ -188,8 +188,13 @@ class Posts extends MasterWeb
         //
         if (appIsFile($this->base_view_filesystem . 'post-' . $curr_post_type->val . '.php')) {
             return view($this->base_view_namespace . 'post-' .  $curr_post_type->val, $this->web_ui_date->toArray());
-        }
-        return view($this->base_view_namespace . 'post-default', $this->web_ui_date->toArray());
+        }else if (appIsFile($this->base_view_filesystem . 'post-default.php')) {
+			return view($this->base_view_namespace . 'post-default', $this->web_ui_date->toArray());
+		}else{
+			$this->base_view_namespace = $this->lc5_views_namespace;
+			$this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
+			return view($this->base_view_namespace.'post-default', $this->web_ui_date->toArray());
+		}
     }
 
     //--------------------------------------------------------------------
