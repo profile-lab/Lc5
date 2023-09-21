@@ -122,6 +122,10 @@ class Pages extends MasterLc
 			$this->lc_ui_date->frontend_guid = reduce_double_slashes($app_domain .'/' . (($this->curr_lc_lang != $this->default_lc_lang) ? $this->curr_lc_lang.'/' : '')  . $curr_entity->guid);
 		}
 		// 
+		if ($curr_entity->created_at == $curr_entity->updated_at) {
+			$curr_entity->public = 1;
+		}
+		// 
 		if ($this->req->getMethod() == 'post') {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
@@ -131,10 +135,12 @@ class Pages extends MasterLc
 			$curr_entity->fill($this->req->getPost());
 			// 
 			if ($this->validate($validate_rules)) {
+				// 
 				if ($curr_entity->created_at == $curr_entity->updated_at) {
 					$curr_entity->status = 1;
-					$curr_entity->public = 1;
 				}
+				$curr_entity->public = $this->req->getPost('public') ? 1 : 0 ;
+				// 
 				$pages_model->save($curr_entity);
 				// 
 				$this->editEntityRows($curr_entity->id, 'pages');

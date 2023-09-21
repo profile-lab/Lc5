@@ -182,7 +182,11 @@ class Posts extends MasterLc
 		if ($app_domain = $this->getAppDataField('domain')) {
 			$this->lc_ui_date->frontend_guid = reduce_double_slashes($app_domain . '/' . (($this->curr_lc_lang != $this->default_lc_lang) ? $this->curr_lc_lang . '/' : '') . $this->current_archive_base_root . $post_type_entity->val . '/' . $curr_entity->guid);
 		}
-
+		// 
+		if ($curr_entity->created_at == $curr_entity->updated_at) {
+			$curr_entity->public = 1;
+		}
+		//
 		if ($this->req->getMethod() == 'post') {
 
 			$validate_rules = [
@@ -194,12 +198,12 @@ class Posts extends MasterLc
 			$curr_entity->multi_categories = json_encode($this->req->getPost('multi_categories'));
 			$curr_entity->tags = json_encode($this->req->getPost('tags'));
 			if ($this->validate($validate_rules)) {
-
+				// 
 				if ($curr_entity->created_at == $curr_entity->updated_at) {
 					$curr_entity->status = 1;
-					$curr_entity->public = 1;
 				}
-
+				$curr_entity->public = $this->req->getPost('public') ? 1 : 0 ;
+				// 
 				$curr_entity->post_type = $post_type_entity->id;
 				$posts_model->save($curr_entity);
 				// 
