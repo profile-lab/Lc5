@@ -1,4 +1,4 @@
-<div class="row row-gallery row-<?= $row->guid ?> <?= $row->css_class ?> <?= $row->css_color ?>">
+<div class="row row-<?= $row->type ?> row-<?= $row->type ?>-<?= $row->css_class ?> row-<?= $row->guid ?> <?= $row->css_class ?> <?= $row->css_color ?>">
     <div class="myIn">
         <?= h2($row->titolo) ?>
         <?php if (isset($row->data_object) && count($row->data_object) > 0) { ?>

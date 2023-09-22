@@ -1,4 +1,4 @@
-<div class="row row-columns row-<?= $row->guid ?> <?= $row->css_class ?> <?= $row->css_color ?> <?= $row->css_extra_class ?>">
+<div class="row row-<?= $row->type ?> row-<?= $row->type ?>-<?= $row->css_class ?> row-<?= $row->guid ?> <?= $row->css_class ?> <?= $row->css_color ?>">
     <div class="myIn">
         <?= h2($row->titolo) ?>
         <?= h3($row->sottotitolo) ?>
