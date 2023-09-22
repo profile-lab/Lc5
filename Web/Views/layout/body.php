@@ -9,8 +9,8 @@
 </head>
 
 <body class="<?php
-    echo ((isset($type) && $type != '') ? ' pagemodel-'.$type.' ' : ''); 
-    echo ((isset($guid) && $guid != '') ? 'type-'.$guid.' ' : ''); 
+    echo ((isset($type) && $type != '') ? ' pagemodel-'.$type.'' : ''); 
+    echo ((isset($guid) && $guid != '') ? ' page-'.$guid.'' : ''); 
 ?>">
     <?= $this->include($base_view_folder.'layout/components/header') ?>
     <main id="main_container">
