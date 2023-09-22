@@ -889,6 +889,8 @@ class MasterLc extends BaseController
 				$curr_row_entity->css_color = $this->req->getPost($prefix . 'css_color')[$count_type];
 				$curr_row_entity->css_extra_class = $this->req->getPost($prefix . 'css_extra_class')[$count_type];
 				$curr_row_entity->formato_media = $this->req->getPost($prefix . 'formato_media')[$count_type];
+				$curr_row_entity->main_img_id = $this->req->getPost($prefix . 'main_img_id')[$count_type];
+
 				$curr_row_entity->json_data = $this->req->getPost($prefix . 'json_data')[$count_type];
 				// 
 				$curr_row_entity->free_values = $this->req->getPost($prefix . 'free_values')[$count_type];
