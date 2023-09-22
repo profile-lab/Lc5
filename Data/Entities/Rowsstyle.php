@@ -43,11 +43,11 @@ class Rowsstyle extends Entity
 			'name' => 'formato_media',
 		],
 		
-		'immagine' => [
+		'main_img_id' => [
 			'label' => 'Immagine',
-			'name' => 'immagine',
+			'name' => 'main_img_id',
 		],
-		
+
 		'gallery' => [
 			'label' => 'Gallery',
 			'name' => 'gallery',
