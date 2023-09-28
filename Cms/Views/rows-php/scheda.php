@@ -26,14 +26,15 @@
         <h1><?= $module_name ?></h1>
         <button type="submit" name="save" value="save" class="btn bottone_salva btn-primary"><span class="oi oi-check"></span>Salva</button>
     </div>
-
+    
+    <div class="row setting_cnt">
+        <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Nome', 'name' => 'nome', 'value' => $entity->nome, 'width' => 'col-md-4', 'placeholder' => 'Nome']]) ?>
+    </div>
     <div class="row setting_cnt">
         <div class="settings_half">
-            <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Nome', 'name' => 'nome', 'value' => $entity->nome, 'width' => 'col-md-4', 'placeholder' => 'Nome']]) ?>
             <?= view('Lc5\Cms\Views\form-cmp/readonly', ['item' => ['label' => 'Guid', 'value' => $entity->val, 'width' => 'col-4', 'placeholder' => '']]) ?>
         </div>
         <div class="settings_half">
-            <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'View file', 'name' => 'view', 'value' => $entity->view, 'width' => 'col-md-6', 'placeholder' => 'Path del file view da richiamare']]) ?>
             <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Method', 'name' => 'before_func', 'value' => $entity->before_func, 'width' => 'col-md-6', 'placeholder' => 'Metodo helper di gestione dati']]) ?>
         </div>
     </div>
