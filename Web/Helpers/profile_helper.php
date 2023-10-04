@@ -1,9 +1,10 @@
 <?php
 
-function isJson($string) {
+function isJson($string)
+{
     json_decode($string);
     return json_last_error() === JSON_ERROR_NONE;
- }
+}
 
 function getML($mlString, $request_lang = null)
 {
@@ -69,9 +70,9 @@ function image_root($imgPath = null)
     return false;
 }
 
-function coin($number)
+function coin($number, $decimali = 2, $decimali_separatore = '.', $migliaia_separatori = '')
 {
-    return number_format($number, 2, '.', '');
+    return number_format($number, $decimali,  $decimali_separatore, $migliaia_separatori);
 }
 
 function number_to_currency(float $num, string $currency, string $locale = null, int $fraction = 2): string
@@ -151,7 +152,7 @@ function hTag($txt = null, $cssClass = '', $hT = '1', $pre_txt = '', $add_txt = 
 {
     $return_html = '';
     if (isset($txt) && $txt != '') {
-        $return_html = '<h' . $hT . ' class="' . $cssClass . '">' . (($pre_txt != '') ? '<span class="txt_pre">'.$pre_txt.'</span> ' : '') . $txt . (($add_txt != '') ? ' <span class="txt_add">'.$add_txt.'</span>' : '') . '</h' . $hT . '>';
+        $return_html = '<h' . $hT . ' class="' . $cssClass . '">' . (($pre_txt != '') ? '<span class="txt_pre">' . $pre_txt . '</span> ' : '') . $txt . (($add_txt != '') ? ' <span class="txt_add">' . $add_txt . '</span>' : '') . '</h' . $hT . '>';
     }
     return $return_html;
 }
@@ -263,7 +264,7 @@ function urlSegment(int $s_index)
 
 function appIsFile(string $path)
 {
-    if (is_file(APPPATH.$path)) {
+    if (is_file(APPPATH . $path)) {
         return TRUE;
     }
     return FALSE;
@@ -277,18 +278,18 @@ function appIsFile(string $path)
 function my_nl2br($text)
 {
     $html = nl2br($text);
-    
-    $html = str_replace(['<table><br>','<table><br />'], '<table>',  $html);
-    $html = str_replace(['</table><br>','</table><br />'], '</table>',  $html);
-   
-    $html = str_replace(['<tbody><br>','<tbody><br />'], '<tbody>',  $html);
-    $html = str_replace(['</tbody><br>','</tbody><br />'], '</tbody>',  $html);
-    
-    $html = str_replace(['<tr><br>','<tr><br />'], '<tr>',  $html);
-    $html = str_replace(['</tr><br>','</tr><br />'], '</tr>',  $html);
-    
-    $html = str_replace(['<td><br>','<td><br />'], '<td>',  $html);
-    $html = str_replace(['</td><br>','</td><br />'], '</td>',  $html);
+
+    $html = str_replace(['<table><br>', '<table><br />'], '<table>',  $html);
+    $html = str_replace(['</table><br>', '</table><br />'], '</table>',  $html);
+
+    $html = str_replace(['<tbody><br>', '<tbody><br />'], '<tbody>',  $html);
+    $html = str_replace(['</tbody><br>', '</tbody><br />'], '</tbody>',  $html);
+
+    $html = str_replace(['<tr><br>', '<tr><br />'], '<tr>',  $html);
+    $html = str_replace(['</tr><br>', '</tr><br />'], '</tr>',  $html);
+
+    $html = str_replace(['<td><br>', '<td><br />'], '<td>',  $html);
+    $html = str_replace(['</td><br>', '</td><br />'], '</td>',  $html);
 
 
 
