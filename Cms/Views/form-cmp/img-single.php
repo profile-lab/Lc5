@@ -12,7 +12,7 @@ extract($fake_item);
 extract($item);
 ?>
 
-<div class="form-group <?= (isset($width)) ? $width : 'col-md-12' ?> position-relative <?= (isset($src) && trim($src)) ? 'hasImage' : '' ?> form-field-<?= (isset($input_class)) ? $input_class : str_replace(['[', ']'], '', $name) ?>">
+<div style="max-width: 300px; max-height:330px" class="form-group <?= (isset($width)) ? $width : 'col-md-12' ?> position-relative <?= (isset($src) && trim($src)) ? 'hasImage' : '' ?> form-field-<?= (isset($input_class)) ? $input_class : str_replace(['[', ']'], '', $name) ?>">
     <?= (isset($label)) ? '<label>' . $label . '</label>' : '' ?>
     <a href="#" meta-rel-id="<?= $value ?>" meta-rel-path="<?= (isset($src) && trim($src)) ? $src : '' ?>" class="open-modal-mediagallery-single">
         <input type="hidden" name="<?= $name ?>" value="<?= esc($value) ?>" class="form-control <?= (isset($input_class)) ? $input_class : '' ?>" <?= (isset($id)) ? ' id="' . $id . '" ' : '' ?> <?= (isset($placeholder)) ? ' placeholder="' . $placeholder . '" ' : '' ?> />
