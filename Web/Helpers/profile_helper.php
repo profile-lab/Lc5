@@ -226,11 +226,11 @@ function h6($txt = null, $cssClass = '', $pre_txt = '', $add_txt = '')
 //--------------------------------------------------
 //--------------------------------------------------
 
-function txt($txt = null, $cssClass = '', $tag = 'div', $container_open = null, $container_close = null, $nl2br = false)
+function txt($txt = null, $cssClass = '', $tag = 'div', $container_open = null, $container_close = null, $nl2br = false, $label = false)
 {
     $return_html = '';
     if (isset($txt) && $txt != '') {
-        $return_html = '<' . $tag . ' class="' . $cssClass . '">' . (($nl2br) ? my_nl2br($txt) : $txt) . '</' . $tag . '>';
+        $return_html = '<' . $tag . ' class="' . $cssClass . '">'. ($label ? '<span>' . $label . ': </span>' : '') . (($nl2br) ? my_nl2br($txt) : $txt) . '</' . $tag . '>';
         if ($container_open && $container_close) {
             $return_html = '<' . $container_open . '>' . $return_html . '</' . $container_close . '>';
         }
