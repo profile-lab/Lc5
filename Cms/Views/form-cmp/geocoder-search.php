@@ -2,6 +2,7 @@
 $fake_item = [
     'label' => '',
     'value' => '',
+    'address_data_val' => '',
     'lat' => '',
     'lng' => '',
 ];
@@ -16,112 +17,155 @@ extract($item);
 
     <div class="form-group form-field-gmaps_addr">
         <label for="address"><?= (isset($label)) ? $label : '' ?></label>
-        <input id="address" class="form-control gmaps_addr" type="textbox" value="<?= esc($value) ?>" />
+        <input id="gmaps_addr" name="gmaps_addr" class="form-control gmaps_addr" type="textbox" value="<?= esc($value) ?>" />
 
     </div>
-    <div class="form-group input-width-xmin form-field-gmaps_addr_btn">
+    <!-- <div class="form-group input-width-xmin form-field-gmaps_addr_btn">
         <label>&nbsp;</label>
-        <input type="button" value="Vai" onclick="codeAddress()">
-    </div>
+        <input type="button" value="Vai" onclick="geocode()">
+    </div> -->
+    <input type="hidden" name="address_data" id="address_data" value="<?= esc($address_data_val) ?>" />
 </div>
 <div class="row">
     <div id="map" style="width: 100%; height: 380px;"></div>
 </div>
 <!-- prettier-ignore -->
-<script>
-    (g => {
-        var h, a, k, p = "The Google Maps JavaScript API",
-            c = "google",
-            l = "importLibrary",
-            q = "__ib__",
-            m = document,
-            b = window;
-        b = b[c] || (b[c] = {});
-        var d = b.maps || (b.maps = {}),
-            r = new Set,
-            e = new URLSearchParams,
-            u = () => h || (h = new Promise(async (f, n) => {
-                await (a = m.createElement("script"));
-                e.set("libraries", [...r] + "");
-                for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]);
-                e.set("callback", c + ".maps." + q);
-                a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
-                d[q] = f;
-                a.onerror = () => h = n(Error(p + " could not load."));
-                a.nonce = m.querySelector("script[nonce]")?.nonce || "";
-                m.head.append(a)
-            }));
-        d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n))
-    })
-    ({
-        key: "AIzaSyAAf-O3lG8BiNcHRYY2IOqL8I-A5btCTsE",
-        v: "beta"
-    });
-</script>
-<?php /*
-*/ ?>
-<script>
-    var geocoder;
-    var map;
 
-    document.addEventListener("DOMContentLoaded", init);
 
-    function init() {
-        async function initialize() {
-            const {Geocoder} = await google.maps.importLibrary("geocoding");
-            geocoder = Geocoder;
-           
-            // geocoder = new google.maps.Geocoder();
-            var latlng = new google.maps.LatLng(<?= (isset($lat) && $lat != '') ? $lat : '41.891492' ?>, <?= (isset($lng) && $lng != '') ? $lng : '12.492528' ?>);
-            var mapOptions = {
-                zoom: 8,
-                center: latlng
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAf-O3lG8BiNcHRYY2IOqL8I-A5btCTsE&libraries=places&callback=initMap&v=weekly" defer></script>
+<script>
+    let map;
+    let marker;
+    // let geocoder;
+    let addressData;
+    let latInput;
+    let lngInput;
+    let addressInput;
+    let cittaInput;
+
+    function initMap() {
+        cittaInput = document.getElementById('citta');
+        addressData = document.getElementById('address_data');
+        latInput = document.getElementById('lat');
+        lngInput = document.getElementById('lng');
+        addressInput = document.getElementById('gmaps_addr');
+        map = new google.maps.Map(document.getElementById("map"), {
+            zoom: <?= (isset($lat) && $lat != '' && isset($lng) && $lng != '') ? 14 : 11 ?>,
+            center: {
+                lat: <?= (isset($lat) && $lat != '') ? $lat : '41.891492' ?>,
+                lng: <?= (isset($lng) && $lng != '') ? $lng : '12.492528' ?>
+            },
+            mapTypeControl: false,
+            zoomControl: true,
+            streetViewControl: false,
+            fullscreenControl: false,
+        });
+        // geocoder = new google.maps.Geocoder();
+
+        marker = new google.maps.Marker({
+            //     position: myLatLng,
+            map
+        });
+
+        <?php if (isset($lat) && $lat != '' && isset($lng) && $lng != '') { ?>
+            const myLatLng = {
+                lat: <?= $lat  ?>,
+                lng: <?= $lng  ?>
+            };
+            marker.setPosition(myLatLng);
+
+        <?php } ?>
+
+
+
+
+        const autocOptions = {
+            fields: ["formatted_address", "geometry", "name", "address_components"],
+            strictBounds: false,
+        };
+        const autocomplete = new google.maps.places.Autocomplete(addressInput, autocOptions);
+        autocomplete.addListener("place_changed", () => {
+            const place = autocomplete.getPlace();
+            const currentResult = place;
+
+            latInput.value = currentResult.geometry.location.lat();
+            lngInput.value = currentResult.geometry.location.lng();
+            addressInput.value = currentResult.formatted_address;
+
+            const addressComponents = parseAddressComponents(currentResult.address_components);
+            if(addressData && addressComponents){
+                addressData.value = JSON.stringify(addressComponents);
+                if(addressComponents['citta']){
+                    if(cittaInput){
+                        cittaInput.value = addressComponents['citta'];
+                    }
+                }
             }
-            map = new google.maps.Map(document.getElementById('map'), mapOptions);
-        }
 
+            map.setCenter(currentResult.geometry.location);
+            marker.setPosition(currentResult.geometry.location);
+            marker.setMap(map);
+        });
 
+        // const testAddrCom = parseAddressComponents();
+    }
 
-        // async function initMap() {
-        //     // const {Geocoder} = await google.maps.importLibrary("geocoding");
-        //     // geocoder = Geocoder;
-           
-            
-
-
-        //     const position = {
-        //         lat: <?= (isset($lat) && $lat != '') ? $lat : '41.891492' ?>,
-        //         lng: <?= (isset($lng) && $lng != '') ? $lng : '12.492528' ?>
-        //     };
-        //     const {
-        //         Map
-        //     } = await google.maps.importLibrary("maps");
-        //     map = new Map(document.getElementById("map"), {
-        //         zoom: 16,
-        //         center: position,
-                
-        //     });
-            
-        // }
-        // initMap();
-
-        function codeAddress() {
-            var address = document.getElementById('address').value;
-            geocoder.geocode({
-                'address': address
-            }, function(results, status) {
-                if (status == 'OK') {
-                    map.setCenter(results[0].geometry.location);
-                    var marker = new google.maps.Marker({
-                        map: map,
-                        position: results[0].geometry.location
-                    });
-                } else {
-                    alert('Geocode was not successful for the following reason: ' + status);
+    function parseAddressComponents(address_components) {
+        const daParsare = ['route', 'street_number', 'administrative_area_level_3', 'administrative_area_level_2', 'administrative_area_level_1', 'country', 'postal_code'];
+        const daParsareObj = {
+            route: 'via',
+            street_number: 'numero',
+            administrative_area_level_3: 'citta',
+            administrative_area_level_2: 'provincia',
+            administrative_area_level_1: 'regione',
+            country: 'nazione',
+            postal_code: 'cap'
+        };
+        const returnAddrComps = Object();
+        if (address_components) {
+            address_components.map((compItem) => {
+                const compItemType = compItem.types[0];
+                if (daParsare.includes(compItemType)) {
+                    // returnAddrComps[daParsareObj[compItemType]] = compItem.long_name;
+                    returnAddrComps[daParsareObj[compItemType]] = compItem.short_name;
                 }
             });
         }
-
-        initialize();
+        return returnAddrComps;
     }
+
+
+
+
+    /*
+    function geocode() {
+        console.log('addressInput', addressInput.value);
+        var request = {
+            address: addressInput.value
+        };
+        geocoder
+            .geocode(request)
+            .then((result) => {
+                const {
+                    results
+                } = result;
+                if (results[0]) {
+                    const currentResult = results[0];
+                    latInput.value = currentResult.geometry.location.lat();
+                    lngInput.value = currentResult.geometry.location.lng();
+                    addressInput.value = currentResult.formatted_address;
+                    // 
+                    map.setCenter(currentResult.geometry.location);
+                    marker.setPosition(currentResult.geometry.location);
+                    marker.setMap(map);
+                    return currentResult;
+                }
+            })
+            .catch((e) => {
+                // alert("Geocode was not successful for the following reason: " + e);
+            });
+        }
+    */
 </script>
