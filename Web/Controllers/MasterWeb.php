@@ -49,7 +49,7 @@ class MasterWeb extends BaseController
 
 
 		$this->base_view_namespace = $this->lc5_views_namespace . (getenv('custom.web_base_folder')) ?  getenv('custom.web_base_folder') . '/' : '';
-		$this->base_view_filesystem =  'Views'. DIRECTORY_SEPARATOR. ((getenv('custom.web_base_folder')) ?  getenv('custom.web_base_folder') . '/' : '');
+		$this->base_view_filesystem =  'Views' . DIRECTORY_SEPARATOR . ((getenv('custom.web_base_folder')) ?  getenv('custom.web_base_folder') . '/' : '');
 		$this->base_assets_folder = (getenv('custom.base_assets_folder')) ?  getenv('custom.base_assets_folder') . '/' : '/assets/';
 		$this->req = \Config\Services::request();
 		$locale = $this->req->getLocale();
@@ -84,6 +84,72 @@ class MasterWeb extends BaseController
 		if (file_exists(APPPATH . 'Controllers/CustomAppContoller.php')) {
 			$this->custom_app_contoller = new \App\Controllers\CustomAppContoller($this);
 		}
+
+
+		if ($this->req->getPost()) {
+
+
+			if (method_exists($this->custom_app_contoller, 'parseFormPostData')) {
+				$form_result = $this->custom_app_contoller->parseFormPostData($this->req->getPost());
+				$this->web_ui_date->__set('form_result', $form_result);
+			} else {
+				$form_result = $this->parseFormPostData($this->req->getPost());
+				$this->web_ui_date->__set('form_result', $form_result);
+			}
+
+
+
+			$form_post_data = (object) $this->req->getPost();
+			$this->web_ui_date->__set('form_post_data', $form_post_data);
+		}
+	}
+
+	//--------------------------------------------------------------------
+	private function parseFormPostData($post_data = null)
+	{
+		if ($post_data) {
+			if (isset($post_data['send_action'])) {
+				switch ($post_data['send_action']) {
+					case 'sendmailtoinfo':
+						return $this->sendMailToInfo($post_data);
+						break;
+				}
+			}
+			// $return_obj = new stdClass();
+			// $user_mess = new stdClass();
+			// $user_mess->type = 'ko';
+			// $user_mess->title = 'Si è verificato un errore';
+			// $user_mess->content = '<ul>
+			// 	<li>Il campo Cipollino è un indirizzo email valido</li>
+			// 	<li>Il campo Ciccino è richiesto</li>
+			// </ul>';
+			// $return_obj->user_mess = $user_mess;
+
+			// return $return_obj;
+		}
+		return FALSE;
+	}
+	//--------------------------------------------------------------------
+	private function sendMailToInfo($post_data = null)
+	{
+
+		$return_obj = new stdClass();
+		$user_mess = new stdClass();
+		$user_mess->type = 'ko';
+		$user_mess->title = 'Si è verificato un errore';
+		$user_mess->content = '';
+		if ($post_data) {
+			$user_mess->type = 'ok';
+			$user_mess->title = $this->appLabelMethod('Email inviata con successo', $this->web_ui_date->app->labels);
+			$user_mess->content = '<ul>
+				<li>Il campo Cipollino è un indirizzo email valido</li>
+				<li>Il campo Ciccino è richiesto</li>
+			</ul>';
+			$return_obj->user_mess = $user_mess;
+
+			return $return_obj;
+		}
+		return $return_obj;
 	}
 
 	//--------------------------------------------------------------------
@@ -104,7 +170,7 @@ class MasterWeb extends BaseController
 
 
 		if ($is_in_maintenance) {
-			if (is_file( $this->base_view_filesystem . 'maintenance.php')) {
+			if (is_file($this->base_view_filesystem . 'maintenance.php')) {
 				return view($this->base_view_namespace . 'maintenance', $this->web_ui_date->toArray());
 			} else {
 				$this->base_view_namespace = $this->lc5_views_namespace;
@@ -185,7 +251,7 @@ class MasterWeb extends BaseController
 					}
 					$row->view = $this->base_view_namespace . 'rows/php-component/' . $row->component;
 				} else {
-					if (is_file( $this->base_view_filesystem . 'rows/php-component/empty.php')) {
+					if (is_file($this->base_view_filesystem . 'rows/php-component/empty.php')) {
 						$row->view = $this->base_view_namespace . 'rows/php-component/empty';
 					} else {
 						$row->view = $this->lc5_views_namespace . 'rows/php-component/empty';
@@ -330,5 +396,18 @@ class MasterWeb extends BaseController
 
 
 		return FALSE;
+	}
+
+	//--------------------------------------------------------------------
+	protected function appLabelMethod($label, $labels, $force_return = true)
+	{
+		// isset($app->app_labels)
+		$label_key = url_title(trim($label), '_', TRUE);
+		if (isset($label_key) && trim($label_key) && isset($labels) && is_array($labels) && isset($labels[$label_key])) {
+			return $labels[$label_key];
+		} else if (isset($label) && trim($label) && $force_return) {
+			return $label;
+		}
+		return '';
 	}
 }
