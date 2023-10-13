@@ -56,12 +56,12 @@ class Posts extends MasterWeb
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
         // REDIRECT TO ARCHIVE WEB PAGE 
-        if(isset($curr_entity->archive_root) && trim($curr_entity->archive_root)){
+        if (isset($curr_entity->archive_root) && trim($curr_entity->archive_root)) {
             return redirect()->to(route_to(__locale_uri__ . 'web_page', $curr_entity->archive_root));
         }
         // REDIRECT TO ARCHIVE WEB PAGE 
         // 
-        $this->getPoststypesFieldsConfig($curr_entity); 
+        $this->getPoststypesFieldsConfig($curr_entity);
         $orderby =  (isset($curr_entity->post_order) && $curr_entity->post_order != '') ? $curr_entity->post_order : 'id';
         $sortby =  (isset($curr_entity->post_sort) && $curr_entity->post_sort != '') ? $curr_entity->post_sort : 'DESC';
         $pagination_limit =  (isset($curr_entity->post_per_page) && $curr_entity->post_per_page != '') ? $curr_entity->post_per_page : __post_per_page__;
@@ -89,8 +89,8 @@ class Posts extends MasterWeb
             $posts_qb->like('tags', '"' . $cur_post_tag_obj->id . '"', 'both');
         }
 
-       
-        
+
+
 
         // if(isset($curr_entity->post_attributes['data_pub']) && $curr_entity->post_attributes['data_pub']){
         //     $orderby = 'data_pub';
@@ -115,7 +115,7 @@ class Posts extends MasterWeb
             }
             $curr_entity->posts_archive = $posts_archive;
         }
-        if($posts_qb->pager->getTotal() > $posts_qb->pager->getPerPage() ){
+        if ($posts_qb->pager->getTotal() > $posts_qb->pager->getPerPage()) {
             $curr_entity->pager =  $posts_qb->pager;
         }
         $this->web_ui_date->fill((array)$curr_entity);
@@ -125,8 +125,13 @@ class Posts extends MasterWeb
         if (appIsFile($this->base_view_filesystem . 'post-archive-' . $curr_entity->val . '.php')) {
             return view($this->base_view_namespace . 'post-archive-' .  $curr_entity->val, $this->web_ui_date->toArray());
         }
-
-        return view($this->base_view_namespace . 'post-archive-default', $this->web_ui_date->toArray());
+        if (appIsFile($this->base_view_filesystem . 'post-archive-default.php')) {
+            return view($this->base_view_namespace . 'post-archive-default', $this->web_ui_date->toArray());
+        } else {
+            $this->base_view_namespace = $this->lc5_views_namespace;
+            $this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
+            return view($this->base_view_namespace . 'post-archive-default', $this->web_ui_date->toArray());
+        }
     }
 
     //--------------------------------------------------------------------
@@ -188,13 +193,13 @@ class Posts extends MasterWeb
         //
         if (appIsFile($this->base_view_filesystem . 'post-' . $curr_post_type->val . '.php')) {
             return view($this->base_view_namespace . 'post-' .  $curr_post_type->val, $this->web_ui_date->toArray());
-        }else if (appIsFile($this->base_view_filesystem . 'post-default.php')) {
-			return view($this->base_view_namespace . 'post-default', $this->web_ui_date->toArray());
-		}else{
-			$this->base_view_namespace = $this->lc5_views_namespace;
-			$this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
-			return view($this->base_view_namespace.'post-default', $this->web_ui_date->toArray());
-		}
+        } else if (appIsFile($this->base_view_filesystem . 'post-default.php')) {
+            return view($this->base_view_namespace . 'post-default', $this->web_ui_date->toArray());
+        } else {
+            $this->base_view_namespace = $this->lc5_views_namespace;
+            $this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
+            return view($this->base_view_namespace . 'post-default', $this->web_ui_date->toArray());
+        }
     }
 
     //--------------------------------------------------------------------
