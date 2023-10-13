@@ -95,6 +95,9 @@ class MasterWeb extends BaseController
 			} else {
 				$form_result = $this->parseFormPostData($this->req->getPost());
 				$this->web_ui_date->__set('form_result', $form_result);
+				if ($form_result->is_send === TRUE) {
+					return redirect()->to(uri_string() . '?is_send=true');
+				}
 			}
 
 
@@ -111,7 +114,7 @@ class MasterWeb extends BaseController
 			if (isset($post_data['send_action'])) {
 				switch ($post_data['send_action']) {
 					case 'sendmailtoinfo':
-						return $this->sendMailToInfo($post_data);
+						return $this->sendMailToInfo();
 						break;
 				}
 			}
@@ -130,25 +133,68 @@ class MasterWeb extends BaseController
 		return FALSE;
 	}
 	//--------------------------------------------------------------------
-	private function sendMailToInfo($post_data = null)
+	private function sendMailToInfo()
 	{
-
+		$requestService = $this->req = \Config\Services::request();
+		$post_data = $requestService->getPost();
+		// 
 		$return_obj = new stdClass();
+		$return_obj->is_send = FALSE;
 		$user_mess = new stdClass();
 		$user_mess->type = 'ko';
-		$user_mess->title = 'Si è verificato un errore';
+		$user_mess->title = $this->appLabelMethod('Si è verificato un errore', $this->web_ui_date->app->labels);
 		$user_mess->content = '';
 		if ($post_data) {
-			$user_mess->type = 'ok';
-			$user_mess->title = $this->appLabelMethod('Email inviata con successo', $this->web_ui_date->app->labels);
-			$user_mess->content = '<ul>
-				<li>Il campo Cipollino è un indirizzo email valido</li>
-				<li>Il campo Ciccino è richiesto</li>
-			</ul>';
-			$return_obj->user_mess = $user_mess;
+			if (isset($post_data['to_addres'])) {
+				$toAddress = $post_data['to_addres'];
+			} else {
+				$toAddress = env('custom.default_to_address');
+			}
+			if (isset($post_data['checkfield'])) {
+				$checkfield_arr = explode('|', $post_data['checkfield']);
+				if (is_array($checkfield_arr) && count($checkfield_arr) > 0) {
+					$field_errors = [];
+					$field_errors_html_list = '';
+					foreach ($checkfield_arr as $field_to_check) {
+						if(!trim($post_data[$field_to_check])){
+							$field_errors[$field_to_check] = 'richiesto';
+							$field_errors_html_list.='<li>Il campo '.$field_to_check.' è richiesto</li>';
 
-			return $return_obj;
+						}
+					}
+					if (count($field_errors) > 0) {
+						$user_mess->title = $this->appLabelMethod("Errore!. Alcuni campi sono richiesti", $this->web_ui_date->app->labels);
+						$user_mess->content = $this->appLabelMethod("<ul>".$field_errors_html_list."</ul>", $this->web_ui_date->app->labels);
+						$return_obj->user_mess = $user_mess;
+						return $return_obj;
+					}
+				}
+			}
+
+			// return;
+
+
+			$htmlbody = file_get_contents(APPPATH . 'Views/email/info_request.html');
+			$htmlbody = str_replace('{{logo_path}}', env('custom.logo_path'), $htmlbody);
+			$htmlbody = str_replace('{{app_name}}', env('custom.app_name'), $htmlbody);
+			$htmlbody = str_replace('{{name}}', $post_data['name'], $htmlbody);
+			$htmlbody = str_replace('{{surname}}', $post_data['surname'], $htmlbody);
+			$htmlbody = str_replace('{{email}}', $post_data['email'], $htmlbody);
+			$htmlbody = str_replace('{{tel}}', $post_data['tel'], $htmlbody);
+			$htmlbody = str_replace('{{message}}', nl2br($post_data['message']), $htmlbody);
+			$email_subject = 'Richiesta info da ' . env('custom.app_name');
+			if ($this->inviaEmailSMTP($toAddress, $email_subject, $htmlbody)) {
+
+				$user_mess->type = 'ok';
+				$user_mess->title = $this->appLabelMethod('Email inviata con successo', $this->web_ui_date->app->labels);
+				$user_mess->content = $this->appLabelMethod('La sua richiesta è stata presa in carico dal nostro team. Grazie!', $this->web_ui_date->app->labels);
+				$return_obj->is_send = TRUE;
+			} else {
+				$user_mess->title = $this->appLabelMethod("Si è verificato un errore durante l'invio della mail", $this->web_ui_date->app->labels);
+				$user_mess->content = $this->appLabelMethod("L'errore è stato segnalato e stiamo lavorando per risolvere il problema, riprova più tardi", $this->web_ui_date->app->labels);
+			}
 		}
+		$return_obj->user_mess = $user_mess;
 		return $return_obj;
 	}
 
@@ -363,33 +409,40 @@ class MasterWeb extends BaseController
 
 
 	//--------------------------------------------------------------------
-	protected function inviaEmailSMTP($toAddres, $mailSubject,  $htmlbody)
+	protected function inviaEmailSMTP($toAddress, $mailSubject,  $htmlbody)
 	{
-
+		// d($this->send_mail_config);
 		$email = new Email($this->send_mail_config);
 		$email->setFrom(env('custom.from_address'), env('custom.from_name'));
-		$email->setTo($toAddres);
-
+		$email->setTo($toAddress);
+		// $email->sendCommand('starttls'); 
 		$email->setSubject($mailSubject);
 		$email->setMessage($htmlbody);
 		$email->setAltMessage('Questa email è stata inviata in formato HTML. Visualizzi questo messaggio perché il tuo client di posta non supporta queste funzionalità.');
 		if ($email->send()) {
 			return TRUE;
 		}
+		return FALSE;
+		// d($email->printDebugger());
 	}
 
 	//--------------------------------------------------------------------
 	private function getEnvEmailConfig()
 	{
 		if (env('custom.email.protocol') == 'smtp') {
+
 			return [
 
 				'mailType' => 'html',
-				'protocol' => env('custom.email.protocol'),
+				'SMTPHost' => env('custom.email.SMTPHost'),
+				'SMTPPort' => env('custom.email.SMTPPort'), //  465,//
+				// 'protocol' => env('custom.email.protocol'),
 				'SMTPUser' => env('custom.email.SMTPUser'),
 				'SMTPPass' => env('custom.email.SMTPPass'),
-				'SMTPHost' => env('custom.email.SMTPHost'),
-				'SMTPPort' => env('custom.email.SMTPPort'),
+				// 'SMTPCrypto' => 'tls',
+				// 'SMTPAuth' => true,
+				// 'SMTPKeepAlive' => true,
+				// 'mailPath' => '/var/qmail/mailnames',
 
 			];
 		}
