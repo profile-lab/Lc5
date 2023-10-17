@@ -6,7 +6,7 @@ function printLangsMenu($menu, $menu_name = 'languages-menu', $has_flags = FALSE
     if (isset($menu) && is_array($menu) && count($menu) > 0) {
         $return_html .= '<ul class="' . $menu_name . '" id="' . $menu_name . '">';
         foreach ($menu as $lang) {
-            $return_html .= '<li>';
+            $return_html .= '<li class="' . (($lang->is_default) ? 'default_lang' : '') . ' ' . (($lang->is_current) ? 'current_lang' : '') . ' ' . $menu_name . '-' . $lang->id . '">';
             $return_html .= '<a class="' . (($lang->is_default) ? 'default_lang' : '') . ' ' . (($lang->is_current) ? 'current_lang' : '') . ' ' . $menu_name . '-' . $lang->id . '" href="' . $lang->parameter . '">';
             if($has_flags){
                 $return_html .= '<img src="' . site_url('/assets/img/'.$lang->label_mini.'.svg').'" alt="' . $lang->label . '" title="' . $lang->label . '" />';
