@@ -17,7 +17,7 @@ use Lc5\Web\Controllers\Users\UserTools;
 
 use CodeIgniter\Email\Email;
 
-use Mailgun\Mailgun;
+// use Mailgun\Mailgun;
 
 class MasterWeb extends BaseController
 {
@@ -422,7 +422,7 @@ class MasterWeb extends BaseController
 	//--------------------------------------------------------------------
 	protected function inviaEmailMailGunApi($toAddress, $mailSubject,  $htmlbody)
 	{
-		$mg = Mailgun::create(env('custom.email.MailGunSigningKey'), 'https://api.eu.mailgun.net'); // For EU servers
+		$mg = \Mailgun\Mailgun::create(env('custom.email.MailGunSigningKey'), 'https://api.eu.mailgun.net'); // For EU servers
 		$mailGun_message = $mg->messages()->send(env('custom.email.MailGunDomain'), [
 			'from'    => env('custom.from_address'), //env('custom.from_name')
 			'to'      => $toAddress,
