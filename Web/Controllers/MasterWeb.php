@@ -17,6 +17,8 @@ use Lc5\Web\Controllers\Users\UserTools;
 
 use CodeIgniter\Email\Email;
 
+use function PHPUnit\Framework\fileExists;
+
 // use Mailgun\Mailgun;
 
 class MasterWeb extends BaseController
@@ -441,17 +443,63 @@ class MasterWeb extends BaseController
 	//--------------------------------------------------------------------
 	protected function inviaEmailSMTP($toAddress, $mailSubject,  $htmlbody)
 	{
-		// d($this->send_mail_config);
-		$email = new Email($this->send_mail_config);
-		$email->setFrom(env('custom.from_address'), env('custom.from_name'));
-		$email->setTo($toAddress);
-		// $email->sendCommand('starttls'); 
-		$email->setSubject($mailSubject);
-		$email->setMessage($htmlbody);
-		$email->setAltMessage('Questa email è stata inviata in formato HTML. Visualizzi questo messaggio perché il tuo client di posta non supporta queste funzionalità.');
-		if ($email->send()) {
-			return TRUE;
+		$filePath = ROOTPATH . 'Lc5/Web/ThirdParty/PHPMailer/language/';
+		$mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+		$mail->setLanguage('it', $filePath);
+		try {
+			//Server settings
+			// $mail->SMTPDebug = \PHPMailer\PHPMailer\SMTP::DEBUG_SERVER;
+			$mail->isSMTP();
+			$mail->Host       = $this->send_mail_config['SMTPHost'];
+			$mail->SMTPAuth   = true;
+			$mail->Username   = $this->send_mail_config['SMTPUser'];
+			$mail->Password   = $this->send_mail_config['SMTPPass'];      
+			$mail->SMTPSecure = 'tls'; // \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+			$mail->Port       = $this->send_mail_config['SMTPPort'];     
+
+			//Recipients
+			$mail->setFrom(env('custom.from_address'), env('custom.from_name'));
+			$mail->addAddress($toAddress);     
+
+			//Content
+			$mail->isHTML(true);
+			$mail->Subject = $mailSubject;
+			$mail->Body    = $htmlbody;
+			$mail->AltBody = 'Questa email è stata inviata in formato HTML. Visualizzi questo messaggio perché il tuo client di posta non supporta queste funzionalità.';
+
+			$mail->send();
+			return true;
+		} catch (\PHPMailer\PHPMailer\Exception $e) {
+			// echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+			return false;
 		}
+
+
+
+		// use PHPMailer\PHPMailer\PHPMailer;
+		// use PHPMailer\PHPMailer\SMTP;
+		// use PHPMailer\PHPMailer\Exception;
+
+		// //Load Composer's autoloader
+		// require 'vendor/autoload.php';
+
+		//Create an instance; passing `true` enables exceptions
+		
+
+
+
+
+		// // d($this->send_mail_config);
+		// $email = new Email($this->send_mail_config);
+		// $email->setFrom(env('custom.from_address'), env('custom.from_name'));
+		// $email->setTo($toAddress);
+		// // $email->sendCommand('starttls'); 
+		// $email->setSubject($mailSubject);
+		// $email->setMessage($htmlbody);
+		// $email->setAltMessage('Questa email è stata inviata in formato HTML. Visualizzi questo messaggio perché il tuo client di posta non supporta queste funzionalità.');
+		// if ($email->send()) {
+		// 	return TRUE;
+		// }
 		return FALSE;
 		// d($email->printDebugger());
 	}
@@ -466,7 +514,7 @@ class MasterWeb extends BaseController
 				'mailType' => 'html',
 				'SMTPHost' => env('custom.email.SMTPHost'),
 				'SMTPPort' => env('custom.email.SMTPPort'), //  465,//
-				// 'protocol' => env('custom.email.protocol'),
+				'protocol' => env('custom.email.protocol'),
 				'SMTPUser' => env('custom.email.SMTPUser'),
 				'SMTPPass' => env('custom.email.SMTPPass'),
 				// 'SMTPCrypto' => 'tls',
