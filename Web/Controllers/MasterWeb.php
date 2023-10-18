@@ -17,6 +17,7 @@ use Lc5\Web\Controllers\Users\UserTools;
 
 use CodeIgniter\Email\Email;
 
+use Mailgun\Mailgun;
 
 class MasterWeb extends BaseController
 {
@@ -156,15 +157,14 @@ class MasterWeb extends BaseController
 					$field_errors = [];
 					$field_errors_html_list = '';
 					foreach ($checkfield_arr as $field_to_check) {
-						if(!trim($post_data[$field_to_check])){
+						if (!trim($post_data[$field_to_check])) {
 							$field_errors[$field_to_check] = 'richiesto';
-							$field_errors_html_list.='<li>Il campo '.$field_to_check.' è richiesto</li>';
-
+							$field_errors_html_list .= '<li>Il campo ' . $field_to_check . ' è richiesto</li>';
 						}
 					}
 					if (count($field_errors) > 0) {
 						$user_mess->title = $this->appLabelMethod("Errore!. Alcuni campi sono richiesti", $this->web_ui_date->app->labels);
-						$user_mess->content = $this->appLabelMethod("<ul>".$field_errors_html_list."</ul>", $this->web_ui_date->app->labels);
+						$user_mess->content = $this->appLabelMethod("<ul>" . $field_errors_html_list . "</ul>", $this->web_ui_date->app->labels);
 						$return_obj->user_mess = $user_mess;
 						return $return_obj;
 					}
@@ -183,8 +183,7 @@ class MasterWeb extends BaseController
 			$htmlbody = str_replace('{{tel}}', $post_data['tel'], $htmlbody);
 			$htmlbody = str_replace('{{message}}', nl2br($post_data['message']), $htmlbody);
 			$email_subject = 'Richiesta info da ' . env('custom.app_name');
-			if ($this->inviaEmailSMTP($toAddress, $email_subject, $htmlbody)) {
-
+			if ($this->inviaEmail($toAddress, $email_subject, $htmlbody)) {
 				$user_mess->type = 'ok';
 				$user_mess->title = $this->appLabelMethod('Email inviata con successo', $this->web_ui_date->app->labels);
 				$user_mess->content = $this->appLabelMethod('La sua richiesta è stata presa in carico dal nostro team. Grazie!', $this->web_ui_date->app->labels);
@@ -409,6 +408,37 @@ class MasterWeb extends BaseController
 
 
 	//--------------------------------------------------------------------
+	protected function inviaEmail($toAddress, $mailSubject,  $htmlbody)
+	{
+
+		if (env('custom.email.protocol') == 'mailgun_api') {
+			return $this->inviaEmailMailGunApi($toAddress, $mailSubject,  $htmlbody);
+		} elseif (env('custom.email.protocol') == 'smtp') {
+			return $this->inviaEmailSMTP($toAddress, $mailSubject,  $htmlbody);
+		}
+	}
+
+
+	//--------------------------------------------------------------------
+	protected function inviaEmailMailGunApi($toAddress, $mailSubject,  $htmlbody)
+	{
+		$mg = Mailgun::create(env('custom.email.MailGunSigningKey'), 'https://api.eu.mailgun.net'); // For EU servers
+		$mailGun_message = $mg->messages()->send(env('custom.email.MailGunDomain'), [
+			'from'    => env('custom.from_address'), //env('custom.from_name')
+			'to'      => $toAddress,
+			'subject' => $mailSubject,
+			'html'    =>  $htmlbody,
+			'text'    => 'Questa email è stata inviata in formato HTML. Visualizzi questo messaggio perché il tuo client di posta non supporta queste funzionalità.',
+
+		]);
+		return $mailGun_message;
+
+
+		// return $this->inviaEmailSMTP($toAddress, $mailSubject,  $htmlbody);
+	}
+
+
+	//--------------------------------------------------------------------
 	protected function inviaEmailSMTP($toAddress, $mailSubject,  $htmlbody)
 	{
 		// d($this->send_mail_config);
@@ -429,10 +459,10 @@ class MasterWeb extends BaseController
 	//--------------------------------------------------------------------
 	private function getEnvEmailConfig()
 	{
-		if (env('custom.email.protocol') == 'smtp') {
-
+		if (env('custom.email.protocol') == 'mailgun_api') {
+			return [];
+		} elseif (env('custom.email.protocol') == 'smtp') {
 			return [
-
 				'mailType' => 'html',
 				'SMTPHost' => env('custom.email.SMTPHost'),
 				'SMTPPort' => env('custom.email.SMTPPort'), //  465,//
@@ -443,7 +473,6 @@ class MasterWeb extends BaseController
 				// 'SMTPAuth' => true,
 				// 'SMTPKeepAlive' => true,
 				// 'mailPath' => '/var/qmail/mailnames',
-
 			];
 		}
 
