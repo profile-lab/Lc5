@@ -12,15 +12,17 @@ class ShopAliquote extends Seeder
 			$id_app = 1;
 		}
         $db_table = 'shop_aliquote';
-
-        $has_dati_query = $this->db->table($db_table)->where('id_app', $id_app)->select('id')->get(1, 0);
-        if (!$has_dati_query->getFirstRow()) {
-            $data = [
-				'id_app' => $id_app,
-                'nome' => 'Iva 22%',
-                'val' => '22',
-            ];
-            $this->db->table($db_table)->insert($data);
+        if ($this->db->tableExists($db_table)) {
+            $has_dati_query = $this->db->table($db_table)->where('id_app', $id_app)->select('id')->get(1, 0);
+            if (!$has_dati_query->getFirstRow()) {
+                $data = [
+                    'id_app' => $id_app,
+                    'nome' => 'Iva 22%',
+                    'val' => '22',
+                ];
+                $this->db->table($db_table)->insert($data);
+            }
         }
+
 	}
 }
