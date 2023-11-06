@@ -497,63 +497,104 @@ class MasterLc extends BaseController
 			}
 		}
 
-		if (env('custom.has_shop') === TRUE) {
+		// if (isset($this->shop_modules) && is_array($this->shop_modules) && count($this->shop_modules)) {
+		// 	foreach ($this->shop_modules as $cm_key => $shop_modulo_arr) {
+		// 		$shop_modulo = (object) $shop_modulo_arr;
+		// 		$module_items = [];
+		// 		if (isset($shop_modulo->items) && is_array($shop_modulo->items) && count($shop_modulo->items)) {
+		// 			foreach ($shop_modulo->items as $shop_modulo_item) {
+		// 				$module_items[] = (object) [
+		// 					'label' => $shop_modulo_item->label,
+		// 					'route' => site_url(route_to($shop_modulo->lc_base_route.'_'. $shop_modulo_item->route)),
+		// 					'module_action' => $shop_modulo_item->module_action,
+		// 				];
+		// 			}
+		// 		}
 
-			// Shop 
-			$menu_data_arr['shop'] = (object) [
-				'label' => 'Shop',
-				'route' => site_url(route_to('lc_shop')),
-				'module' => 'shopproduct',
-				// 'module' => 'products',
-				'ico' => 'basket',
-				'items' => [
-					(object) [
-						'label' => 'Lista Prodotti',
-						'route' => site_url(route_to('lc_shop_prod')),
-						'module_action' => 'index',
-					],
-					(object) [
-						'label' => 'Nuovo Prodotto',
-						'route' => site_url(route_to('lc_shop_prod_new')),
-						'module_action' => 'newpost',
-					],
-					(object) [
-						'label' => 'Categorie Prodotti',
-						'route' => site_url(route_to('lc_shop_prod_cat')),
-						'module_action' => 'shopproductscat',
-					],
-					(object) [
-						'label' => 'Settings',
-						'route' => site_url(route_to('lc_shop_settings')),
-						'module_action' => 'shopsettings',
-					],
-					// (object) [
-					// 	'label' => 'Taglie Prodotti',
-					// 	'route' => site_url(route_to('lc_shop_prod_sizes')),
-					// 	'module_action' => 'shopproductssizes',
-					// ],
-					// (object) [
-					// 	'label' => 'Varianti Prodotti',
-					// 	'route' => site_url(route_to('lc_shop_prod_colors')),
-					// 	'module_action' => 'shopproductscolors',
-					// ],
-					// (object) [
-					// 	'label' => 'Tags Prodotti',
-					// 	'route' => site_url(route_to('lc_shop_prod_tags')),
-					// 	'module_action' => 'shopproductstags',
-					// 	'label' => 'Varianti Prodotti',
-					// 	'route' => site_url(route_to('lc_shop_prod_colors')),
-					// 	'module_action' => 'shopproductscolors',
-					// ],
-					// (object) [
-					// 	'label' => 'Aliquote Iva',
-					// 	'route' => site_url(route_to('lc_shop_aliquote')),
-					// 	'module_action' => 'shopaliquote',
-					// ]
-				]
-			];
-			// 
-		}
+		// 		// Shop 
+		// 		$menu_data_arr['shop_' . $shop_modulo->nome] = (object) [
+		// 			'label' => $shop_modulo->nome,
+		// 			'route' => site_url(route_to($shop_modulo->lc_base_route)),
+		// 			'module' => $cm_key,
+		// 			'ico' => 'basket',
+		// 			'items' => $module_items,
+		// 			// [
+		// 			// 	(object) [
+		// 			// 		'label' => 'Lista ',
+		// 			// 		'route' => site_url(route_to($shop_modulo->lc_base_route)),
+		// 			// 		'module_action' => 'index',
+		// 			// 	],
+		// 			// ]
+		// 		];
+		// 		// 
+
+
+		// 		// 'corsi' => (object)[
+		// 		// 	'nome' => 'Corsi',
+		// 		// 	'controller' => 'Corsi',
+		// 		// 	'lc_base_route' => 'lc_admin_corsi'
+		// 		// ]
+
+		// 	}
+		// }
+
+		// if (env('custom.has_shop') === TRUE) {
+
+		// 	// Shop 
+		// 	$menu_data_arr['shop'] = (object) [
+		// 		'label' => 'Shop',
+		// 		'route' => site_url(route_to('lc_shop')),
+		// 		'module' => 'shopproduct',
+		// 		// 'module' => 'products',
+		// 		'ico' => 'basket',
+		// 		'items' => [
+		// 			(object) [
+		// 				'label' => 'Lista Prodotti',
+		// 				'route' => site_url(route_to('lc_shop_prod')),
+		// 				'module_action' => 'index',
+		// 			],
+		// 			(object) [
+		// 				'label' => 'Nuovo Prodotto',
+		// 				'route' => site_url(route_to('lc_shop_prod_new')),
+		// 				'module_action' => 'newpost',
+		// 			],
+		// 			(object) [
+		// 				'label' => 'Categorie Prodotti',
+		// 				'route' => site_url(route_to('lc_shop_prod_cat')),
+		// 				'module_action' => 'shopproductscat',
+		// 			],
+		// 			(object) [
+		// 				'label' => 'Settings',
+		// 				'route' => site_url(route_to('lc_shop_settings')),
+		// 				'module_action' => 'shopsettings',
+		// 			],
+		// 			// (object) [
+		// 			// 	'label' => 'Taglie Prodotti',
+		// 			// 	'route' => site_url(route_to('lc_shop_prod_sizes')),
+		// 			// 	'module_action' => 'shopproductssizes',
+		// 			// ],
+		// 			// (object) [
+		// 			// 	'label' => 'Varianti Prodotti',
+		// 			// 	'route' => site_url(route_to('lc_shop_prod_colors')),
+		// 			// 	'module_action' => 'shopproductscolors',
+		// 			// ],
+		// 			// (object) [
+		// 			// 	'label' => 'Tags Prodotti',
+		// 			// 	'route' => site_url(route_to('lc_shop_prod_tags')),
+		// 			// 	'module_action' => 'shopproductstags',
+		// 			// 	'label' => 'Varianti Prodotti',
+		// 			// 	'route' => site_url(route_to('lc_shop_prod_colors')),
+		// 			// 	'module_action' => 'shopproductscolors',
+		// 			// ],
+		// 			// (object) [
+		// 			// 	'label' => 'Aliquote Iva',
+		// 			// 	'route' => site_url(route_to('lc_shop_aliquote')),
+		// 			// 	'module_action' => 'shopaliquote',
+		// 			// ]
+		// 		]
+		// 	];
+		// 	// 
+		// }
 
 
 		// Media 
@@ -604,8 +645,8 @@ class MasterLc extends BaseController
 		];
 		//
 
-		if(isset($this->custom_app_modules) && is_array($this->custom_app_modules)){
-			foreach($this->custom_app_modules as $cm_key => $custom_modulo_arr){
+		if (isset($this->custom_app_modules) && is_array($this->custom_app_modules)) {
+			foreach ($this->custom_app_modules as $cm_key => $custom_modulo_arr) {
 				$custom_modulo = (object) $custom_modulo_arr;
 
 				// Posts 
