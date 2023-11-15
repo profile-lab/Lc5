@@ -9,7 +9,7 @@ use Lc5\Data\Models\LanguagesModel;
 // use Lc5\Data\Models\CustomFieldsKeysModel;
 use Lc5\Data\Models\LcappsModel;
 use Lc5\Data\Models\AppSettingsModel;
-use Lc5\Data\Models\ShopSettingsModel;
+// use Lc5\Data\Models\ShopSettingsModel;
 
 use Lc5\Data\Models\PagesModel;
 use Lc5\Data\Models\RowsModel;
@@ -48,6 +48,11 @@ class MasterLc extends BaseController
 	// 
 	protected $vimeo_client = null;
 	// 
+
+	// 
+	protected $lc_plugin_modules = [];
+	// 
+
 
 	//--------------------------------------------------------------------
 	public function __construct()
@@ -119,37 +124,37 @@ class MasterLc extends BaseController
 	//--------------------------------------------------------------------
 	//--------------------------------------------------------------------
 
-	//--------------------------------------------------------------------
-	protected function getShopSettings()
-	{
-		// 
-		$shop_settings_model = new ShopSettingsModel();
-		if (!$shop_settings_entity = $shop_settings_model->where('id_app', $this->getCurrApp())->first()) {
-			$this->createBeseShopSettings($this->getCurrApp());
-			if (!$shop_settings_entity = $shop_settings_model->where('id_app', $this->getCurrApp())->first()) {
-				throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-			}
-		}
-		// 
-		return $shop_settings_entity;
-	}
-	//--------------------------------------------------------------------
-	protected function createBeseShopSettings($__id_app = null)
-	{
-		if (!$__id_app) {
-			$__id_app = $this->getCurrApp();
-		}
+	// //--------------------------------------------------------------------
+	// protected function getShopSettings()
+	// {
+	// 	// 
+	// 	$shop_settings_model = new ShopSettingsModel();
+	// 	if (!$shop_settings_entity = $shop_settings_model->where('id_app', $this->getCurrApp())->first()) {
+	// 		$this->createBeseShopSettings($this->getCurrApp());
+	// 		if (!$shop_settings_entity = $shop_settings_model->where('id_app', $this->getCurrApp())->first()) {
+	// 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+	// 		}
+	// 	}
+	// 	// 
+	// 	return $shop_settings_entity;
+	// }
+	// //--------------------------------------------------------------------
+	// protected function createBeseShopSettings($__id_app = null)
+	// {
+	// 	if (!$__id_app) {
+	// 		$__id_app = $this->getCurrApp();
+	// 	}
 
-		$shop_settings_model = new ShopSettingsModel();
-		$new_base_entity = new \Lc5\Data\Entities\Shopsettings();
-		$new_base_entity->id_app = $__id_app;
-		$new_base_entity->entity_free_values = '[]';
-		$new_base_entity->discount_type = 'PRICE';
-		if ($shop_settings_model->save($new_base_entity)) {
-			return TRUE;
-		}
-		return FALSE;
-	}
+	// 	$shop_settings_model = new ShopSettingsModel();
+	// 	$new_base_entity = new \Lc5\Data\Entities\Shopsettings();
+	// 	$new_base_entity->id_app = $__id_app;
+	// 	$new_base_entity->entity_free_values = '[]';
+	// 	$new_base_entity->discount_type = 'PRICE';
+	// 	if ($shop_settings_model->save($new_base_entity)) {
+	// 		return TRUE;
+	// 	}
+	// 	return FALSE;
+	// }
 
 	//--------------------------------------------------------------------
 	//--------------------------------------------------------------------
@@ -389,43 +394,47 @@ class MasterLc extends BaseController
 		return null;
 	}
 
-	//--------------------------------------------------------------------
-	protected function getShopToolsTabs()
-	{
-		$tabs_data_arr = [
-			(object) [
-				'label' => 'Config',
-				'route' => site_url(route_to('lc_shop_settings')),
-				'module_tab' => 'shopsettings',
-			],
-			(object) [
-				'label' => 'Taglie Prodotti',
-				'route' => site_url(route_to('lc_shop_prod_sizes')),
-				'module_tab' => 'shopproductssizes',
-			],
-			(object) [
-				'label' => 'Varianti Prodotti',
-				'route' => site_url(route_to('lc_shop_prod_colors')),
-				'module_tab' => 'shopproductscolors',
-			],
-			(object) [
-				'label' => 'Tags Prodotti',
-				'route' => site_url(route_to('lc_shop_prod_tags')),
-				'module_tab' => 'shopproductstags',
-			],
-			(object) [
-				'label' => 'Aliquote Iva',
-				'route' => site_url(route_to('lc_shop_aliquote')),
-				'module_tab' => 'shopaliquote',
-			]
-		];
+	// //--------------------------------------------------------------------
+	// protected function getShopToolsTabs()
+	// {
+	// 	$tabs_data_arr = [
+	// 		(object) [
+	// 			'label' => 'Config',
+	// 			'route' => site_url(route_to('lc_shop_settings')),
+	// 			'module_tab' => 'shopsettings',
+	// 		],
+	// 		(object) [
+	// 			'label' => 'Taglie Prodotti',
+	// 			'route' => site_url(route_to('lc_shop_prod_sizes')),
+	// 			'module_tab' => 'shopproductssizes',
+	// 		],
+	// 		(object) [
+	// 			'label' => 'Varianti Prodotti',
+	// 			'route' => site_url(route_to('lc_shop_prod_colors')),
+	// 			'module_tab' => 'shopproductscolors',
+	// 		],
+	// 		(object) [
+	// 			'label' => 'Tags Prodotti',
+	// 			'route' => site_url(route_to('lc_shop_prod_tags')),
+	// 			'module_tab' => 'shopproductstags',
+	// 		],
+	// 		(object) [
+	// 			'label' => 'Aliquote Iva',
+	// 			'route' => site_url(route_to('lc_shop_aliquote')),
+	// 			'module_tab' => 'shopaliquote',
+	// 		]
+	// 	];
 
-		return $tabs_data_arr;
-	}
+	// 	return $tabs_data_arr;
+	// }
 
 	//--------------------------------------------------------------------
 	protected function getLcAdminMenu()
 	{
+		if (class_exists('\LcShop\Cms\Controllers\LcShopConfigs')) {
+			$this->lc_plugin_modules = array_merge($this->lc_plugin_modules, \LcShop\Cms\Controllers\LcShopConfigs::getLcModulesMenu());
+		}
+
 		$posts_icos = ['news' => 'paperclip', 'faq' => 'question-mark'];
 		$menu_data_arr = [];
 
@@ -494,6 +503,18 @@ class MasterLc extends BaseController
 					]
 				];
 				// 
+			}
+		}
+
+		if (isset($this->lc_plugin_modules) && is_array($this->lc_plugin_modules) && count($this->lc_plugin_modules)) {
+			foreach ($this->lc_plugin_modules as $plugin_key => $plugin_module) {
+				$menu_data_arr[$plugin_key] = (object) [
+					'label' => $plugin_module->label,
+					'route' => site_url(route_to($plugin_module->route)),
+					'module' => $plugin_module->module,
+					'ico' => $plugin_module->ico,
+					'items' => $plugin_module->items,
+				];
 			}
 		}
 
