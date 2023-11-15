@@ -80,9 +80,11 @@
                             <div class="row">
                                 <?= view('Lc5\Cms\Views\form-cmp/readonly', ['item' => ['label' => 'Nome', 'value' => $entity->nome, 'name' => 'nome',  'width' => 'col-12', 'placeholder' => '', 'if_active_name' => 'nome',  'enabled' => (($entity->id) ? TRUE : FALSE)]]) ?>
                                 <?= view('Lc5\Cms\Views\form-cmp/readonly', ['item' => ['label' => 'Guid', 'value' => $entity->guid, 'width' => 'col-12', 'placeholder' => '', 'if_active_name' => 'guid',  'enabled' => (($entity->id) ? TRUE : FALSE)]]) ?>
-                                <?= view('Lc5\Cms\Views\form-cmp/select', [ 'item' => ['label' => 'Public', 'name' => 'public', 'input_class' => 'public', 'value' => $entity->public, 'width' => 'col-md-12', 'sources' => $bool_values, 'no_empty' => true] ]); ?>
+                                <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => 'Public', 'name' => 'public', 'input_class' => 'public', 'value' => $entity->public, 'width' => 'col-md-12', 'sources' => $bool_values, 'no_empty' => true]]); ?>
                                 <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => 'Tipo', 'name' => 'type', 'value' => $entity->type, 'width' => 'col-12 col-xl-12', 'sources' => $pages_types, 'no_empty' => true]]) ?>
-                                <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => 'Genitore', 'name' => 'parent', 'value' => $entity->parent, 'width' => 'col-12 col-xl-12', 'sources' => $parents, 'no_empty' => false]]) ?>
+                                <?php if (isset($parents) && is_array($parents) && count($parents) > 0) { ?>
+                                    <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => 'Genitore', 'name' => 'parent', 'value' => $entity->parent, 'width' => 'col-12 col-xl-12', 'sources' => $parents, 'no_empty' => false]]) ?>
+                                <?php } ?>
                                 <?= view('Lc5\Cms\Views\form-cmp/number', ['item' => ['label' => 'Ordine', 'name' => 'ordine', 'value' => $entity->ordine, 'width' => 'col-12 col-xl-12', 'placeholder' => 'titolo', 'step' => '0.01']]) ?>
                                 <?php if (isset($poststypes) && is_array($poststypes) && count($poststypes) > 0) { ?>
                                     <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => '&Egrave; archivio di', 'name' => 'is_posts_archive', 'value' => $entity->is_posts_archive, 'width' => 'col-12 col-xl-12', 'sources' => $poststypes]]) ?>
