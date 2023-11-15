@@ -92,13 +92,13 @@ class MasterWeb extends BaseController
 		if ($this->req->getPost()) {
 
 
-			if (method_exists($this->custom_app_contoller, 'parseFormPostData')) {
-				$form_result = $this->custom_app_contoller->parseFormPostData($this->req->getPost());
+			if (file_exists(APPPATH . 'Controllers/CustomAppContoller.php') &&  method_exists($this->custom_app_contoller, 'parseFormPostData')) {
+				$form_result = $this->custom_app_contoller->{'parseFormPostData'}($this->req->getPost());
 				$this->web_ui_date->__set('form_result', $form_result);
 			} else {
 				$form_result = $this->parseFormPostData($this->req->getPost());
-				$this->web_ui_date->__set('form_result', $form_result);
-				if ($form_result->is_send === TRUE) {
+				if (isset($form_result) && isset($form_result->is_send) && $form_result->is_send === TRUE) {
+					$this->web_ui_date->__set('form_result', $form_result);
 					return redirect()->to(uri_string() . '?is_send=true');
 				}
 			}
