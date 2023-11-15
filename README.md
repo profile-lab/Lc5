@@ -64,15 +64,21 @@ Add helpers requirements in App\Controllers\BaseController.php
 Add getShopSettings method in App\Controllers\BaseController.php
 
         //--------------------------------------------------------------------
-        protected function getShopSettings()
+        protected function getShopSettings($current_app_id)
         {
+                if(!$current_app_id){
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+                }
+                if (class_exists('\LcShop\Data\Models\ShopSettingsModel')) {
                 // 
-                $shop_settings_model = new \Lc5\Data\Models\ShopSettingsModel();
-                if (!$shop_settings_entity = $shop_settings_model->asObject()->where('id_app', __web_app_id__ )->first()) {
+                $shop_settings_model = new \LcShop\Data\Models\ShopSettingsModel();
+                if (!$shop_settings_entity = $shop_settings_model->asObject()->where('id_app', $current_app_id)->first()) {
                         throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
                 }
                 // 
                 return $shop_settings_entity;
+                }
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
 
