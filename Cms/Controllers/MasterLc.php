@@ -394,39 +394,6 @@ class MasterLc extends BaseController
 		return null;
 	}
 
-	// //--------------------------------------------------------------------
-	// protected function getShopToolsTabs()
-	// {
-	// 	$tabs_data_arr = [
-	// 		(object) [
-	// 			'label' => 'Config',
-	// 			'route' => site_url(route_to('lc_shop_settings')),
-	// 			'module_tab' => 'shopsettings',
-	// 		],
-	// 		(object) [
-	// 			'label' => 'Taglie Prodotti',
-	// 			'route' => site_url(route_to('lc_shop_prod_sizes')),
-	// 			'module_tab' => 'shopproductssizes',
-	// 		],
-	// 		(object) [
-	// 			'label' => 'Varianti Prodotti',
-	// 			'route' => site_url(route_to('lc_shop_prod_colors')),
-	// 			'module_tab' => 'shopproductscolors',
-	// 		],
-	// 		(object) [
-	// 			'label' => 'Tags Prodotti',
-	// 			'route' => site_url(route_to('lc_shop_prod_tags')),
-	// 			'module_tab' => 'shopproductstags',
-	// 		],
-	// 		(object) [
-	// 			'label' => 'Aliquote Iva',
-	// 			'route' => site_url(route_to('lc_shop_aliquote')),
-	// 			'module_tab' => 'shopaliquote',
-	// 		]
-	// 	];
-
-	// 	return $tabs_data_arr;
-	// }
 
 	//--------------------------------------------------------------------
 	protected function getLcAdminMenu()
@@ -559,63 +526,7 @@ class MasterLc extends BaseController
 		// 	}
 		// }
 
-		// if (env('custom.has_shop') === TRUE) {
-
-		// 	// Shop 
-		// 	$menu_data_arr['shop'] = (object) [
-		// 		'label' => 'Shop',
-		// 		'route' => site_url(route_to('lc_shop')),
-		// 		'module' => 'shopproduct',
-		// 		// 'module' => 'products',
-		// 		'ico' => 'basket',
-		// 		'items' => [
-		// 			(object) [
-		// 				'label' => 'Lista Prodotti',
-		// 				'route' => site_url(route_to('lc_shop_prod')),
-		// 				'module_action' => 'index',
-		// 			],
-		// 			(object) [
-		// 				'label' => 'Nuovo Prodotto',
-		// 				'route' => site_url(route_to('lc_shop_prod_new')),
-		// 				'module_action' => 'newpost',
-		// 			],
-		// 			(object) [
-		// 				'label' => 'Categorie Prodotti',
-		// 				'route' => site_url(route_to('lc_shop_prod_cat')),
-		// 				'module_action' => 'shopproductscat',
-		// 			],
-		// 			(object) [
-		// 				'label' => 'Settings',
-		// 				'route' => site_url(route_to('lc_shop_settings')),
-		// 				'module_action' => 'shopsettings',
-		// 			],
-		// 			// (object) [
-		// 			// 	'label' => 'Taglie Prodotti',
-		// 			// 	'route' => site_url(route_to('lc_shop_prod_sizes')),
-		// 			// 	'module_action' => 'shopproductssizes',
-		// 			// ],
-		// 			// (object) [
-		// 			// 	'label' => 'Varianti Prodotti',
-		// 			// 	'route' => site_url(route_to('lc_shop_prod_colors')),
-		// 			// 	'module_action' => 'shopproductscolors',
-		// 			// ],
-		// 			// (object) [
-		// 			// 	'label' => 'Tags Prodotti',
-		// 			// 	'route' => site_url(route_to('lc_shop_prod_tags')),
-		// 			// 	'module_action' => 'shopproductstags',
-		// 			// 	'label' => 'Varianti Prodotti',
-		// 			// 	'route' => site_url(route_to('lc_shop_prod_colors')),
-		// 			// 	'module_action' => 'shopproductscolors',
-		// 			// ],
-		// 			// (object) [
-		// 			// 	'label' => 'Aliquote Iva',
-		// 			// 	'route' => site_url(route_to('lc_shop_aliquote')),
-		// 			// 	'module_action' => 'shopaliquote',
-		// 			// ]
-		// 		]
-		// 	];
-		// 	// 
-		// }
+		
 
 
 		// Media 
