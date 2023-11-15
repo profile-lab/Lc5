@@ -88,10 +88,10 @@ class WebUiData extends Entity
             'lang_menu' => $menu_lang,
             //
         ];
-        if (env('custom.has_shop') === TRUE) {
-            $cart = Services::shopcart();
-            $base_attributes['site_cart'] = $cart->getSiteCart();
-        }
+        // if (env('custom.has_shop') === TRUE) {
+        //     $cart = Services::shopcart();
+        //     $base_attributes['site_cart'] = $cart->getSiteCart();
+        // }
 
         $this->fill($base_attributes);
 	}
