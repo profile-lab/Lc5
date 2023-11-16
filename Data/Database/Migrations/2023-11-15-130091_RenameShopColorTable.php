@@ -4,7 +4,7 @@ namespace Lc5\Data\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class RenameShopBaseTables extends Migration
+class RenameShopColorTable extends Migration
 {
 
     public function up()
