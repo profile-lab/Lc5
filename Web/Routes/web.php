@@ -2,28 +2,30 @@
 
 $req = \Config\Services::request();
 if (!$req->isCLI()) {
-	$supportedLocalesWithoutDefault = array_diff($req->config->supportedLocales, array($req->config->defaultLocale));
-	if (in_array($req->uri->getSegment(1), $supportedLocalesWithoutDefault)) {
+    $uri =$req->getUri();
+    $supportedLocales = config(App::class)->{'supportedLocales'};
+    $supportedLocalesWithoutDefault = array_diff($supportedLocales, array($req->getDefaultLocale()));
+	if (in_array($uri->getSegment(1), $supportedLocalesWithoutDefault)) {
 		// 
 		// if (env('custom.has_shop') === TRUE) {
-		// 	$routes->add('{locale}/shop/empty-cart', '\Lc5\Web\Controllers\Shop\Shop::emptyCart', ['as' => $req->uri->getSegment(1) . 'web_shop_cart_empty']);
-		// 	$routes->add('{locale}/shop/remove-cart-row/(:any)', '\Lc5\Web\Controllers\Shop\Shop::cartRemoveRow/$1', ['as' => $req->uri->getSegment(1) . 'web_shop_cart_remove_row']);
-		// 	$routes->add('{locale}/shop/increment-qnt/(:any)', '\Lc5\Web\Controllers\Shop\Shop::cartIncrementQnt/$1', ['as' => $req->uri->getSegment(1) . 'web_shop_cart_increment_qnt']);
-		// 	$routes->add('{locale}/shop/decrement-qnt/(:any)', '\Lc5\Web\Controllers\Shop\Shop::cartDecrementQnt/$1', ['as' => $req->uri->getSegment(1) . 'web_shop_cart_decrement_qnt']);
-		// 	$routes->add('{locale}/shop/cart', '\Lc5\Web\Controllers\Shop\Shop::carrello', ['as' => $req->uri->getSegment(1) . 'web_shop_cart']);
+		// 	$routes->add('{locale}/shop/empty-cart', '\Lc5\Web\Controllers\Shop\Shop::emptyCart', ['as' => $uri->getSegment(1) . 'web_shop_cart_empty']);
+		// 	$routes->add('{locale}/shop/remove-cart-row/(:any)', '\Lc5\Web\Controllers\Shop\Shop::cartRemoveRow/$1', ['as' => $uri->getSegment(1) . 'web_shop_cart_remove_row']);
+		// 	$routes->add('{locale}/shop/increment-qnt/(:any)', '\Lc5\Web\Controllers\Shop\Shop::cartIncrementQnt/$1', ['as' => $uri->getSegment(1) . 'web_shop_cart_increment_qnt']);
+		// 	$routes->add('{locale}/shop/decrement-qnt/(:any)', '\Lc5\Web\Controllers\Shop\Shop::cartDecrementQnt/$1', ['as' => $uri->getSegment(1) . 'web_shop_cart_decrement_qnt']);
+		// 	$routes->add('{locale}/shop/cart', '\Lc5\Web\Controllers\Shop\Shop::carrello', ['as' => $uri->getSegment(1) . 'web_shop_cart']);
 		// 	// 
-		// 	$routes->add('{locale}/shop/product/(:segment)/(:segment)', '\Lc5\Web\Controllers\Shop\Shop::detail/$1/$2', ['as' => $req->uri->getSegment(1) . 'web_shop_detail_model']);
-		// 	$routes->add('{locale}/shop/product/(:segment)', '\Lc5\Web\Controllers\Shop\Shop::detail/$1', ['as' => $req->uri->getSegment(1) . 'web_shop_detail']);
-		// 	$routes->add('{locale}/shop/(:segment)', '\Lc5\Web\Controllers\Shop\Shop::index/$1', ['as' => $req->uri->getSegment(1) . 'web_shop_category']);
-		// 	$routes->add('{locale}/shop', '\Lc5\Web\Controllers\Shop\Shop::index', ['as' => $req->uri->getSegment(1) . 'web_shop_home']);
+		// 	$routes->add('{locale}/shop/product/(:segment)/(:segment)', '\Lc5\Web\Controllers\Shop\Shop::detail/$1/$2', ['as' => $uri->getSegment(1) . 'web_shop_detail_model']);
+		// 	$routes->add('{locale}/shop/product/(:segment)', '\Lc5\Web\Controllers\Shop\Shop::detail/$1', ['as' => $uri->getSegment(1) . 'web_shop_detail']);
+		// 	$routes->add('{locale}/shop/(:segment)', '\Lc5\Web\Controllers\Shop\Shop::index/$1', ['as' => $uri->getSegment(1) . 'web_shop_category']);
+		// 	$routes->add('{locale}/shop', '\Lc5\Web\Controllers\Shop\Shop::index', ['as' => $uri->getSegment(1) . 'web_shop_home']);
 		// }
 		//
-		$routes->add('{locale}/archive/(:segment)/(:segment)/', '\Lc5\Web\Controllers\Posts::post/$1/$2', ['as' => $req->uri->getSegment(1) . 'web_posts_single']);
-		$routes->add('{locale}/archive/(:segment)', '\Lc5\Web\Controllers\Posts::index/$1', ['as' => $req->uri->getSegment(1) . 'web_posts_archive']);
-		$routes->add('{locale}/archive', '\Lc5\Web\Controllers\Posts::archivioDefault', ['as' => $req->uri->getSegment(1) . 'web_posts_archivie_default']);
+		$routes->add('{locale}/archive/(:segment)/(:segment)/', '\Lc5\Web\Controllers\Posts::post/$1/$2', ['as' => $uri->getSegment(1) . 'web_posts_single']);
+		$routes->add('{locale}/archive/(:segment)', '\Lc5\Web\Controllers\Posts::index/$1', ['as' => $uri->getSegment(1) . 'web_posts_archive']);
+		$routes->add('{locale}/archive', '\Lc5\Web\Controllers\Posts::archivioDefault', ['as' => $uri->getSegment(1) . 'web_posts_archivie_default']);
 		//
-		$routes->add('{locale}/(:any)', '\Lc5\Web\Controllers\Pages::page/$1', ['as' => $req->uri->getSegment(1) . 'web_page']);
-		$routes->add('{locale}', '\Lc5\Web\Controllers\Pages::index', ['as' => $req->uri->getSegment(1) . 'web_homepage']);
+		$routes->add('{locale}/(:any)', '\Lc5\Web\Controllers\Pages::page/$1', ['as' => $uri->getSegment(1) . 'web_page']);
+		$routes->add('{locale}', '\Lc5\Web\Controllers\Pages::index', ['as' => $uri->getSegment(1) . 'web_homepage']);
 	}
 }
 
