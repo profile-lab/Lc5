@@ -67,56 +67,53 @@ class LcTools extends MasterLc
     //--------------------------------------------------------------------
     public function filesCreate()
     {
-        dd('filesCreate function');
-        $this->lc_ui_date->__set('module_name', 'Lc Tools - Files');
-
-        if (!is_dir($this->files_save_folder)) {
-            mkdir($this->files_save_folder, 0777, true);
-        }
-
-        
         $nome_zip_file = 'bkp_uploads_' . date("Y-m-d_His") . '.zip';
         $save_zip_file_path = $this->files_save_folder . $nome_zip_file;
 
-        
-        $zip = new \ZipArchive;
-        // collect files you want to include in your zip file
-    $filesList = [
-        'imagesfolder/image1.jpg',
-        'imagesfolder/image2.jpg',
-        'imagesfolder/image3.jpg',
-    ];
 
-    $zip = new \ZipArchive();
-    $zipFileName = 'images.zip';
-    $zipFilePath = WRITEPATH . 'zips/' . $zipFileName; // Change the path as needed, dont forget to create a directory if it is not already there
-
-
-    if ($zip->open($zipFilePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE)) {
-        // Add files to the zip archive
-        foreach ($filesList as $filePath) {
-            if (file_exists($filePath)) {
-                $zip->addFile($filePath, basename($filePath));
+        helper('filesystem');
+        $public_root_folder = ROOTPATH . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR;
+        // $WRITEPATH_upload_files = WRITEPATH . 'uploads/files/';
+        if (!is_dir(ROOTPATH . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR)) {
+            $public_root_folder = ROOTPATH . DIRECTORY_SEPARATOR . 'public_html' . DIRECTORY_SEPARATOR;
+            if (!is_dir($public_root_folder)) {
+                throw new \Exception('public folder not found');
             }
         }
 
-        $zip->close();
+        $public_uploads_folder = $public_root_folder . 'uploads' . DIRECTORY_SEPARATOR;
+        $map_uploads_folder = directory_map($public_uploads_folder);
 
-        // Send the zip file to the user
-        return $this->response->download($zipFilePath, null)->setFileName(basename($zipFilePath));
-    } else {
-        return $this->response->setStatusCode(500)->setBody('Failed to create the zip file.');
-    }
+        if (!is_array($map_uploads_folder)) {
+            throw new \Exception('uploads folder vuota');
+        }
+        $zip = new \ZipArchive;
 
+        if ($zip->open($save_zip_file_path, \ZipArchive::CREATE) === TRUE) {
+            $currentDir = $public_uploads_folder;
+            $localDir = 'uploads' . DIRECTORY_SEPARATOR;
+            $zip->addEmptyDir('uploads');
+            foreach ($map_uploads_folder as $folderKey => $currentFile) {
+                if (is_array($currentFile)) {
+                    $folder_name = $folderKey . DIRECTORY_SEPARATOR;
+                    $zip->addEmptyDir($localDir . $folder_name);
+                    foreach ($currentFile as $currentSubFile) {
+                        $zip->addFile($currentDir . $folder_name . $currentSubFile, $localDir . $folder_name . $currentSubFile);
+                    }
+                } else {
+                    $zip->addFile($currentDir . $currentFile, $localDir . $currentFile);
+                }
+            }
+            $this->lc_ui_date->__set('module_name', 'Lc Tools - Files');
+            if (!is_dir($this->files_save_folder)) {
+                mkdir($this->files_save_folder, 0777, true);
+            }
+            $zip->close();
+            echo 'Archiving is sucessful!';
+        } else {
+            echo 'Error, can\'t create a zip file!';
+        }
 
-
-        // try {
-        //     $zip = new \ZipArchive;
-        //     // 
-        //     return redirect()->route($this->route_prefix . '_db');
-        // } catch (\Exception $e) {
-        //     echo 'mysqldump-php error: ' . $e->getMessage();
-        // }
     }
 
 
