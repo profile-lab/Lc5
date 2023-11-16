@@ -424,17 +424,22 @@ class MasterWeb extends BaseController
 	//--------------------------------------------------------------------
 	protected function inviaEmailMailGunApi($toAddress, $mailSubject,  $htmlbody)
 	{
-		$mg = \Mailgun\Mailgun::create(env('custom.email.MailGunSigningKey'), 'https://api.eu.mailgun.net'); // For EU servers
-		$mailGun_message = $mg->messages()->send(env('custom.email.MailGunDomain'), [
-			'from'    => env('custom.from_address'), //env('custom.from_name')
-			'to'      => $toAddress,
-			'subject' => $mailSubject,
-			'html'    =>  $htmlbody,
-			'text'    => 'Questa email è stata inviata in formato HTML. Visualizzi questo messaggio perché il tuo client di posta non supporta queste funzionalità.',
+		if (!env('custom.email.MailGunSigningKey') || !env('custom.email.MailGunDomain')) {
+			return FALSE;
+		}
+		if (class_exists('\Mailgun\Mailgun')) {
+			$mg = \Mailgun\Mailgun::create(env('custom.email.MailGunSigningKey'), 'https://api.eu.mailgun.net'); // For EU servers
+			$mailGun_message = $mg->messages()->send(env('custom.email.MailGunDomain'), [
+				'from'    => env('custom.from_address'), //env('custom.from_name')
+				'to'      => $toAddress,
+				'subject' => $mailSubject,
+				'html'    =>  $htmlbody,
+				'text'    => 'Questa email è stata inviata in formato HTML. Visualizzi questo messaggio perché il tuo client di posta non supporta queste funzionalità.',
 
-		]);
-		return $mailGun_message;
-
+			]);
+			return $mailGun_message;
+		}
+		return FALSE;
 
 		// return $this->inviaEmailSMTP($toAddress, $mailSubject,  $htmlbody);
 	}
@@ -453,13 +458,13 @@ class MasterWeb extends BaseController
 			$mail->Host       = $this->send_mail_config['SMTPHost'];
 			$mail->SMTPAuth   = true;
 			$mail->Username   = $this->send_mail_config['SMTPUser'];
-			$mail->Password   = $this->send_mail_config['SMTPPass'];      
+			$mail->Password   = $this->send_mail_config['SMTPPass'];
 			$mail->SMTPSecure = 'tls'; // \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-			$mail->Port       = $this->send_mail_config['SMTPPort'];     
+			$mail->Port       = $this->send_mail_config['SMTPPort'];
 
 			//Recipients
 			$mail->setFrom(env('custom.from_address'), env('custom.from_name'));
-			$mail->addAddress($toAddress);     
+			$mail->addAddress($toAddress);
 
 			//Content
 			$mail->isHTML(true);
@@ -484,7 +489,7 @@ class MasterWeb extends BaseController
 		// require 'vendor/autoload.php';
 
 		//Create an instance; passing `true` enables exceptions
-		
+
 
 
 
