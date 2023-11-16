@@ -77,12 +77,6 @@ class MasterWeb extends BaseController
 		}
 
 		$this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
-		// $this->web_ui_date->__set('lc_admin_menu', $this->getLcAdminMenu());
-		// $this->web_ui_date->__set('lc_apps', $this->getLcApps());
-		// $this->web_ui_date->__set('curr_lc_app', $this->getCurrApp());
-		// $this->web_ui_date->__set('lc_languages', $this->getLcLanguages());
-		// $this->web_ui_date->__set('curr_lc_lang', $this->getCurrLang());
-
 
 		if (file_exists(APPPATH . 'Controllers/CustomAppContoller.php')) {
 			$this->custom_app_contoller = new \App\Controllers\CustomAppContoller($this);

@@ -124,20 +124,7 @@ class MasterLc extends BaseController
 	//--------------------------------------------------------------------
 	//--------------------------------------------------------------------
 
-	// //--------------------------------------------------------------------
-	// protected function getShopSettings()
-	// {
-	// 	// 
-	// 	$shop_settings_model = new ShopSettingsModel();
-	// 	if (!$shop_settings_entity = $shop_settings_model->where('id_app', $this->getCurrApp())->first()) {
-	// 		$this->createBeseShopSettings($this->getCurrApp());
-	// 		if (!$shop_settings_entity = $shop_settings_model->where('id_app', $this->getCurrApp())->first()) {
-	// 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-	// 		}
-	// 	}
-	// 	// 
-	// 	return $shop_settings_entity;
-	// }
+	
 	// //--------------------------------------------------------------------
 	// protected function createBeseShopSettings($__id_app = null)
 	// {
