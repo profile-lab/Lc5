@@ -44,7 +44,7 @@ $routes->group('user-zone', ['namespace' => '\Lc5\Web\Controllers\Users', 'filte
 
 
 
-$routes->match(['get', 'post'], '/payment-stripe-webhook', '\App\Controllers\App\Webhooks::paymentStripeWebhook', ['as' => 'payment_stripe_webhook']);
+// $routes->match(['get', 'post'], '/payment-stripe-webhook', '\App\Controllers\App\Webhooks::paymentStripeWebhook', ['as' => 'payment_stripe_webhook']);
 
 
 // 
