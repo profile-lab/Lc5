@@ -19,13 +19,13 @@
                             <span><?= $item->value ?></span>
                         </div>
                         <div class="list_item_tools">
-                            <?php if ($item->download) { ?>
+                        <?php if (isset($item->megabytes ) && $item->megabytes) { ?>
+                                <div class="list_item_megabytes"><b><?= $item->megabytes ?></b> Mb</div>
+                            <?php } ?>
+                            <?php if (isset($item->download ) && $item->download) { ?>
                                 <a class="btn btn-sm btn-primary" href="<?= site_url($item->download) ?>">Scarica</a>
                             <?php } ?>
-                            <?php if ($item->make_zip) { ?>
-                                <a class="btn btn-sm btn-primary" href="<?= site_url($item->make_zip) ?>">Crea Zip</a>
-                            <?php } ?>
-                            <?php if ($item->delete) { ?>
+                            <?php if (isset($item->delete ) && $item->delete) { ?>
                                 <a class="btn btn-sm btn-danger a_delete" href="<?= site_url($item->delete) ?>">Elimina</a>
                             <?php } ?>
                         </div>

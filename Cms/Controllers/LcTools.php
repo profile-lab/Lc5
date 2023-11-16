@@ -43,20 +43,28 @@ class LcTools extends MasterLc
 
 
     //--------------------------------------------------------------------
-    public function filesIndex()
+    //------------- UPLOADS ---------------------------------------------
+    //--------------------------------------------------------------------
+
+
+    //--------------------------------------------------------------------
+    public function uploadFilesBkpIndex()
     {
         $this->lc_ui_date->__set('module_name', 'Lc Tools - Files');
         $dump_files_list = [];
         if (is_dir($this->files_save_folder)) {
             $scanned_directory = array_diff(scandir($this->files_save_folder), array('..', '.'));
             foreach ($scanned_directory as $key => $value) {
+                $file = new \CodeIgniter\Files\File($this->files_save_folder . $value);
+                $megabytes = $file->getSizeByUnit('mb'); 
                 $extension = strtolower(pathinfo($value, PATHINFO_EXTENSION));
                 $nome_file_str = str_replace('.' . $extension, '', $value);
                 $dump_files_list[] = (object)[
                     'value' => $value,
-                    'download' => route_to($this->route_prefix . '_db_dump_download_item', $nome_file_str, $extension),
-                    'make_zip' => ($extension != 'zip') ? route_to($this->route_prefix . '_db_dump_zip', $nome_file_str, $extension) : null,
-                    'delete' => route_to($this->route_prefix . '_db_dump_delete_file', $nome_file_str, $extension),
+                    'megabytes' => $megabytes,
+                    'make_zip' => null,
+                    'download' => route_to($this->route_prefix . '_uploadfiles_download_item', $nome_file_str, $extension),
+                    'delete' => route_to($this->route_prefix . '_uploadfiles_delete_item', $nome_file_str, $extension),
                 ];
             }
         }
@@ -64,8 +72,9 @@ class LcTools extends MasterLc
         // 
         return view('Lc5\Cms\Views\lc-tools/files/index', $this->lc_ui_date->toArray());
     }
+    
     //--------------------------------------------------------------------
-    public function filesCreate()
+    public function uploadFilesBkpCreate()
     {
         $nome_zip_file = 'bkp_uploads_' . date("Y-m-d_His") . '.zip';
         $save_zip_file_path = $this->files_save_folder . $nome_zip_file;
@@ -110,12 +119,47 @@ class LcTools extends MasterLc
             }
             $zip->close();
             echo 'Archiving is sucessful!';
+            return redirect()->route($this->route_prefix . '_uploadfiles');
+
         } else {
             echo 'Error, can\'t create a zip file!';
         }
-
     }
 
+    //--------------------------------------------------------------------
+    public function uploadFilesBkpDownload($filename)
+    {
+        $file = $this->files_save_folder . $filename . '.zip';
+
+        if (file_exists($file)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename=' . basename($file));
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            ob_clean();
+            flush();
+            readfile($file);
+            exit;
+        }
+    }
+    
+    //--------------------------------------------------------------------
+    public function uploadFilesBkpDelete($filename)
+    {
+        $file = $this->files_save_folder . $filename . '.zip';
+        unlink($file);
+        return redirect()->route($this->route_prefix . '_uploadfiles');
+    }
+
+
+
+    //--------------------------------------------------------------------
+    //------------- DATABASE ---------------------------------------------
+    //--------------------------------------------------------------------
 
     //--------------------------------------------------------------------
     public function dbIndex()
@@ -125,13 +169,16 @@ class LcTools extends MasterLc
         if (is_dir($this->database_save_folder)) {
             $scanned_directory = array_diff(scandir($this->database_save_folder), array('..', '.'));
             foreach ($scanned_directory as $key => $value) {
+                $file = new \CodeIgniter\Files\File($this->database_save_folder . $value);
+                $megabytes = $file->getSizeByUnit('mb'); 
                 $extension = strtolower(pathinfo($value, PATHINFO_EXTENSION));
                 $nome_file_str = str_replace('.' . $extension, '', $value);
                 $dump_files_list[] = (object)[
                     'value' => $value,
+                    'megabytes' => $megabytes,
                     'download' => route_to($this->route_prefix . '_db_dump_download_item', $nome_file_str, $extension),
                     'make_zip' => ($extension != 'zip') ? route_to($this->route_prefix . '_db_dump_zip', $nome_file_str, $extension) : null,
-                    'delete' => route_to($this->route_prefix . '_db_dump_delete_file', $nome_file_str, $extension),
+                    'delete' => route_to($this->route_prefix . '_db_dump_delete_item', $nome_file_str, $extension),
                 ];
             }
         }
@@ -139,7 +186,6 @@ class LcTools extends MasterLc
         // 
         return view('Lc5\Cms\Views\lc-tools/db/index', $this->lc_ui_date->toArray());
     }
-
 
     //--------------------------------------------------------------------
     public function dbDump()
@@ -170,7 +216,7 @@ class LcTools extends MasterLc
     }
 
     //--------------------------------------------------------------------
-    public function comprimiSingleFiles($filename, $extension)
+    public function comprimiSingleDumpFiles($filename, $extension)
     {
         $file = $this->database_save_folder . $filename;
         $zip_file = $this->database_save_folder . $filename . '.zip';
@@ -186,7 +232,7 @@ class LcTools extends MasterLc
 
 
     //--------------------------------------------------------------------
-    public function scaricaSingleFiles($filename, $extension)
+    public function scaricaSingleBumpFiles($filename, $extension)
     {
 
         $file = $this->database_save_folder . $filename . '.' . $extension;
@@ -208,7 +254,7 @@ class LcTools extends MasterLc
     }
 
     //--------------------------------------------------------------------
-    public function eliminaSingleFiles($filename, $extension)
+    public function eliminaSingleDumpFiles($filename, $extension)
     {
         $file = $this->database_save_folder . $filename . '.' . $extension;
         unlink($file);

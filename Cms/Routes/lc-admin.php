@@ -1,21 +1,20 @@
-<?php 
+<?php
 //----------------------------------------------------------------------------
 //------------------- LC
 //----------------------------------------------------------------------------
 
-if (env('custom.hide_lc_cms') === TRUE) { 
-
-}else{
+if (env('custom.hide_lc_cms') === TRUE) {
+} else {
 
 	$routes->match(['get', 'post'], 'lc-admin/login', '\Lc5\Cms\Controllers\Admins::login', ['as' => 'lc_login']); //, ['filter' => 'noauth']
 	$routes->match(['get'], 'lc-admin/logout', '\Lc5\Cms\Controllers\Admins::logout', ['as' => 'lc_logout']); //, ['filter' => 'noauth']
-	
+
 	$routes->group('lc-admin', ['namespace' => 'Lc5\Cms\Controllers', 'filter' => 'admin_auth'], function ($routes) {
 		$routes->resource('users');
 		// $routes->get('dashboard','Dashboard::index', ['as' => 'lc_dashboard']);
-	
+
 		$routes->group('cms-api', function ($routes) {
-			
+
 			$routes->match(['get', 'post'], 'video-info', 'Api\CmsApi::getInfoVimeo', ['as' => 'lc_api_video_info_vimeo']);
 			$routes->match(['get', 'post'], 'new-tus-video/(:segment)/(:num)', 'Api\CmsApi::newTusVimeo/$1/$2', ['as' => 'lc_api_new_tus_vimeo_w_rel']);
 			$routes->match(['get', 'post'], 'new-video-by-url/(:segment)/(:num)', 'Api\CmsApi::newVideoByUrl/$1/$2', ['as' => 'lc_api_new_vimeo_by_url']);
@@ -23,10 +22,10 @@ if (env('custom.hide_lc_cms') === TRUE) {
 			$routes->match(['get', 'post'], 'video-delete/(:segment)/(:num)', 'Api\CmsApi::removeVideo/$1/$2', ['as' => 'lc_api_video_delete_vimeo_w_rel']);
 			$routes->match(['get', 'post'], 'video-delete', 'Api\CmsApi::removeVideo', ['as' => 'lc_api_video_delete_vimeo']);
 		});
-	
-	
+
+
 		// 
-	
+
 		$routes->group('admin-users', function ($routes) {
 			$routes->get('delete/(:num)', 'AdminUsers::delete/$1', ['as' => 'lc_admin_users_delete']);
 			$routes->match(['get', 'post'], 'edit/(:num)', 'AdminUsers::edit/$1', ['as' => 'lc_admin_users_edit']);
@@ -45,7 +44,7 @@ if (env('custom.hide_lc_cms') === TRUE) {
 			$routes->match(['get', 'post'], 'newpost', 'Sitemenus::newpost', ['as' => 'lc_menus_new']);
 			$routes->get('', 'Sitemenus::index', ['as' => 'lc_menus']);
 		});
-	
+
 		$routes->group('pages', function ($routes) {
 			$routes->get('duplicate/(:num)/(:any)', 'Pages::duplicate/$1/$2', ['as' => 'lc_pages_duplicate_lang']);
 			$routes->get('duplicate/(:num)', 'Pages::duplicate/$1', ['as' => 'lc_pages_duplicate']);
@@ -55,12 +54,12 @@ if (env('custom.hide_lc_cms') === TRUE) {
 			$routes->get('set-as-home/(:num)', 'Pages::setAsHome/$1', ['as' => 'lc_pages_set_as_home']);
 			$routes->get('', 'Pages::index', ['as' => 'lc_pages']);
 		});
-		
-	
+
+
 		$routes->group('posts', function ($routes) {
 			$routes->group('tags', function ($routes) {
 				// $routes->get('', 'PostsTags::index', ['as' => 'lc_posts_tags_all']);
-	
+
 				$routes->get('(:any)/delete/(:num)', 'PostsTags::delete/$1/$2', ['as' => 'lc_posts_tags_delete']);
 				$routes->match(['get', 'post'], '(:any)/edit/(:num)', 'PostsTags::edit/$1/$2', ['as' => 'lc_posts_tags_edit']);
 				$routes->match(['get', 'post'], '(:any)/newpost', 'PostsTags::newpost/$1', ['as' => 'lc_posts_tags_new']);
@@ -81,7 +80,7 @@ if (env('custom.hide_lc_cms') === TRUE) {
 			$routes->match(['get', 'post'], '(:any)/newpost', 'Posts::newpost/$1', ['as' => 'lc_posts_new']);
 			$routes->get('(:any)', 'Posts::index/$1', ['as' => 'lc_posts']);
 		});
-	
+
 		$routes->group('tools', function ($routes) {
 			// 
 			$routes->group('posts-type', function ($routes) {
@@ -91,7 +90,7 @@ if (env('custom.hide_lc_cms') === TRUE) {
 				$routes->get('', 'Poststypes::index', ['as' => 'lc_tools_poststypes']);
 			});
 			// 
-	
+
 			$routes->group('pages-type', function ($routes) {
 				$routes->get('delete/(:num)', 'Pagestype::delete/$1', ['as' => 'lc_tools_pagetypes_delete']);
 				$routes->match(['get', 'post'], 'edit/(:num)', 'Pagestype::edit/$1', ['as' => 'lc_tools_pagetypes_edit']);
@@ -156,33 +155,38 @@ if (env('custom.hide_lc_cms') === TRUE) {
 				// // $routes->get( 'delete/(:num)', 'Lcapps::delete/$1', ['as' => 'lc_apps_delete']);
 				// $routes->match(['get', 'post'], 'edit/(:num)', 'Lcapps::edit/$1', ['as' => 'lc_apps_edit']);
 				// $routes->match(['get', 'post'], 'newpost', 'Lcapps::newpost', ['as' => 'lc_apps_new']);
-				
-				$routes->add('db/dump',  'LcTools::dbDump', ['as' => 'lc_tools_db_dump']);
-				$routes->add('db/downloads/(:any)/(:any)',  'LcTools::scaricaSingleFiles/$1/$2', ['as' => 'lc_tools_db_dump_download_item'] );
-				$routes->add('db/zippa/(:any)/(:any)',  'LcTools::comprimiSingleFiles/$1/$2', ['as' => 'lc_tools_db_dump_zip'] );
-				$routes->add('db/elimina/(:any)/(:any)',  'LcTools::eliminaSingleFiles/$1/$2', ['as' => 'lc_tools_db_dump_delete_file'] );
-				$routes->add('db',  'LcTools::dbIndex', ['as' => 'lc_tools_db']);
+
+				$routes->group('db', function ($routes) {
+					$routes->add('dump',  'LcTools::dbDump', ['as' => 'lc_tools_db_dump']);
+					$routes->add('elimina/(:any)/(:any)',  'LcTools::eliminaSingleDumpFiles/$1/$2', ['as' => 'lc_tools_db_dump_delete_item']);
+					$routes->add('downloads/(:any)/(:any)',  'LcTools::scaricaSingleBumpFiles/$1/$2', ['as' => 'lc_tools_db_dump_download_item']);
+					$routes->add('zippa/(:any)/(:any)',  'LcTools::comprimiSingleDumpFiles/$1/$2', ['as' => 'lc_tools_db_dump_zip']);
+					$routes->add('',  'LcTools::dbIndex', ['as' => 'lc_tools_db']);
+				});
+				$routes->group('files', function ($routes) {
+					$routes->add('elimina/(:any)',  'LcTools::uploadFilesBkpDelete/$1', ['as' => 'lc_tools_uploadfiles_delete_item']);
+					$routes->add('downloads/(:any)',  'LcTools::uploadFilesBkpDownload/$1', ['as' => 'lc_tools_uploadfiles_download_item']);
+					$routes->add('create',  'LcTools::uploadFilesBkpCreate', ['as' => 'lc_tools_uploadfiles_create']);
+					$routes->add('',  'LcTools::uploadFilesBkpIndex', ['as' => 'lc_tools_uploadfiles']);
+				});
 
 
-				$routes->add('files/create',  'LcTools::filesCreate', ['as' => 'lc_tools_uploadfiles_create']);
-				$routes->add('files',  'LcTools::filesIndex', ['as' => 'lc_tools_uploadfiles']);
-	
-				
+
+
 				$routes->get('', 'LcTools::index', ['as' => 'lc_tools_index']);
-	
 			});
 			// 
 			// 
 			$routes->match(['get', 'post'], 'db-table-structure/(:any)', 'Migrate::tableStructure/$1', ['as' => 'lc_table_structure']);
 			$routes->match(['get', 'post'], 'db-table-structure', 'Migrate::tableStructure', ['as' => 'lc_tables_structure']);
-	
-			
+
+
 			// 
 			// 
 		});
 		$routes->match(['get', 'post'], 'settings', 'AppSettings::edit', ['as' => 'lc_app_settings']); //, ['filter' => 'noauth']
-	
-	
+
+
 		$routes->group('media', function ($routes) {
 			$routes->group('formati', function ($routes) {
 				$routes->get('delete/(:num)', 'Mediaformat::delete/$1', ['as' => 'lc_media_formati_delete']);
@@ -205,7 +209,7 @@ if (env('custom.hide_lc_cms') === TRUE) {
 		$routes->get('/', 'Dashboard::index', ['as' => 'lc_dashboard']);
 		$routes->get('change-lang/(:any)', 'MasterLc::cambiaLang/$1', ['as' => 'lc_cambia_lang']);
 		$routes->get('change-app/(:any)', 'MasterLc::cambiaApp/$1', ['as' => 'lc_cambia_app']);
-		$routes->get('', 'Dashboard::index');//, ['as' => 'lc_dashboard']
+		$routes->get('', 'Dashboard::index'); //, ['as' => 'lc_dashboard']
 		$routes->get('', 'Dashboard::index', ['as' => 'lc_root']);
 	});
 }
