@@ -162,6 +162,10 @@ if (env('custom.hide_lc_cms') === TRUE) {
 				$routes->add('db/zippa/(:any)/(:any)',  'LcTools::comprimiSingleFiles/$1/$2', ['as' => 'lc_tools_db_dump_zip'] );
 				$routes->add('db/elimina/(:any)/(:any)',  'LcTools::eliminaSingleFiles/$1/$2', ['as' => 'lc_tools_db_dump_delete_file'] );
 				$routes->add('db',  'LcTools::dbIndex', ['as' => 'lc_tools_db']);
+
+
+				$routes->add('files/create',  'LcTools::filesCreate', ['as' => 'lc_tools_uploadfiles_create']);
+				$routes->add('files',  'LcTools::filesIndex', ['as' => 'lc_tools_uploadfiles']);
 	
 				
 				$routes->get('', 'LcTools::index', ['as' => 'lc_tools_index']);
