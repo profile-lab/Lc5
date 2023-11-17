@@ -112,21 +112,38 @@ Run: https://domain.com/cmpsr-install.php
 
 ## .env variables
 
+        CI_ENVIRONMENT = development
+
         app.appName = 'APP NAME'
-        app.baseURL = "http://localhost:8081"
+        app.baseURL = "https://domain.com"
         app.indexPage = ""
         app.defaultLocale = "it"
         app.appTimezone = 'Europe/Rome'
+        app.forceGlobalSecureRequests = true
 
         database.default.hostname = 'hostname'
         database.default.database = 'database'
         database.default.username = 'username'
         database.default.password = 'password'
         database.default.DBDriver = 'MySQLi'
+        database.default.DBPrefix = ''
 
         custom.web_app_id = 1
         custom.media_root_path = "/uploads/"
         custom.post_per_page = 12
+
+        cookie.domain = 'domain.com'
+        cookie.prefix = 'domain_com_'
+        cookie.expires = 0
+        cookie.path = '/'
+        cookie.secure = true
+        cookie.httponly = true
+        cookie.samesite = 'Lax'
+        cookie.raw = false
+
+
+
+
 
 ## Database variables
 
