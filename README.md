@@ -9,9 +9,10 @@
         - rename folder "public" -> "public_html"
         - replace "public" -> "public_html" in spark file 
 
-        Add to .gitignore
+        *Add to .gitignore*
         composer.lock
         *.env
+        !env-local.env
         public_html/uploads/*
         public_html/uploads/*/*
 
