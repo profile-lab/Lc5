@@ -37,6 +37,22 @@
         git submodule update --init --recursive
 
 #
+# Install on remote server by composer
+#### *- All files are avalables on Lc5/composer-install-files*
+
+- Copy cmpsr-install.php file to /public_html (app public folder)
+- Copy composer.phar to / (root folder)
+
+*Codeigniter 4 composer.json file is mandatory* 
+
+Run: https://domain.com/cmpsr-install.php
+ 
+*If doesn't works, checke /writable folder permission*
+
+
+
+
+#
 # Base Configuration 
 
 #### Add Supported Lang in App\Config\App.php
@@ -144,20 +160,6 @@ https://domain.com/lc-admin/first-login
                 // $master_app_controller->web_ui_date->page_data = $custom_sample_model->asObject()->findAll();
             }
         }
-
-
-#
-# Install on remote server by composer
-#### *- All files are avalables on Lc5/composer-install-files*
-
-- Copy cmpsr-install.php file to /public_html (app public folder)
-- Copy composer.phar to / (root folder)
-
-*Codeigniter 4 composer.json file is mandatory* 
-
-Run: https://domain.com/cmpsr-install.php
- 
-*If doesn't works, checke /writable folder permission*
 
 
 
