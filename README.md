@@ -10,6 +10,7 @@
         - replace "public" -> "public_html" in spark file 
 
         Add to .gitignore
+        composer.lock
         *.env
         public_html/uploads/*
         public_html/uploads/*/*
