@@ -179,6 +179,24 @@ https://domain.com/lc-admin/first-login
             }
         }
 
+## Custom App Components
+
+### Custom App Routes
+#### Create AppCustom.php in App/Routes
+
+        // Custom LcModule
+        $routes->group('lc-admin', ['namespace' => 'App\Controllers\LcCustom', 'filter' => 'admin_auth'], function ($routes) {
+            $routes->group('component-name-route', function ($routes) {
+                $routes->match(['get', 'post'], 'newpost', 'ComponentCotrollerName::method', ['as' => 'lc_conponent_name_new']);
+                $routes->match(['get', 'post'], '', 'ComponentCotrollerName::index', ['as' => 'lc_conponent_name']);
+	        });
+	    });
+
+        // Frontend Module
+        $routes->group('component-name-route', ['namespace' => 'App\Controllers' ], function ($routes) {
+            $routes->match(['get', 'post'], 'newpost', 'ComponentCotrollerName::method', ['as' => 'lc_conponent_name_new']);
+            $routes->match(['get', 'post'], '', 'ComponentCotrollerName::index', ['as' => 'lc_conponent_name']);
+        });
 
 
 #
