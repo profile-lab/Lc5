@@ -43,6 +43,8 @@ class CreateCustomComponent extends BaseCommand
         $this->generaPhpFile('lc_controller_back.tpl', 'Controllers' . DIRECTORY_SEPARATOR . 'LcCustom', $backClassName, $mackerSearch, $mackerReplace);
         $this->generaPhpFile('lc_model.tpl', 'Models', $model_class, $mackerSearch, $mackerReplace);
         $this->generaPhpFile('lc_entity.tpl', 'Entities', $entity_class, $mackerSearch, $mackerReplace);
+        $this->generaPhpFile('lc_view_index_back.tpl', 'Views' . DIRECTORY_SEPARATOR . 'lc-custom'. DIRECTORY_SEPARATOR. decamelize($class) , 'index');
+        $this->generaPhpFile('lc_view_scheda_back.tpl', 'Views' . DIRECTORY_SEPARATOR . 'lc-custom'. DIRECTORY_SEPARATOR. decamelize($class) , 'scheda');
 
         $this->call('make:migration', array_merge([$class], $options));
         //
@@ -55,13 +57,22 @@ class CreateCustomComponent extends BaseCommand
     {
         $save_folder = APPPATH . $save_folder_name;
         if (!is_dir($save_folder)) {
-            mkdir($save_folder);
+            $folderStructure = explode(DIRECTORY_SEPARATOR, $save_folder_name);
+            $path_fino_a_qui = APPPATH;
+            foreach($folderStructure as $folder){
+                $path_fino_a_qui.=  $folder .DIRECTORY_SEPARATOR;
+                if (!is_dir($path_fino_a_qui)) {
+                    mkdir($path_fino_a_qui);
+                }
+            }
         }
         // Retrieves the namespace part from the fully qualified class name.
         $namespace = trim(implode('\\', array_slice(explode('\\', $class), 0, -1)), '\\');
         $search[]  = '<@php';
+        $search[]  = '<@=';
         $search[]  = '{class}';
         $replace[] = '<?php';
+        $replace[] = '<?=';
         $replace[] = $class;
         // 
         $file_path = __DIR__ . DIRECTORY_SEPARATOR . $tpl . '.php';
@@ -80,7 +91,7 @@ class CreateCustomComponent extends BaseCommand
         file_put_contents($save_path, $file_code_string);
 
         CLI::write('File created: '. $returnStringPath, 'green');
-        // CLI::newLine();
+        CLI::newLine();
         return $returnStringPath;
     }
 }
