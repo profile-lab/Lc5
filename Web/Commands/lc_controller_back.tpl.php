@@ -23,8 +23,10 @@ class {class} extends MasterLc
         $this->lc_ui_date->__set('request', $this->req);
         $this->lc_ui_date->__set('route_prefix', $this->route_prefix);
         $this->lc_ui_date->__set('module_name', $this->module_name);
+        //
+        $this->lc_ui_date->__set('bool_values',["0" => (object) ["nome" => "NO", "val" => "0"],"1" => (object) ["nome" => "YES", "val" => "1"]]);
         // 
-        $this->module_model = new ProductsModel();
+        $this->module_model = new {model_class}();
         // 
     }
 
@@ -50,6 +52,12 @@ class {class} extends MasterLc
             ];
             $curr_entity->fill($this->req->getPost());
             if ($this->validate($validate_rules)) {
+                //
+                // $curr_entity->nome = $curr_entity->titolo;
+				// $curr_entity->status = 0;
+				// $curr_entity->public = 0;
+                //
+
                 $this->module_model->save($curr_entity);
                 // 
                 $new_id = $this->module_model->getInsertID();
@@ -61,7 +69,7 @@ class {class} extends MasterLc
         }
         // 
         $this->lc_ui_date->entity = $curr_entity;
-        return view('Views/lc-custom/{nome_modulo}/scheda', $this->lc_ui_date->toArray());
+        return view('Views/lc-custom/{nome_modulo}/new', $this->lc_ui_date->toArray());
     }
 
     //--------------------------------------------------------------------
@@ -78,6 +86,13 @@ class {class} extends MasterLc
             ];
             $curr_entity->fill($this->req->getPost());
             if ($this->validate($validate_rules)) {
+                // 
+				// if ($curr_entity->created_at == $curr_entity->updated_at) {
+				// 	$curr_entity->status = 1;
+				// }
+				// $curr_entity->public = $this->req->getPost('public') ? 1 : 0 ;
+				// 
+
                 $this->module_model->save($curr_entity);
                 // 
                 return redirect()->route($this->route_prefix . '_edit', [$curr_entity->id]);

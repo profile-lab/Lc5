@@ -45,6 +45,7 @@ class CreateCustomComponent extends BaseCommand
         $this->generaPhpFile('lc_entity.tpl', 'Entities', $entity_class, $mackerSearch, $mackerReplace);
         $this->generaPhpFile('lc_view_index_back.tpl', 'Views' . DIRECTORY_SEPARATOR . 'lc-custom'. DIRECTORY_SEPARATOR. decamelize($class) , 'index');
         $this->generaPhpFile('lc_view_scheda_back.tpl', 'Views' . DIRECTORY_SEPARATOR . 'lc-custom'. DIRECTORY_SEPARATOR. decamelize($class) , 'scheda');
+        $this->generaPhpFile('lc_view_new_back.tpl', 'Views' . DIRECTORY_SEPARATOR . 'lc-custom'. DIRECTORY_SEPARATOR. decamelize($class) , 'new');
         $route_config_string = $this->generaPhpFile('lc_routes.tpl', 'Routes', 'AppCustom', $mackerSearch, $mackerReplace);
 
         CLI::write('ROUTE CONFIGURATION', 'yellow');

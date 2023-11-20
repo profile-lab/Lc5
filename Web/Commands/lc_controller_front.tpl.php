@@ -18,7 +18,7 @@ class {class} extends MasterWeb
 		$this->web_ui_date->__set('request', $this->req);
         $this->web_ui_date->__set('route_prefix', '{nome_modulo}');
         // 
-        $this->module_model = new ProductsModel();
+        $this->module_model = new {model_class}();
 		// 
     }
 
