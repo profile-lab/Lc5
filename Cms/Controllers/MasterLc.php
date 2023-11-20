@@ -124,7 +124,7 @@ class MasterLc extends BaseController
 	//--------------------------------------------------------------------
 	//--------------------------------------------------------------------
 
-	
+
 	// //--------------------------------------------------------------------
 	// protected function createBeseShopSettings($__id_app = null)
 	// {
@@ -462,12 +462,22 @@ class MasterLc extends BaseController
 
 		if (isset($this->lc_plugin_modules) && is_array($this->lc_plugin_modules) && count($this->lc_plugin_modules)) {
 			foreach ($this->lc_plugin_modules as $plugin_key => $plugin_module) {
+
+				$plugin_module = (object) $plugin_module;
+				$plugin_module_items_array = [];
+				if (isset($plugin_module->items) && $plugin_module->items && count($plugin_module->items) > 0) {
+					foreach ($plugin_module->items as $plugin_module_item) {
+						$plugin_module_item_obj = (object) $plugin_module_item;
+						$plugin_module_item_obj->route = site_url(route_to($plugin_module_item_obj->route));
+						$plugin_module_items_array[] = $plugin_module_item_obj;
+					}
+				}				
 				$menu_data_arr[$plugin_key] = (object) [
 					'label' => $plugin_module->label,
 					'route' => site_url(route_to($plugin_module->route)),
 					'module' => $plugin_module->module,
 					'ico' => $plugin_module->ico,
-					'items' => $plugin_module->items,
+					'items' =>$plugin_module_items_array,
 				];
 			}
 		}
@@ -513,7 +523,7 @@ class MasterLc extends BaseController
 		// 	}
 		// }
 
-		
+
 
 
 		// Media 

@@ -3,11 +3,12 @@
 ## New project - Codeigniter 4
 
 #### Create new project in work folder
+
         composer create-project codeigniter4/appstarter <project_name>  --no-dev
         cd <project_name>
 
         - rename folder "public" -> "public_html"
-        - replace "public" -> "public_html" in spark file 
+        - replace "public" -> "public_html" in spark file
 
         *Add to .gitignore*
         composer.lock
@@ -25,43 +26,42 @@
         git submodule add https://github.com/profile-lab/Lc5
         git submodule add https://github.com/profile-lab/lc5-admin-assets public_html/assets/lc-admin-assets
 
-
 ### Alternative - Clone repository from git
 
         - git clone <repository link>
         - composer update
-        - git submodule update --init --recursive 
+        - git submodule update --init --recursive
         (or git submodule update --recursive)
 
-#### Update/Download submodules 
+#### Update/Download submodules
 
         git submodule update --init --recursive
 
 #
+
 # Install on remote server by composer
-#### *- All files are avalables on Lc5/composer-install-files*
+
+#### _- All files are avalables on Lc5/composer-install-files_
 
 - Copy cmpsr-install.php file to /public_html (app public folder)
 - Copy composer.phar to / (root folder)
 
-*Codeigniter 4 composer.json file is mandatory* 
+_Codeigniter 4 composer.json file is mandatory_
 
 Run: https://domain.com/cmpsr-install.php
- 
-*If doesn't works, checke /writable folder permission*
 
-
-
+_If doesn't works, checke /writable folder permission_
 
 #
-# Base Configuration 
+
+# Base Configuration
 
 #### Add Supported Lang in App\Config\App.php
 
         public array $supportedLocales = ['en','it','fr','es','de'];
 
 #### Add LC5 psr4 namespace in App\Config\Autoload.php
-        
+
         public $psr4 = [
             ...
             //
@@ -76,18 +76,16 @@ Run: https://domain.com/cmpsr-install.php
         ];
 
 #### Add LC5 helpers in App\Config\Autoload.php
-        
+
         public $helpers =  ['html', 'text', 'form', 'profile', 'lc_view', 'web_view', 'custom_frontend'];
 
-
 #### Add LC5 Admin filter in App\Config\Filters.php
-        
+
         public $aliases = [
            ...
            //
            'admin_auth'	=> \Lc5\Cms\Filters\AdminAuth::class,
         ];
-
 
 #### Add LC5 services in App\Config\Services.php
 
@@ -107,7 +105,13 @@ Run: https://domain.com/cmpsr-install.php
             require APPPATH . 'Routes/AppCustom.php';
         }
 
+### Add Class variables in App\Controllers\BaseController.php
+
+        protected $custom_app_modules = [];
+        protected $lc_plugin_modules = [];
+
 #
+
 # ENV and Database
 
 ## .env variables
@@ -141,21 +145,20 @@ Run: https://domain.com/cmpsr-install.php
         cookie.samesite = 'Lax'
         cookie.raw = false
 
-
-
-
-
 ## Database variables
 
-##### Add db connection info in .env 
+##### Add db connection info in .env
 
-##### Create/Update Database tables structure 
+##### Create/Update Database tables structure
+
 https://domain.com/lc-admin/update-db
 
 ##### Create first admin user
+
 https://domain.com/lc-admin/first-login
 
 #
+
 # Custom Components
 
 #### Create CustomAppContoller.php in App/Controllers to extends default module data
@@ -170,7 +173,7 @@ https://domain.com/lc-admin/first-login
             {
                 // $master_app_controller->web_ui_date->__set('seo_title', env('custom.nome_app'));
             }
-    
+
             //--------------------------------------------------------------------
             public function customSampleMethod(&$master_app_controller)
             {
@@ -180,7 +183,9 @@ https://domain.com/lc-admin/first-login
         }
 
 ## Custom App Lc Modules
+
 #### Run this command in terminal
+
         php spark create:custom-component <COMPONENT_NAME>
 
 #### Edit the Migration file to generate custum database table
@@ -192,8 +197,8 @@ https://domain.com/lc-admin/first-login
             $routes->group('component-name-route', function ($routes) {
                 $routes->match(['get', 'post'], 'newpost', 'ComponentCotrollerName::method', ['as' => 'lc_conponent_name_new']);
                 $routes->match(['get', 'post'], '', 'ComponentCotrollerName::index', ['as' => 'lc_conponent_name']);
-	        });
-	    });
+            });
+        });
 
         // Frontend Module
         $routes->group('component-name-route', ['namespace' => 'App\Controllers' ], function ($routes) {
@@ -201,8 +206,27 @@ https://domain.com/lc-admin/first-login
             $routes->match(['get', 'post'], '', 'ComponentCotrollerName::index', ['as' => 'lc_conponent_name']);
         });
 
+#### Add Lc Menu items in App\Controllers\BaseController->lc_plugin_modules
+
+        protected $lc_plugin_modules = [
+                'component' =>  [
+                        'label' => 'Component Name',
+                        'route' => 'lc_conponent_name',
+                        'module' => 'conponent_name',
+                        'ico' => 'basket',
+                        'items' => [
+                                [
+                                        'label' => 'Lista Component',
+                                        'route' => 'lc_conponent_name',
+                                        'module_action' => 'index',
+                                ],
+                        ],
+                ]
+        ];
+
 
 #
+
 # Server Requirements
 
 PHP version 8.2 or higher is required, with the following extensions installed:
@@ -217,5 +241,6 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 - [mysqlnd](http://php.net/manual/en/mysqlnd.install.php)
 - xml (enabled by default - don't turn it off)
 
-## SE HTACCESS GENERA Errore 500 
-#### disabilita -> Restrict the ability to follow symbolic links di Apache Ngix 
+## SE HTACCESS GENERA Errore 500
+
+#### disabilita -> Restrict the ability to follow symbolic links di Apache Ngix
