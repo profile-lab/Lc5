@@ -208,7 +208,7 @@ https://domain.com/lc-admin/first-login
 
 #### Add Lc Menu items in App\Controllers\BaseController->lc_plugin_modules
 
-        protected $lc_plugin_modules = [
+       protected $lc_plugin_modules = [
                 'component' =>  [
                         'label' => 'Component Name',
                         'route' => 'lc_conponent_name',
@@ -216,12 +216,23 @@ https://domain.com/lc-admin/first-login
                         'ico' => 'basket',
                         'items' => [
                                 [
-                                        'label' => 'Lista Component',
-                                        'route' => 'lc_conponent_name',
+                                        'label' => 'List',
+                                        'route' => 'lc_conponent_name_index',
                                         'module_action' => 'index',
                                 ],
-                        ],
-                ]
+                                [
+                                        'label' => 'New',
+                                        'route' => 'lc_conponent_name_new',
+                                        'module_action' => 'new',
+                                ]
+                        ]
+                ],
+                'other-component' =>  [
+                        'label' => 'Other Component',
+                        'route' => 'lc_other_component',
+                        'module' => 'other_component',
+                        'ico' => 'cog'
+                ],
         ];
 
 
