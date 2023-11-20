@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Entities\{entity_class};
 use App\Models\{model_class};
 use Lc5\Web\Controllers\MasterWeb;
 
