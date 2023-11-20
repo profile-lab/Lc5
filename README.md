@@ -158,7 +158,7 @@ https://domain.com/lc-admin/first-login
 #
 # Custom Components
 
-#### Create CustomAppContoller.php in App/Controllers
+#### Create CustomAppContoller.php in App/Controllers to extends default module data
 
         <?php
         namespace App\Controllers;
@@ -179,9 +179,12 @@ https://domain.com/lc-admin/first-login
             }
         }
 
-## Custom App Components
+## Custom App Lc Modules
+#### Run this command in terminal
+        php spark create:custom-component <COMPONENT_NAME>
 
-### Custom App Routes
+#### Edit the Migration file to generate custum database table
+
 #### Create AppCustom.php in App/Routes
 
         // Custom LcModule
