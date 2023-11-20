@@ -50,7 +50,7 @@ class MasterLc extends BaseController
 	// 
 
 	// 
-	protected $lc_plugin_modules = [];
+	// protected $lc_plugin_modules = [];
 	// 
 
 
