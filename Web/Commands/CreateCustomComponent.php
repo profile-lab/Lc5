@@ -32,7 +32,7 @@ class CreateCustomComponent extends BaseCommand
         $className = pascalize($class);
         $backClassName = pascalize('Lc_' . $class);
         $model_class = pascalize($class . 'Model');
-        $entity_class = pascalize($class . 'Entity');
+        $entity_class = pascalize($class . '');
 
         $mackerSearch = ['{model_class}', '{entity_class}', '{nome_modulo}', '{table}'];
         $mackerReplace = [$model_class, $entity_class, decamelize($class), decamelize('app_' . $class)];
@@ -69,9 +69,16 @@ class CreateCustomComponent extends BaseCommand
 
         $file_code_string =  str_replace($search, $replace, $template_string);
         $save_path = $save_folder . DIRECTORY_SEPARATOR . $class . '.php';
+        $returnStringPath = $save_folder . DIRECTORY_SEPARATOR . $class . '.php';
+        
+        if(is_file($save_path)){
+            CLI::write('File already exists: '. $returnStringPath, 'red');
+            CLI::newLine();
+            return $save_path;
+        }
+
         file_put_contents($save_path, $file_code_string);
 
-        $returnStringPath = $save_folder . DIRECTORY_SEPARATOR . $class . '.php';
         CLI::write('File created: '. $returnStringPath, 'green');
         // CLI::newLine();
         return $returnStringPath;

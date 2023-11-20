@@ -8,6 +8,9 @@ use Lc5\Web\Controllers\MasterWeb;
 
 class {class} extends MasterWeb
 {
+
+    private $module_model;
+
     //--------------------------------------------------------------------
     public function __construct()
     {
@@ -15,6 +18,8 @@ class {class} extends MasterWeb
 		// 
 		$this->web_ui_date->__set('request', $this->req);
         $this->web_ui_date->__set('route_prefix', '{nome_modulo}');
+        // 
+        $this->module_model = new ProductsModel();
 		// 
     }
 
