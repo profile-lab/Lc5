@@ -48,7 +48,7 @@ class {class} extends MasterLc
         //
         if ($this->req->getMethod() == 'post') {
             $validate_rules = [
-                'nome' => ['label' => 'Nome', 'rules' => 'required'],
+                'titolo' => ['label' => 'Titolo', 'rules' => 'required'],
             ];
             $curr_entity->fill($this->req->getPost());
             if ($this->validate($validate_rules)) {
@@ -82,7 +82,7 @@ class {class} extends MasterLc
         // 
         if ($this->req->getMethod() == 'post') {
             $validate_rules = [
-                'nome' => ['label' => 'Nome', 'rules' => 'required'],
+                'titolo' => ['label' => 'Titolo', 'rules' => 'required'],
             ];
             $curr_entity->fill($this->req->getPost());
             if ($this->validate($validate_rules)) {
