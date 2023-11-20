@@ -34,8 +34,8 @@ class CreateCustomComponent extends BaseCommand
         $model_class = pascalize($class . 'Model');
         $entity_class = pascalize($class . '');
 
-        $mackerSearch = ['{model_class}', '{entity_class}', '{nome_modulo}', '{table}'];
-        $mackerReplace = [$model_class, $entity_class, decamelize($class), decamelize('app_' . $class)];
+        $mackerSearch = ['{model_class}', '{entity_class}', '{nome_modulo}', '{table}', '{className_string}', '{backClassName_string}'];
+        $mackerReplace = [$model_class, $entity_class, decamelize($class), decamelize('app_' . $class), $className, $backClassName];
 
 
 
@@ -45,6 +45,14 @@ class CreateCustomComponent extends BaseCommand
         $this->generaPhpFile('lc_entity.tpl', 'Entities', $entity_class, $mackerSearch, $mackerReplace);
         $this->generaPhpFile('lc_view_index_back.tpl', 'Views' . DIRECTORY_SEPARATOR . 'lc-custom'. DIRECTORY_SEPARATOR. decamelize($class) , 'index');
         $this->generaPhpFile('lc_view_scheda_back.tpl', 'Views' . DIRECTORY_SEPARATOR . 'lc-custom'. DIRECTORY_SEPARATOR. decamelize($class) , 'scheda');
+        $route_config_string = $this->generaPhpFile('lc_routes.tpl', 'Routes', 'AppCustom', $mackerSearch, $mackerReplace);
+
+        CLI::write('ROUTE CONFIGURATION', 'yellow');
+        CLI::newLine();
+        CLI::newLine();
+        CLI::write($route_config_string, 'yellow');
+        CLI::newLine();
+        CLI::newLine();
 
         $this->call('make:migration', array_merge([$class], $options));
         //
@@ -85,13 +93,13 @@ class CreateCustomComponent extends BaseCommand
         if(is_file($save_path)){
             CLI::write('File already exists: '. $returnStringPath, 'red');
             CLI::newLine();
-            return $save_path;
+            return $file_code_string;
         }
 
         file_put_contents($save_path, $file_code_string);
 
         CLI::write('File created: '. $returnStringPath, 'green');
         CLI::newLine();
-        return $returnStringPath;
+        return $file_code_string;
     }
 }
