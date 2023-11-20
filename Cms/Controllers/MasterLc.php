@@ -477,54 +477,14 @@ class MasterLc extends BaseController
 					'route' => site_url(route_to($plugin_module->route)),
 					'module' => $plugin_module->module,
 					'ico' => $plugin_module->ico,
-					'items' =>$plugin_module_items_array,
+					// 'items' =>$plugin_module_items_array,
 				];
+				if(count($plugin_module_items_array)> 0){
+					$menu_data_arr[$plugin_key]->items = $plugin_module_items_array;
+
+				}
 			}
 		}
-
-		// if (isset($this->shop_modules) && is_array($this->shop_modules) && count($this->shop_modules)) {
-		// 	foreach ($this->shop_modules as $cm_key => $shop_modulo_arr) {
-		// 		$shop_modulo = (object) $shop_modulo_arr;
-		// 		$module_items = [];
-		// 		if (isset($shop_modulo->items) && is_array($shop_modulo->items) && count($shop_modulo->items)) {
-		// 			foreach ($shop_modulo->items as $shop_modulo_item) {
-		// 				$module_items[] = (object) [
-		// 					'label' => $shop_modulo_item->label,
-		// 					'route' => site_url(route_to($shop_modulo->lc_base_route.'_'. $shop_modulo_item->route)),
-		// 					'module_action' => $shop_modulo_item->module_action,
-		// 				];
-		// 			}
-		// 		}
-
-		// 		// Shop 
-		// 		$menu_data_arr['shop_' . $shop_modulo->nome] = (object) [
-		// 			'label' => $shop_modulo->nome,
-		// 			'route' => site_url(route_to($shop_modulo->lc_base_route)),
-		// 			'module' => $cm_key,
-		// 			'ico' => 'basket',
-		// 			'items' => $module_items,
-		// 			// [
-		// 			// 	(object) [
-		// 			// 		'label' => 'Lista ',
-		// 			// 		'route' => site_url(route_to($shop_modulo->lc_base_route)),
-		// 			// 		'module_action' => 'index',
-		// 			// 	],
-		// 			// ]
-		// 		];
-		// 		// 
-
-
-		// 		// 'corsi' => (object)[
-		// 		// 	'nome' => 'Corsi',
-		// 		// 	'controller' => 'Corsi',
-		// 		// 	'lc_base_route' => 'lc_admin_corsi'
-		// 		// ]
-
-		// 	}
-		// }
-
-
-
 
 		// Media 
 		$menu_data_arr['media'] = (object) [
@@ -584,38 +544,8 @@ class MasterLc extends BaseController
 					'route' => site_url(route_to($custom_modulo->lc_base_route)),
 					'module' => $cm_key,
 					'ico' => 'pin',
-					'items' => [
-						(object) [
-							'label' => 'Lista ',
-							'route' => site_url(route_to($custom_modulo->lc_base_route)),
-							'module_action' => 'index',
-						],
-						// (object) [
-						// 	'label' => 'New ' . $post_type->nome,
-						// 	'route' => site_url(route_to('lc_posts_new', $post_type->val)),
-						// 	'module_action' => 'newpost',
-						// ],
-						// (object) [
-						// 	'label' => 'Categorie',
-						// 	'route' => site_url(route_to('lc_posts_cat', $post_type->val)),
-						// 	'module_action' => 'postscategories',
-						// ],
-						// (object) [
-						// 	'label' => 'Tags',
-						// 	'route' => site_url(route_to('lc_posts_tags', $post_type->val)),
-						// 	'module_action' => 'poststags',
-						// ]
-					]
 				];
 				// 
-
-
-				// 'corsi' => (object)[
-				// 	'nome' => 'Corsi',
-				// 	'controller' => 'Corsi',
-				// 	'lc_base_route' => 'lc_admin_corsi'
-				// ]
-
 			}
 		}
 
