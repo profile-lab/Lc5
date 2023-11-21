@@ -77,12 +77,15 @@ class Pages extends MasterWeb
 		}
 		//
 		if (appIsFile($this->base_view_filesystem . 'page-' . $curr_entity->type . '.php')) {
+			$this->web_ui_date->__set('master_view', $curr_entity->type);
 			return view($this->base_view_namespace . 'page-' .  $curr_entity->type, $this->web_ui_date->toArray());
 		}
 		if (appIsFile($this->base_view_filesystem . 'page-default.php')) {
+			$this->web_ui_date->__set('master_view', 'default');
 			return view($this->base_view_namespace . 'page-default', $this->web_ui_date->toArray());
 		}else{
 			$this->base_view_namespace = $this->lc5_views_namespace;
+			$this->web_ui_date->__set('master_view', 'lc-default');
 			$this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
 			return view($this->base_view_namespace.'page-default', $this->web_ui_date->toArray());
 		}
