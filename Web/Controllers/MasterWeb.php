@@ -211,7 +211,7 @@ class MasterWeb extends BaseController
 
 
 		if ($is_in_maintenance) {
-			if (is_file($this->base_view_filesystem . 'maintenance.php')) {
+			if (appIsFile($this->base_view_filesystem  . 'maintenance.php')) {
 				return view($this->base_view_namespace . 'maintenance', $this->web_ui_date->toArray());
 			} else {
 				$this->base_view_namespace = $this->lc5_views_namespace;
