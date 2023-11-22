@@ -81,7 +81,7 @@ class Media extends MasterLc
 						$curr_entity->tipo_file = $file_up->getExtension();
 						$curr_entity->mime = $file_up->getMimeType();
 						$curr_entity->is_image = ($this->fileType($curr_entity->tipo_file) == 'image');
-						if ($file_path = $this->uploadFile($file_up, NULL, $curr_entity->is_image)) {
+						if ($file_path = $this->uploadFile($file_up, NULL, $curr_entity->is_image, $curr_entity->mime)) {
 							$curr_entity->path = $file_path['path'];
 							if ($curr_entity->is_image) {
 								$curr_entity->image_width = $file_path['image_width'];
@@ -149,8 +149,7 @@ class Media extends MasterLc
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
 		// 
-		$folder = 'uploads';
-		$this->makeFormato($curr_entity->path, $formato, $folder);
+		$this->makeFormato($curr_entity->path, $formato, 'uploads');
 
 		// 
 		return redirect()->route($this->route_prefix . '_edit', [$curr_entity->id]);
@@ -170,9 +169,6 @@ class Media extends MasterLc
 		// 
 
 		$folder = 'uploads';
-		// $this->makeFormato($curr_entity->path, $formato, $folder);
-
-		// $curr_entity->path, $formato, $folder
 		// 
 		$image = \Config\Services::image()->withFile(FCPATH . '' . $folder . '/' . $curr_entity->path)->rotate(270);
 		if (trim($formato['folder'])) {
@@ -355,7 +351,7 @@ class Media extends MasterLc
 						$curr_entity->tipo_file = $file_up->getExtension();
 						$curr_entity->mime = $file_up->getMimeType();
 						$curr_entity->is_image = ($this->fileType($curr_entity->tipo_file) == 'image');
-						if ($file_path = $this->uploadFile($file_up, NULL, $curr_entity->is_image)) {
+						if ($file_path = $this->uploadFile($file_up, NULL, $curr_entity->is_image, $curr_entity->mime)) {
 							$curr_entity->path = $file_path['path'];
 							$curr_entity->guid = $curr_entity->path;
 
@@ -421,7 +417,7 @@ class Media extends MasterLc
 						$curr_entity->tipo_file = $file_up->getExtension();
 						$curr_entity->mime = $file_up->getMimeType();
 						$curr_entity->is_image = ($this->fileType($curr_entity->tipo_file) == 'image');
-						if ($file_path = $this->uploadFile($file_up, NULL, $curr_entity->is_image)) {
+						if ($file_path = $this->uploadFile($file_up, NULL, $curr_entity->is_image, $curr_entity->mime)) {
 							$curr_entity->path = $file_path['path'];
 							if ($curr_entity->is_image) {
 								$curr_entity->image_width = $file_path['image_width'];

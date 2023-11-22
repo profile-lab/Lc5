@@ -471,7 +471,7 @@ class MasterLc extends BaseController
 						$plugin_module_item_obj->route = site_url(route_to($plugin_module_item_obj->route));
 						$plugin_module_items_array[] = $plugin_module_item_obj;
 					}
-				}				
+				}
 				$menu_data_arr[$plugin_key] = (object) [
 					'label' => $plugin_module->label,
 					'route' => site_url(route_to($plugin_module->route)),
@@ -479,9 +479,8 @@ class MasterLc extends BaseController
 					'ico' => $plugin_module->ico,
 					// 'items' =>$plugin_module_items_array,
 				];
-				if(count($plugin_module_items_array)> 0){
+				if (count($plugin_module_items_array) > 0) {
 					$menu_data_arr[$plugin_key]->items = $plugin_module_items_array;
-
 				}
 			}
 		}
@@ -967,7 +966,7 @@ class MasterLc extends BaseController
 		return $mediaformat_model->asArray()->findAll();
 	}
 	//--------------------------------------------------------------------
-	public function uploadFile($file_up = null, $nomefile = null, $isImage = FALSE, $folder =  'uploads')
+	public function uploadFile($file_up = null, $nomefile = null, $isImage = FALSE, $curr_file_mime_type = null, $folder =  'uploads')
 	{
 		$base_folder = WRITEPATH;
 		if ($file_up) {
@@ -996,47 +995,17 @@ class MasterLc extends BaseController
 					'formati' => []
 				];
 				foreach ($this->getImgFormati() as $formato) {
-					$this->makeFormato($nomefile, $formato, $folder);
-					// // 
-					// $image = \Config\Services::image()->withFile(WRITEPATH . '' . $folder . '/' . $nomefile);
-					// if (trim($formato['folder'])) {
-					// 	if (!is_dir(FCPATH . $folder . '/' . $formato['folder'])) {
-					// 		mkdir(FCPATH . $folder . '/' . $formato['folder'], 0755, true);
-					// 	}
-					// }
-					// if ($formato['rule'] == 'crop') {
-					// 	$image->crop($formato['w'], $formato['h'], $x = null, $y = null, false, 'auto');
-					// } elseif ($formato['rule'] == 'fit') {
-					// 	$image->fit($formato['w'], $formato['h'], $position = 'center');
-					// } elseif ($formato['rule'] == 'scale') {
-					// 	$image->resize($formato['w'], $formato['h'], true, 'auto');
-					// } else {
-					// 	// $image->resize($image->getWidth(), $image->getHeight(), true, 'auto');
-					// 	$image->fit($image->getWidth(), $image->getHeight(), $position = 'center');
-
-					// }
-					// $image->save(FCPATH . $folder . '/' . (trim($formato['folder']) ? $formato['folder'] . '/' : '') . $nomefile, 90);
-					// // 
+					$this->makeFormato($nomefile, $formato, $folder, $curr_file_mime_type);
 					$return_img_obj['formati'][] = [
 						'w' => $formato['w'],
 						'h' => $formato['h'],
 						'path' => $folder . '/' . $formato['folder'] . '/' . $nomefile
 					];
 				}
-				// // 
-				// if (file_exists(FCPATH . $public_folder . '/' . $nomefile)) {
-				// 	unlink(FCPATH . $public_folder . '/' . $nomefile);
-				// }
-				// // 
 				return $return_img_obj;
 			} else {
-				// $path = $this->request->getFile('userfile')->store('head_img/', 'user_name.jpg');
-
-
 				$file = new \CodeIgniter\Files\File(WRITEPATH . '' . $folder . '/' . $nomefile);
-				// dd($file);
 				$file->move(FCPATH . $folder, $nomefile);
-
 				return  ['path' => $nomefile];
 			}
 		} else {
@@ -1044,15 +1013,31 @@ class MasterLc extends BaseController
 		}
 	}
 	//--------------------------------------------------------------------
-	protected function makeFormato($nomefile, $formato, $folder =  'uploads')
+	protected function makeFormato($nomefile, $formato, $folder =  'uploads', $curr_file_mime_type = null)
 	{
-		// 
-		$image = \Config\Services::image()->withFile(WRITEPATH . '' . $folder . '/' . $nomefile);
 		if (trim($formato['folder'])) {
 			if (!is_dir(FCPATH . $folder . '/' . $formato['folder'])) {
 				mkdir(FCPATH . $folder . '/' . $formato['folder'], 0755, true);
 			}
 		}
+		if (
+			($curr_file_mime_type === 'png' || $curr_file_mime_type === 'image/png' || $curr_file_mime_type === 'image/x-png') &&
+			$formato['rule'] === '' && $formato['folder'] === ''
+		) {
+			// $curr_file_mime_type = mime_content_type(WRITEPATH . '' . $folder . '/' . $nomefile);
+			// d('qui-ok--' . $formato['rule'] . ' -' . $formato['folder'] . '- ' . $curr_file_mime_type);
+
+			$file = WRITEPATH . '' . $folder . '/' . $nomefile;
+			$newfile = FCPATH . $folder . '/' . $nomefile;
+
+			if (copy($file, $newfile)) {
+
+				return;
+			}
+		}
+		// 
+		$image = \Config\Services::image()->withFile(WRITEPATH . '' . $folder . '/' . $nomefile);
+
 		if ($formato['rule'] == 'crop') {
 			$image->fit($formato['w'], $formato['h'], $position = 'center');
 			$image->crop($formato['w'], $formato['h'], $x = null, $y = null, false, 'auto');
@@ -1064,7 +1049,7 @@ class MasterLc extends BaseController
 			// $image->resize($image->getWidth(), $image->getHeight(), true, 'auto');
 			$image->fit($image->getWidth(), $image->getHeight(), $position = 'center');
 		}
-		$image->save(FCPATH . $folder . '/' . (trim($formato['folder']) ? $formato['folder'] . '/' : '') . $nomefile, 90);
+		$image->save(FCPATH . $folder . '/' . (trim($formato['folder']) ? $formato['folder'] . '/' : '') . $nomefile, 75); // 90
 		// 
 	}
 	//--------------------------------------------------------------------
