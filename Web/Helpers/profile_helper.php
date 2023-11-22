@@ -230,7 +230,16 @@ function txt($txt = null, $cssClass = '', $tag = 'div', $container_open = null, 
 {
     $return_html = '';
     if (isset($txt) && $txt != '') {
-        $return_html = '<' . $tag . ' class="' . $cssClass . '">' . ($label ? '<' . $labelTag . ' class="' . $cssClass . '-label">' . $label . $label_spacer . ' </' . $labelTag . '>' : '') . (($nl2br) ? my_nl2br($txt) : $txt) . '</' . $tag . '>';
+        $return_html = '<' . $tag . ' class="' . $cssClass . '">';
+        if($label){
+            $return_html.= '<' . $labelTag . ' class="' . $cssClass . '-label">' . $label . $label_spacer . ' </' . $labelTag . '>' ;
+            $return_html.= '<div class="' . $cssClass . '-txt">' ;
+        }
+        $return_html .= (($nl2br) ? my_nl2br($txt) : $txt);
+        if($label){
+            $return_html.= '</div>' ;
+        }
+        $return_html .= '</' . $tag . '>';
         if ($container_open && $container_close) {
             $return_html = '<' . $container_open . '>' . $return_html . '</' . $container_close . '>';
         }
