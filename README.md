@@ -87,6 +87,13 @@ _If doesn't works, checke /writable folder permission_
            'admin_auth'	=> \Lc5\Cms\Filters\AdminAuth::class,
         ];
 
+        public array $globals = [
+           ...
+           'after' => [
+            'toolbar' => ['except' => ['lc-admin/*']],
+          ],
+        ];
+
 #### Add LC5 services in App\Config\Services.php
 
         public static function admins($getShared = true)
