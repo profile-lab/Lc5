@@ -252,6 +252,48 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 - [mysqlnd](http://php.net/manual/en/mysqlnd.install.php)
 - xml (enabled by default - don't turn it off)
 
-## SE HTACCESS GENERA Errore 500
+#
+# Bug conosciuti
 
-#### disabilita -> Restrict the ability to follow symbolic links di Apache Ngix
+## 500 Error for subpages (mod_rewrite)
+Se l'applicazione genera errore 500 al primo avvio protrebbe dipendere dal *mod_rewrite.c* nel file .htaccess.
+
+Disabilitare restrizioni per i link simbolici 
+
+*In Plesk* disattivare **Restrict the ability to follow symbolic links** nelle configurazioni di Apache Ngix.
+
+## 403 / 500 Error */?debugbar_time=*
+Se in console trovi un errore 403 per la chiamata GET di */?debugbar_time=* potrebbe dipendere dal modulo **ModSecurity**.
+
+Spegnere la regola che blocca questa chiamata in fase di debug potrebbe risolvere il problema.
+
+*In Plesk* **Tools & Settings / Web Application Firewall** - **Switch off security rules**:
+Provare ad aggiungere l'eccezione per la regola **214120** nel campo **Security rule IDs** 
+
+#### *NB: se il problema persiste consultare i log del modulo **ModSecurity Log File***
+
+Cercare tra i log il path interessato dall'errore *(?debugbar_time)*, Intercettare l'ID dell'errore (codice 8 caratteri preceduti da -- con suffisso -A-- dove A sta per indentificativo dell'informazione sull'errore).
+
+        es: --69375927-A- --69375927-B- ... --69375927-H-
+
+Cercare il codice errore con suffisso -H-- e tra i vari parametri della riga di debug intercettare **[id "000000"]**. Questo è l'ID della regola del ModSecurity violata.
+
+Aggiungere l'ID della regola intercettata alle **Security rule IDs** nelle direttive **Switch off security rules**
+
+#### *Se l'errore è 500 protrebbe dipendere dalla dimensione della risposta.*
+
+*In Plesk* **Tools & Settings / Web Application Firewall / settings** 
+
+
+##### Custom directives:
+
+        SecResponseBodyLimit 536870912
+
+
+Oppure come configurazione direttiva di Apache & nginx Settings
+
+##### Custom directives:
+
+        <IfModule mod_security2.c>
+                SecResponseBodyLimit 536870912
+        </IfModule>
