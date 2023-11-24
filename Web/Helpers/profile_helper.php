@@ -229,7 +229,10 @@ function h6($txt = null, $cssClass = '', $pre_txt = '', $add_txt = '')
 function txt($txt = null, $cssClass = '', $tag = 'div', $container_open = null, $container_close = null, $nl2br = false, $label = false, $label_spacer = ':', $labelTag = 'span')
 {
     $return_html = '';
-    if (isset($txt) && $txt != '') {
+    if(!isset($txt) || $txt == '' || $txt == '<p><br></p>' || $txt == '<p><br/></p>' || strip_tags($txt) == ''){
+        return $return_html;
+    }
+    if (isset($txt) && $txt != '' ) {
         $return_html = '<' . $tag . ' class="' . $cssClass . '">';
         if($label){
             $return_html.= '<' . $labelTag . ' class="' . $cssClass . '-label">' . $label . $label_spacer . ' </' . $labelTag . '>' ;
