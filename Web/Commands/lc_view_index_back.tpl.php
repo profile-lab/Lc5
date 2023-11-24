@@ -4,7 +4,7 @@
     <h1><@= $module_name ?></h1>
     <div class="d-flex align-items-center">
         <div>
-            <a class="btn btn-primary" href="<@= site_url(route_to($route_prefix . '_new', $post_type_guid)) ?>"><span class="oi oi-plus mr-1"></span>Nuovo</a>
+            <a class="btn btn-primary" href="<@= site_url(route_to($route_prefix . '_new')) ?>"><span class="oi oi-plus mr-1"></span>Nuovo</a>
         </div>
         <div>
             <input type="search" class="form-control search-filter" id="search-filter" placeholder="Cerca..." />
