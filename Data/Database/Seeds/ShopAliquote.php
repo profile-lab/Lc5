@@ -19,6 +19,7 @@ class ShopAliquote extends Seeder
                     'id_app' => $id_app,
                     'nome' => 'Iva 22%',
                     'val' => '22',
+                    'is_default' => 1,
                 ];
                 $this->db->table($db_table)->insert($data);
             }
