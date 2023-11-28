@@ -28,15 +28,24 @@ $t_unique = rand(100, 1000);
 
 
         <div class="more-row-content">
-
-
-            <div class="col_2">
-                <div class="row">
-                    <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Titolo', 'name' => $prefix . 'titolo[]', 'value' => (isset($row->titolo)) ? $row->titolo : '', 'width' => 'col-md-12', 'placeholder' => 'Titolo']]) ?>
+            <div class="row" style="display: flex;flex-direction: row;justify-content: space-around;align-items: center;">
+                <div class="colonna_titotli_colonne_cnt" style="width: 80%;">
+                    <div class="row">
+                        <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Titolo', 'name' => $prefix . 'titolo[]', 'value' => (isset($row->titolo)) ? $row->titolo : '', 'width' => 'col-md-12', 'placeholder' => 'Titolo']]) ?>
+                    </div>
+                    <div class="row">
+                        <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Sottotitolo', 'name' => $prefix . 'sottotitolo[]', 'value' => (isset($row->sottotitolo)) ? $row->sottotitolo : '', 'width' => 'col-md-12', 'placeholder' => '']]) ?>
+                    </div>
                 </div>
-                <div class="row">
-                    <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Sottotitolo', 'name' => $prefix . 'sottotitolo[]', 'value' => (isset($row->sottotitolo)) ? $row->sottotitolo : '', 'width' => 'col-md-12', 'placeholder' => '']]) ?>
+                <div class="colonna_immagini_colonne_cnt" style="width: 20%;">
+                    <div class="row">
+                        <?= view('Lc5\Cms\Views\form-cmp/img-single', ['item' => ['label' => 'Copertina', 'name' => $prefix . 'main_img_id[]', 'value' => (isset($row->main_img_id)) ? $row->main_img_id : '', 'width' => 'col-12', 'src' => (isset($row->main_img_thumb)) ? $row->main_img_thumb : '']]) ?>
+                    </div>
                 </div>
+            </div>
+
+            <div class="">
+
                 <div class="row form-row">
                     <?php if (isset($rows_colonne_styles) && is_iterable($rows_colonne_styles) && count($rows_colonne_styles) > 0) { ?>
                         <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => 'Tipo', 'name' => $prefix . 'css_class[]', 'value' => (isset($row->css_class)) ? $row->css_class : '', 'input_class' => 'select_css_class', 'width' => 'col-md-2', 'sources' => $rows_colonne_styles, 'no_empty' => true]]) ?>
@@ -66,14 +75,7 @@ $t_unique = rand(100, 1000);
 
             </div>
 
-            <div class="row">
-                <div class="col-12 col-md-3 sb_paragraph_in ">
-                    <div class="row">
-                        <?= view('Lc5\Cms\Views\form-cmp/img-single', ['item' => ['label' => 'Copertina', 'name' => $prefix . 'main_img_id[]', 'value' => (isset($row->main_img_id)) ? $row->main_img_id : '', 'width' => 'col-12', 'src' => (isset($row->main_img_thumb)) ? $row->main_img_thumb : '']]) ?>
-                    </div>
-                </div>
-            </div>
-
+           
             <?= view('Lc5\Cms\Views\form-cmp/hidden', ['item' => ['name' => $prefix . 'json_data[]', 'value' => (isset($row->json_data)) ? $row->json_data : '', 'input_class' => 'json_object']]) ?>
             <div class="colonne_items_cnt">
                 <?php if (isset($row->data_object) && is_iterable($row->data_object)) { ?>
