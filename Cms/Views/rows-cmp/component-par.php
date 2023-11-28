@@ -26,28 +26,44 @@ $t_unique = rand(100, 1000);
             <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Nome*', 'name' => $prefix . 'nome[]', 'value' => (isset($row->nome)) ? $row->nome : '', 'width' => 'col-md-12', 'placeholder' => 'Nome', 'required' => 'required']]) ?>
         </div>
         <div class="more-row-content">
-            <div class="row">
-                <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Titolo', 'name' => $prefix . 'titolo[]', 'value' => (isset($row->titolo)) ? $row->titolo : '', 'width' => 'col-md-12', 'placeholder' => 'Titolo']]) ?>
-            </div>
-            <div class="row">
-                <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Sottotitolo', 'name' => $prefix . 'sottotitolo[]', 'value' => (isset($row->sottotitolo)) ? $row->sottotitolo : '', 'width' => 'col-md-12', 'placeholder' => '']]) ?>
-            </div>
-            <div class="row myFlex">
-                <?php if (isset($rows_components) && is_iterable($rows_components) && count($rows_components) > 0) { ?>
-                    <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => 'Componente', 'name' => $prefix . 'component[]', 'value' => (isset($row->component)) ? $row->component : '', 'width' => 'col-md-3', 'sources' => $rows_components, 'no_empty' => true]]) ?>
-                    <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Parametri Componente', 'name' => $prefix . 'component_params[]', 'value' => (isset($row->component_params)) ? $row->component_params : '', 'width' => 'col-md-6', 'placeholder' => 'Parametri Componente']]) ?>
-                <?php } else { ?>
-                    <?= view('Lc5\Cms\Views\form-cmp/hidden', ['item' => ['name' => $prefix . 'component[]', 'value' => (isset($row->component)) ? $row->component : '', 'input_class' => null]]) ?>
-                <?php } ?>
-                <?php if (isset($rows_colors) && is_iterable($rows_colors) && count($rows_colors) > 0) { ?>
-                    <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => 'Colori', 'name' => $prefix . 'css_color[]', 'value' => (isset($row->css_color)) ? $row->css_color : '', 'width' => 'col-md-3', 'sources' => $rows_colors, 'no_empty' => true]]) ?>
-                <?php } else { ?>
-                    <?= view('Lc5\Cms\Views\form-cmp/hidden', ['item' => ['name' => $prefix . 'css_color[]', 'value' => (isset($row->css_color)) ? $row->css_color : '', 'input_class' => null]]) ?>
-                <?php } ?>
+            <div class="row" style="display: flex;flex-direction: row;justify-content: space-around;align-items: start;">
+                <div class="colonna_titotli_colonne_cnt" style="width: 80%;">
+                    <div class="row">
+                        <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Titolo', 'name' => $prefix . 'titolo[]', 'value' => (isset($row->titolo)) ? $row->titolo : '', 'width' => 'col-md-12', 'placeholder' => 'Titolo']]) ?>
+                    </div>
+                    <div class="row">
+                        <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Sottotitolo', 'name' => $prefix . 'sottotitolo[]', 'value' => (isset($row->sottotitolo)) ? $row->sottotitolo : '', 'width' => 'col-md-12', 'placeholder' => '']]) ?>
+                    </div>
+
+                    <div class="row myFlex">
+                        <?php if (isset($rows_components) && is_iterable($rows_components) && count($rows_components) > 0) { ?>
+                            <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => 'Componente', 'name' => $prefix . 'component[]', 'value' => (isset($row->component)) ? $row->component : '', 'width' => 'col-md-3', 'sources' => $rows_components, 'no_empty' => true]]) ?>
+                            <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Parametri Componente', 'name' => $prefix . 'component_params[]', 'value' => (isset($row->component_params)) ? $row->component_params : '', 'width' => 'col-md-6', 'placeholder' => 'Parametri Componente']]) ?>
+                        <?php } else { ?>
+                            <?= view('Lc5\Cms\Views\form-cmp/hidden', ['item' => ['name' => $prefix . 'component[]', 'value' => (isset($row->component)) ? $row->component : '', 'input_class' => null]]) ?>
+                        <?php } ?>
+                        <?php if (isset($rows_colors) && is_iterable($rows_colors) && count($rows_colors) > 0) { ?>
+                            <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => 'Colori', 'name' => $prefix . 'css_color[]', 'value' => (isset($row->css_color)) ? $row->css_color : '', 'width' => 'col-md-3', 'sources' => $rows_colors, 'no_empty' => true]]) ?>
+                        <?php } else { ?>
+                            <?= view('Lc5\Cms\Views\form-cmp/hidden', ['item' => ['name' => $prefix . 'css_color[]', 'value' => (isset($row->css_color)) ? $row->css_color : '', 'input_class' => null]]) ?>
+                        <?php } ?>
+                    </div>
+
+
+
+                </div>
+                <div class="colonna_immagini_colonne_cnt" style="width: 20%;">
+                    <div class="row">
+                        <?= view('Lc5\Cms\Views\form-cmp/img-single', ['item' => ['label' => 'Copertina', 'name' => $prefix . 'main_img_id[]', 'value' => (isset($row->main_img_id)) ? $row->main_img_id : '', 'width' => 'col-12', 'src' => (isset($row->main_img_thumb)) ? $row->main_img_thumb : '']]) ?>
+                    </div>
+                </div>
             </div>
 
+
+            
+
             <!-- CAMPI CUSTOM FIELD -->
-            <?php if( isset($custom_fields_keys_component_par) && is_array($custom_fields_keys_component_par) && count($custom_fields_keys_component_par) > 0 ) { ?>
+            <?php if (isset($custom_fields_keys_component_par) && is_array($custom_fields_keys_component_par) && count($custom_fields_keys_component_par) > 0) { ?>
                 <div class="col-12 form-field-simple_custom_fields_rows">
                     <div class="row badge-light border">
                         <div class="d-flex justify-content-between align-items-center py-3">
@@ -72,7 +88,7 @@ $t_unique = rand(100, 1000);
                         </div>
                     </div>
                 </div>
-            <?php }else{ ?>
+            <?php } else { ?>
                 <?= view('Lc5\Cms\Views\form-cmp/hidden', ['item' => ['name' => $prefix . 'free_values[]', 'value' => (isset($row->free_values)) ? $row->free_values : '', 'input_class' => 'free_values']]) ?>
             <?php } ?>
             <!-- CAMPI CUSTOM FIELD -->
