@@ -141,11 +141,11 @@ class MasterWeb extends BaseController
 					foreach ($checkfield_arr as $field_to_check) {
 						if (!isset($post_data[$field_to_check]) || !trim($post_data[$field_to_check])) {
 							$field_errors[$field_to_check] = 'richiesto';
-							$field_errors_html_list .= '<li>Il campo ' . $field_to_check . ' è richiesto</li>';
+							$field_errors_html_list .= '<li>Il campo <b>' . $field_to_check . '</b> è richiesto</li>';
 						}
 					}
 					if (count($field_errors) > 0) {
-						$user_mess->title = $this->appLabelMethod("Errore!. Alcuni campi sono richiesti", $this->web_ui_date->app->labels);
+						$user_mess->title = $this->appLabelMethod("Errore!. Controlla i campi richiesti", $this->web_ui_date->app->labels);
 						$user_mess->content = $this->appLabelMethod("<ul>" . $field_errors_html_list . "</ul>", $this->web_ui_date->app->labels);
 						$return_obj->user_mess = $user_mess;
 						return $return_obj;
