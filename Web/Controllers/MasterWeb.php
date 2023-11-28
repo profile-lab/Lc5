@@ -84,21 +84,18 @@ class MasterWeb extends BaseController
 
 
 		if ($this->req->getPost()) {
-
-
 			if (file_exists(APPPATH . 'Controllers/CustomAppContoller.php') &&  method_exists($this->custom_app_contoller, 'parseFormPostData')) {
 				$form_result = $this->custom_app_contoller->{'parseFormPostData'}($this->req->getPost());
 				$this->web_ui_date->__set('form_result', $form_result);
 			} else {
 				$form_result = $this->parseFormPostData($this->req->getPost());
-				if (isset($form_result) && isset($form_result->is_send) && $form_result->is_send === TRUE) {
+				if (isset($return_obj) && isset($form_result->is_send) && $form_result->is_send === TRUE) {
 					$this->web_ui_date->__set('form_result', $form_result);
 					return redirect()->to(uri_string() . '?is_send=true');
 				}
+				// dd($form_result);
+				$this->web_ui_date->__set('form_result', $form_result);
 			}
-
-
-
 			$form_post_data = (object) $this->req->getPost();
 			$this->web_ui_date->__set('form_post_data', $form_post_data);
 		}
@@ -115,17 +112,6 @@ class MasterWeb extends BaseController
 						break;
 				}
 			}
-			// $return_obj = new stdClass();
-			// $user_mess = new stdClass();
-			// $user_mess->type = 'ko';
-			// $user_mess->title = 'Si è verificato un errore';
-			// $user_mess->content = '<ul>
-			// 	<li>Il campo Cipollino è un indirizzo email valido</li>
-			// 	<li>Il campo Ciccino è richiesto</li>
-			// </ul>';
-			// $return_obj->user_mess = $user_mess;
-
-			// return $return_obj;
 		}
 		return FALSE;
 	}
@@ -165,7 +151,7 @@ class MasterWeb extends BaseController
 						return $return_obj;
 					}
 				}
-			}else{
+			} else {
 				throw new \Exception("Error Processing Request. Checkfield is required", 1);
 			}
 
