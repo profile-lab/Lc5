@@ -153,7 +153,7 @@ class MasterWeb extends BaseController
 					$field_errors = [];
 					$field_errors_html_list = '';
 					foreach ($checkfield_arr as $field_to_check) {
-						if (!trim($post_data[$field_to_check])) {
+						if (!isset($post_data[$field_to_check]) || !trim($post_data[$field_to_check])) {
 							$field_errors[$field_to_check] = 'richiesto';
 							$field_errors_html_list .= '<li>Il campo ' . $field_to_check . ' è richiesto</li>';
 						}
@@ -165,6 +165,8 @@ class MasterWeb extends BaseController
 						return $return_obj;
 					}
 				}
+			}else{
+				throw new \Exception("Error Processing Request. Checkfield is required", 1);
 			}
 
 			// return;
