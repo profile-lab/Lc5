@@ -47,8 +47,14 @@ $routes->group('user-zone', ['namespace' => '\Lc5\Web\Controllers\Users', 'filte
 // $routes->match(['get', 'post'], '/payment-stripe-webhook', '\App\Controllers\App\Webhooks::paymentStripeWebhook', ['as' => 'payment_stripe_webhook']);
 
 
+if (env('custom.no_add_maintainer_action') === true) {
+    
+    // dd(env('custom.no_add_maintainer_action'));
+} else {
+    $routes->add('add-maintainer', '\Lc5\Web\Controllers\Pages::addMaintainer');
+}
+
 // 
-$routes->add('add-maintainer', '\Lc5\Web\Controllers\Pages::addMaintainer');
 //
 $routes->add('archivio/(:segment)/(:segment)/', '\Lc5\Web\Controllers\Posts::post/$1/$2', ['as' => 'web_posts_single']);
 $routes->add('archivio/(:segment)', '\Lc5\Web\Controllers\Posts::index/$1', ['as' => 'web_posts_archive']);
