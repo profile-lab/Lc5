@@ -42,13 +42,7 @@ $routes->group('user-zone', ['namespace' => '\Lc5\Web\Controllers\Users', 'filte
     $routes->add('', 'UserDashboard::personalDashboard', ['as' => 'web_dashboard']);
 });
 
-
-
-// $routes->match(['get', 'post'], '/payment-stripe-webhook', '\App\Controllers\App\Webhooks::paymentStripeWebhook', ['as' => 'payment_stripe_webhook']);
-
-
-if (env('custom.no_add_maintainer_action') === true) {
-    
+if (env('custom.no_add_maintainer_action') === true) {    
     // dd(env('custom.no_add_maintainer_action'));
 } else {
     $routes->add('add-maintainer', '\Lc5\Web\Controllers\Pages::addMaintainer');
