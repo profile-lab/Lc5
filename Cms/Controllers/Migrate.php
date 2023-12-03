@@ -63,17 +63,18 @@ class Migrate extends \CodeIgniter\Controller
 			if ($db->tableExists($table_name)) {
 
 				$entity_string = '<?php
-namespace App\Entities;
+namespace Lc5\Data\Entities;
 use CodeIgniter\Entity\Entity;
 
-class ' . pascalize(singular($table_name)) . '  extends Entity
+class ' . pascalize(singular($table_name)) . ' extends Entity
 {
 	protected $attributes = [';
 				$model_string = '<?php
-namespace App\Models;
+namespace Lc5\Data\Models;
+use Lc5\Data\Models\MediaModel;
 use CodeIgniter\Model;
 
-class ' . pascalize(plural($table_name)) . 'Model  extends Model
+class ' . pascalize(plural($table_name)) . 'Model extends MasterModel
 {
 	protected $table				= \'' . $table_name . '\';
 	protected $primaryKey			= \'id\';
@@ -82,7 +83,7 @@ class ' . pascalize(plural($table_name)) . 'Model  extends Model
 	protected $updatedField			= \'updated_at\';
 	protected $deletedField			= \'deleted_at\';
 
-	protected $returnType           = \'' . ("App\Entities\\" . pascalize(singular($table_name))) . '\';
+	protected $returnType           = \'' . ("Lc5\Data\Entities\\" . pascalize(singular($table_name))) . '\';
 	protected $allowedFields = [';
 
 				$table_structure = [];
@@ -109,14 +110,76 @@ class ' . pascalize(plural($table_name)) . 'Model  extends Model
 				$model_string .= '
 
 	];
-	protected $beforeInsert         = [];
+
+	protected $beforeInsert         = [\'beforeInsert\'];
 	protected $afterInsert          = [];
-	protected $beforeUpdate         = [];
+	protected $beforeUpdate         = [\'beforeUpdate\'];
 	protected $afterUpdate          = [];
-	protected $beforeFind           = [];
-	protected $afterFind            = [];
+	protected $beforeFind           = [\'beforeFind\'];
+	protected $afterFind            = [\'afterFind\'];
 	protected $beforeDelete         = [];
 	protected $afterDelete          = [];
+
+	//------------------------------------------------------------
+	protected function beforeFind(array $data)
+	{
+		$this->checkAppAndLang();
+		//
+		// if($this->is_for_frontend == true){
+		// 	$this->where(\'status !=\', 0);
+		// 	$this->where(\'public\', 1);
+		// }
+		// 
+	}
+
+	//------------------------------------------------------------
+	protected function afterFind(array $data)
+	{
+		// $data = $this->beforeSave($data);
+		if ($data[\'singleton\'] == true) {
+			$data[\'data\'] = $this->extendData($data[\'data\'], true);
+		} else {
+			foreach ($data[\'data\'] as $item) {
+				$item = $this->extendData($item);
+			}
+		}
+		return $data;
+	}
+
+	//------------------------------------------------------------
+	private function extendData($item, $is_singleton = false)
+	{
+		if ($item) {
+		}
+		return $item;
+	}
+
+	//------------------------------------------------------------
+	protected function beforeUpdate(array $data)
+	{
+		$data = $this->beforeSave($data);
+		return $data;
+	}
+
+	//------------------------------------------------------------
+	protected function beforeInsert(array $data)
+	{
+		$data = $this->setDataAppAndLang($data);
+		$data = $this->beforeSave($data);
+		return $data;
+	}
+
+	//------------------------------------------------------------
+	private function beforeSave(array $data)
+	{
+		$curr_item_lang = null;
+		if (in_array(\'lang\', $this->allowedFields)) {
+			if ($curr_lc_lang = session()->get(\'curr_lc_lang\')) {
+				$curr_item_lang = $curr_lc_lang;
+			}
+		}
+		return $data;
+	}
 
 }';
 
