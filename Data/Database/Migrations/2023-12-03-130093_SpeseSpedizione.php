@@ -53,7 +53,7 @@ class SpeseSpedizione extends Migration
 				'constraint' => '10,2',
 				'default' => NULL
 			],
-			'peso_max_kg' => [
+			'prezzo_imponibile' => [
 				'type' => 'DECIMAL',
 				'constraint' => '10,2',
 				'default' => NULL
