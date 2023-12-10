@@ -13,8 +13,6 @@ use Lc5\Data\Models\PostTagsModel;
 use Lc5\Data\Models\PoststypesModel;
 use stdClass;
 
-use Lc5\Web\Controllers\Users\UserTools;
-
 use CodeIgniter\Email\Email;
 
 use function PHPUnit\Framework\fileExists;
@@ -39,17 +37,12 @@ class MasterWeb extends BaseController
 
 	public $custom_app_contoller = null;
 
-	public $user_tools;
-
 	protected $send_mail_config;
 
 
 	//--------------------------------------------------------------------
 	public function __construct()
 	{
-
-		$this->user_tools = new UserTools();
-
 
 		$this->base_view_namespace = $this->lc5_views_namespace . (getenv('custom.web_base_folder')) ?  getenv('custom.web_base_folder') . '/' : '';
 		$this->base_view_filesystem =  'Views' . DIRECTORY_SEPARATOR . ((getenv('custom.web_base_folder')) ?  getenv('custom.web_base_folder') . '/' : '');
