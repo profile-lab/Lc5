@@ -56,7 +56,9 @@ class AppUsersAuth extends Migration
         $this->forge->addField([
             'id' => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             'user_id' => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
-            'type' => ['type' => 'ENUM("email_password","token")', 'default' => 'email_password', 'null' => FALSE,],
+            'type' => ['type' => 'ENUM("email_password","token","direct_email","direct_link","single_sign_on")', 'default' => 'email_password', 'null' => FALSE,],
+            'single_sign_on_account' => ['type' => 'varchar', 'constraint' => 255],
+            'single_sign_on_data' => ['type' => 'varchar', 'constraint' => 255],
             'active' => ['type' => 'tinyint', 'constraint' => 1, 'null' => 0, 'default' => 0],
             'id_app' => ['type' => 'INT', 'constraint' => 11, 'null' => true,],
 
