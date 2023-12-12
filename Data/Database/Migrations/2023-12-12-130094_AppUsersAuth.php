@@ -70,6 +70,7 @@ class AppUsersAuth extends Migration
             'extra' => ['type' => 'text', 'null' => true],
             'force_reset'  => ['type' => 'tinyint', 'constraint' => 1, 'default' => 0],
             'last_used_at' => ['type' => 'datetime', 'null' => true],
+            '`activated_at` TIMESTAMP NULL DEFAULT NULL',
             'created_at TIMESTAMP NULL DEFAULT current_timestamp()',
             '`updated_at` TIMESTAMP NULL DEFAULT NULL',
             '`deleted_at` TIMESTAMP NULL DEFAULT NULL',
