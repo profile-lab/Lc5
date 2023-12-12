@@ -45,7 +45,7 @@ class AppUsersAuth extends Migration
             '`deleted_at` TIMESTAMP NULL DEFAULT NULL',
         ]);
         $this->forge->addPrimaryKey('id');
-        $this->forge->addUniqueKey('id_app', 'username');
+        // $this->forge->addUniqueKey('id_app', 'username');
         $this->forge->createTable('app_users_data', true);
 
         // Users Auth Table
@@ -75,7 +75,7 @@ class AppUsersAuth extends Migration
             '`deleted_at` TIMESTAMP NULL DEFAULT NULL',
         ]);
         $this->forge->addPrimaryKey('id');
-        $this->forge->addUniqueKey(['type', 'username']);
+        // $this->forge->addUniqueKey(['type', 'username']);
         $this->forge->addKey('user_id');
         $this->forge->addForeignKey('user_id', 'app_users_data', 'id', '', 'CASCADE');
         $this->forge->createTable('app_users_auth', true);
