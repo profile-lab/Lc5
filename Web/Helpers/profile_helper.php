@@ -88,6 +88,10 @@ function number_to_currency(float $num, string $currency, string $locale = null,
 //--------------------------------------------------
 function getServerMessage()
 {
+    $ui_mess_description = '';
+    if ($ui_mess_description_string = session()->getFlashdata('ui_mess_description')) {
+        $ui_mess_description = '<div class="alert-description">' . $ui_mess_description_string . '</div>';
+    }
     if ($ui_mess = session()->getFlashdata('ui_mess')) {
         if (is_array($ui_mess)) {
             $ui_mess_text = '';
@@ -100,8 +104,15 @@ function getServerMessage()
         if (!$ui_mess_type = session()->getFlashdata('ui_mess_type')) {
             $ui_mess_type = 'alert alert-info';
         }
-        return '<div class="' . $ui_mess_type . '" role="alert">' . $ui_mess_text . '</div>';
+        return '
+        <div class="' . $ui_mess_type . '" role="alert">
+            <div class="alert-header">' . $ui_mess_text . '</div>' . $ui_mess_description . '
+        </div>
+        ';
     }
+    session()->setFlashdata('ui_mess', NULL);
+    session()->setFlashdata('ui_mess_description', NULL);
+    session()->setFlashdata('ui_mess_type', NULL);
     return NULL;
 }
 
@@ -229,18 +240,18 @@ function h6($txt = null, $cssClass = '', $pre_txt = '', $add_txt = '')
 function txt($txt = null, $cssClass = '', $tag = 'div', $container_open = null, $container_close = null, $nl2br = false, $label = false, $label_spacer = ':', $labelTag = 'span')
 {
     $return_html = '';
-    if(!isset($txt) || $txt == '' || $txt == '<p><br></p>' || $txt == '<p><br/></p>' || strip_tags($txt) == ''){
+    if (!isset($txt) || $txt == '' || $txt == '<p><br></p>' || $txt == '<p><br/></p>' || strip_tags($txt) == '') {
         return $return_html;
     }
-    if (isset($txt) && $txt != '' ) {
+    if (isset($txt) && $txt != '') {
         $return_html = '<' . $tag . ' class="' . $cssClass . '">';
-        if($label){
-            $return_html.= '<' . $labelTag . ' class="' . $cssClass . '-label">' . $label . $label_spacer . ' </' . $labelTag . '>' ;
-            $return_html.= '<div class="' . $cssClass . '-txt">' ;
+        if ($label) {
+            $return_html .= '<' . $labelTag . ' class="' . $cssClass . '-label">' . $label . $label_spacer . ' </' . $labelTag . '>';
+            $return_html .= '<div class="' . $cssClass . '-txt">';
         }
         $return_html .= (($nl2br) ? my_nl2br($txt) : $txt);
-        if($label){
-            $return_html.= '</div>' ;
+        if ($label) {
+            $return_html .= '</div>';
         }
         $return_html .= '</' . $tag . '>';
         if ($container_open && $container_close) {
