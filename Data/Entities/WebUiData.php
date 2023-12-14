@@ -39,12 +39,6 @@ class WebUiData extends Entity
         unset($app_settings->updated_at);
 
         $app = (object) array_merge((array) $app_base_data, (array) $app_settings);
-
-
-        // d($app_base_data);
-        // d($app_settings);
-        // dd($app);
-        
     
         // 
         // 
@@ -76,18 +70,26 @@ class WebUiData extends Entity
             }
         }
         
-      
+        
         $base_attributes = [
             'app' => $app,
             //
-            'web_user_id' => session()->get('user_id'),
-            'web_user_data' => session()->get('user_data'),
-            'web_user_isLoggedIn' => session()->get('isUserLoggedIn'),
+            // 'web_user_id' => session()->get('user_id'),
+            // 'web_user_data' => session()->get('user_data'),
+            // 'web_user_isLoggedIn' => session()->get('isUserLoggedIn'),
             // 
             'site_menus' => $menus_arr,
             'lang_menu' => $menu_lang,
             //
         ];
+
+        $appuserClassNamespace = '\LcUsers\Web\Controllers\Appuser'; 
+        if(class_exists($appuserClassNamespace)){
+            $appuser = new $appuserClassNamespace();
+            $base_attributes['app_user_data'] = $appuser->getUserData();
+            $base_attributes['app_user_isLoggedIn'] = $appuser->getLoggedIn();
+            $base_attributes['app_user_id'] = $appuser->getUserId();
+        }
 
         // if(shopcart)
         $cart = \Config\Services::shopcart();
@@ -102,9 +104,12 @@ class WebUiData extends Entity
 	protected $attributes = [
         'app' => null,
         // 
-        'web_user_id' => null,
-        'web_user_data' => null,
-        'web_user_isLoggedIn' => null,
+        'app_user_data' => null,
+        'app_user_isLoggedIn' => null,
+        'app_user_id' => null,
+        // 'web_user_id' => null,
+        // 'web_user_data' => null,
+        // 'web_user_isLoggedIn' => null,
         // 
         'posts_archive_name' => null,
         'posts_archive_index' => null,
