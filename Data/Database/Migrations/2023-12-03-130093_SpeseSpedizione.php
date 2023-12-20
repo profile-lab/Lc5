@@ -58,6 +58,12 @@ class SpeseSpedizione extends Migration
 				'constraint' => '10,2',
 				'default' => NULL
 			],
+			'prezzo_aliquota' => [
+				'type' => 'int',
+				'constraint' => '2',
+				'null' => true,
+				'default' => 22
+			],
 			'post_type' => [
 				'type'			=> 'INT',
 				'constraint'	=> 11,
