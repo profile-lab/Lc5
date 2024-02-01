@@ -11,7 +11,9 @@ class Lcapp extends Entity
 		'nome' => null,
 		'apikey' => null,
 
-		'domain' => null, 
+		'domain' => null,
+		'status' => 1,
+		'is_in_maintenance_mode' => 0,
 		// 'email' => null, 
 		// 'phone' => null, 
 		// 'address' => null, 
@@ -28,5 +30,5 @@ class Lcapp extends Entity
 
 		'labels_json_object' => null,
 
-    ];
+	];
 }

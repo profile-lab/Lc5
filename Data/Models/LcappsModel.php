@@ -17,6 +17,8 @@ class LcappsModel extends MasterModel
 		'nome',
 		'apikey',
 		'domain',
+		'status',
+		'is_in_maintenance_mode',
 		// 'email', 
 		// 'phone', 
 		// 'address', 

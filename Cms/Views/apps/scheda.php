@@ -34,6 +34,11 @@
         <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Dominio', 'name' => 'domain', 'value' => $entity->domain, 'width' => 'col-md-12', 'placeholder' => 'https://...']]) ?>
 
     </div>
+    <div class="row form-row">
+        <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => 'In manutenzione', 'name' => 'is_in_maintenance_mode', 'input_class' => 'is_in_maintenance_mode', 'value' => $entity->is_in_maintenance_mode, 'width' => 'col-md-12', 'sources' => $bool_values, 'no_empty' => true]]); ?>
+        <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => 'Attiva', 'name' => 'status', 'input_class' => 'status', 'value' => $entity->status, 'width' => 'col-md-12', 'sources' => $bool_values, 'no_empty' => true]]); ?>
+        
+    </div>
 
     <?php if (isset($app_languages)) { ?>
         <div class="row form-row">
@@ -125,14 +130,14 @@
             <input type="text" name="label_key[]" value="" class="form-control label_key">
         </div>
         <?php if (isset($app_languages)) { ?>
-                <div class="form-field-label_vals_cnt">
-                    <?php foreach ($app_languages as $__lang) { ?>
-                        <div class="form-field-label_val ">
-                            <label><?= $__lang->nome ?></label>
-                            <input type="text" name="<?= 'label_' . $__lang->val . '[]' ?>" value="" meta-lang="<?= $__lang->val ?>" class="form-control label_val">
-                        </div>
-                    <?php } ?>
-                </div>
+            <div class="form-field-label_vals_cnt">
+                <?php foreach ($app_languages as $__lang) { ?>
+                    <div class="form-field-label_val ">
+                        <label><?= $__lang->nome ?></label>
+                        <input type="text" name="<?= 'label_' . $__lang->val . '[]' ?>" value="" meta-lang="<?= $__lang->val ?>" class="form-control label_val">
+                    </div>
+                <?php } ?>
+            </div>
         <?php } ?>
         <div class="delete_row_cnt">
             <a class="btn btn-danger btn-sm btn-sm mt-3 py-1 px-2 delete_row" href="#"><span class="oi oi-trash m-0"></span></a>

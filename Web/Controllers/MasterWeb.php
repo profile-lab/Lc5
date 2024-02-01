@@ -177,9 +177,10 @@ class MasterWeb extends BaseController
 	//--------------------------------------------------------------------
 	protected function checkIsInMaintenance()
 	{
+		// dd($this->web_ui_date->app);
 		// 
 		$is_in_maintenance = FALSE;
-		if ((ENVIRONMENT != 'production' && env('custom.maintenance_mode') != 'DISABLED') || env('custom.maintenance_mode') == 'ACTIVE') {
+		if (((ENVIRONMENT != 'production' && env('custom.maintenance_mode') != 'DISABLED') || env('custom.maintenance_mode') == 'ACTIVE') || ($is_in_maintenance_mode = $this->web_ui_date->app->is_in_maintenance_mode)) {
 			$admins = \Config\Services::admins();
 			if ($this->req->getPath() == 'add-maintainer') {
 				return FALSE;
