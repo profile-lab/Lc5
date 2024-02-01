@@ -159,7 +159,7 @@ class MasterWeb extends BaseController
 			$htmlbody = str_replace('{{email}}', $post_data['email'], $htmlbody);
 			$htmlbody = str_replace('{{tel}}', $post_data['tel'], $htmlbody);
 			$htmlbody = str_replace('{{message}}', nl2br($post_data['message']), $htmlbody);
-			$email_subject = 'Richiesta info da ' . env('custom.app_name');
+			$email_subject = 'Richiesta info da ' . '=?UTF-8?B?'.base64_encode(env('custom.app_name')).'?=';
 			if ($this->inviaEmail($toAddress, $email_subject, $htmlbody)) {
 				$user_mess->type = 'ok';
 				$user_mess->title = $this->appLabelMethod('Email inviata con successo', $this->web_ui_date->app->labels);
