@@ -4,7 +4,7 @@ namespace Lc5\Data\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Lcapps_v2 extends Migration
+class Lcapps_v3 extends Migration
 {
     private $db_table = 'lcapps';
     protected $__fields = [
