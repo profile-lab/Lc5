@@ -37,6 +37,10 @@
 
         git submodule update --init --recursive
 
+#### Add Lc5 modules on git repository on plesk
+
+        ----
+
 #
 
 # Install on remote server by composer
