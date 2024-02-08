@@ -39,8 +39,12 @@
 
 #### Add Lc5 modules on git repository on plesk
 
-        add new Git Repositories for each active submodules in the project 
-        add Webhooks on github remote project setting (disable SSL verification and check domain mame)
+        - add new Git Repositories for each active submodules in the project 
+        - add Webhooks on github remote project setting 
+                
+                - Payload URL: copy from server git componet and check domain mame replace (https://domain.ext:8443 -> https://subdomanin.domain.ext:8443)
+                - Content type application/json
+                - disable SSL verification
 
 
 #
