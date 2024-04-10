@@ -731,6 +731,7 @@ class MasterLc extends BaseController
 					$curr_row_entity = new Row();
 				}
 				// 
+				$curr_row_entity->master_row = intval($curr_row_entity->master_row) + 1;
 				$curr_row_entity->parent = $parent;
 				$curr_row_entity->type = $this->req->getPost($prefix . 'type')[$count_type];
 				$curr_row_entity->modulo = $modulo;
@@ -777,6 +778,7 @@ class MasterLc extends BaseController
 					$curr_row_entity = new Row();
 				}
 				// 
+				$curr_row_entity->master_row = intval($curr_row_entity->master_row) + 1;
 				$curr_row_entity->parent = $parent;
 				$curr_row_entity->type = $this->req->getPost($prefix . 'type')[$count_type];
 				$curr_row_entity->modulo = $modulo;
@@ -818,6 +820,7 @@ class MasterLc extends BaseController
 					$curr_row_entity = new Row();
 				}
 				// 
+				$curr_row_entity->master_row = intval($curr_row_entity->master_row) + 1;
 				$curr_row_entity->parent = $parent;
 				$curr_row_entity->type = $this->req->getPost($prefix . 'type')[$count_type];
 				$curr_row_entity->modulo = $modulo;
@@ -857,6 +860,7 @@ class MasterLc extends BaseController
 					$curr_row_entity = new Row();
 				}
 				// 
+				$curr_row_entity->master_row = intval($curr_row_entity->master_row) + 1;
 				$curr_row_entity->parent = $parent;
 				$curr_row_entity->type = $this->req->getPost($prefix . 'type')[$count_type];
 				$curr_row_entity->modulo = $modulo;
