@@ -25,6 +25,17 @@ class DesignSystem extends MasterWeb
 			return view($this->base_view_namespace.'design-system');
 		}
 	}
+	//--------------------------------------------------------------------
+	public function grid()
+	{
+		//
+		if (appIsFile($this->base_view_filesystem . 'design-system-grid.php')) {
+			return view($this->base_view_namespace . 'design-system-grid');
+		} else {
+			$this->base_view_namespace = $this->lc5_views_namespace;
+			return view($this->base_view_namespace.'design-system-grid');
+		}
+	}
 
 	
 }
