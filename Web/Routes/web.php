@@ -30,6 +30,8 @@ $routes->add('archivio/(:segment)/(:segment)/', '\Lc5\Web\Controllers\Posts::pos
 $routes->add('archivio/(:segment)', '\Lc5\Web\Controllers\Posts::index/$1', ['as' => 'web_posts_archive']);
 $routes->add('archivio', '\Lc5\Web\Controllers\Posts::archivioDefault', ['as' => 'web_posts_archivie_default']);
 //
+$routes->add('design-system', '\Lc5\Web\Controllers\DesignSystem::list', ['as' => 'desisgn_system_page']);
+// 
 $routes->add('(:any)', '\Lc5\Web\Controllers\Pages::page/$1', ['as' => 'web_page']);
 $routes->get('/', '\Lc5\Web\Controllers\Pages::index', ['as' => 'web_homepage']);
 $routes->add('', '\Lc5\Web\Controllers\Pages::index');
