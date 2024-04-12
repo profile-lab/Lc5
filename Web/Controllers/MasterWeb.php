@@ -49,12 +49,24 @@ class MasterWeb extends BaseController
 		$this->base_assets_folder = (getenv('custom.base_assets_folder')) ?  getenv('custom.base_assets_folder') . '/' : '/assets/';
 		$this->req = \Config\Services::request();
 		$locale = $this->req->getLocale();
-		define('__locale__', $locale);
-		define('__default_locale__', $this->req->getDefaultLocale());
-		define('__locale_uri__', (__locale__ != getenv('app.defaultLocale')) ? __locale__ : '');
-		define('__web_app_id__', getenv('custom.web_app_id'));
-		define('__post_per_page__', (getenv('custom.post_per_page')) ?: 25);
-		define('__base_assets_folder__', $this->base_assets_folder);
+		if(!defined('__locale__')){
+			define('__locale__', $locale);
+		}
+		if(!defined('__default_locale__')){
+			define('__default_locale__', $this->req->getDefaultLocale());
+		}
+		if(!defined('__locale_uri__')){
+			define('__locale_uri__', (__locale__ != getenv('app.defaultLocale')) ? __locale__ : '');
+		}
+		if(!defined('__web_app_id__')){
+			define('__web_app_id__', getenv('custom.web_app_id'));
+		}
+		if(!defined('__post_per_page__')){
+			define('__post_per_page__', (getenv('custom.post_per_page')) ?: 25);
+		}
+		if(!defined('__base_assets_folder__')){
+			define('__base_assets_folder__', $this->base_assets_folder);
+		}
 		// 
 		$this->send_mail_config = $this->getEnvEmailConfig();
 		// 

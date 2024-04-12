@@ -37,6 +37,16 @@ $routes->add('(:any)', '\Lc5\Web\Controllers\Pages::page/$1', ['as' => 'web_page
 $routes->get('/', '\Lc5\Web\Controllers\Pages::index', ['as' => 'web_homepage']);
 $routes->add('', '\Lc5\Web\Controllers\Pages::index');
 
+$routes->set404Override('\Lc5\Web\Controllers\Pages::error404');
 $routes->setDefaultNamespace('\Lc5\Web\Controllers\Pages');
 $routes->setDefaultController('Pages');
 $routes->setDefaultMethod('index');
+
+// $routes->set404Override(function( $message = null )
+// {
+//     $data = [
+//         'title' => '404 - Page not found',
+//         'message' => $message,
+//     ];
+//     echo view('my404/viewfile', $data);
+// });

@@ -26,11 +26,30 @@ class Pages extends MasterWeb
 	public function addMaintainer()
 	{
 		$data = [
-			'maintainer_user' => 'maintainer_'.uniqid()
+			'maintainer_user' => 'maintainer_' . uniqid()
 		];
 		session()->set($data);
 		return redirect()->route('web_homepage');
 		// return $this->page();
+	}
+
+	//--------------------------------------------------------------------
+	public function error404()
+	{
+		$curr_entity = new \stdClass();
+		$curr_entity->titolo = 'Errore 404';
+		$curr_entity->testo = 'Pagina non trovata';
+		$curr_entity->seo_title = '404 Pagina non trovata';
+		$curr_entity->seo_description = '404 Pagina non trovata';
+
+		$this->web_ui_date->fill((array)$curr_entity);
+		$this->web_ui_date->__set('master_view', '404');
+		if (appIsFile($this->base_view_filesystem . '404.php')) {
+			return view($this->base_view_namespace . '404', $this->web_ui_date->toArray());
+		}
+		$this->base_view_namespace = $this->lc5_views_namespace;
+		$this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
+		return view($this->base_view_namespace . '404', $this->web_ui_date->toArray());
 	}
 
 	//--------------------------------------------------------------------
@@ -55,9 +74,9 @@ class Pages extends MasterWeb
 		}
 		// 
 		$custom_parameters = null;
-		if(isset($curr_entity->entity_free_values_object) && is_array($curr_entity->entity_free_values_object) && count($curr_entity->entity_free_values_object) > 0){
+		if (isset($curr_entity->entity_free_values_object) && is_array($curr_entity->entity_free_values_object) && count($curr_entity->entity_free_values_object) > 0) {
 			$custom_parameters = new \stdClass();
-			foreach($curr_entity->entity_free_values_object as $free_val){
+			foreach ($curr_entity->entity_free_values_object as $free_val) {
 				$curr_entity->{url_title($free_val->key, '_', TRUE)} =  $free_val->value;
 				$custom_parameters->{url_title($free_val->key, '_', TRUE)} =  $free_val->value;
 			}
@@ -68,7 +87,7 @@ class Pages extends MasterWeb
 		// 
 		$this->web_ui_date->entity_rows = $this->getEntityRows($curr_entity->id, 'pages');
 		// 
-		if(isset($this->custom_app_contoller) && $this->custom_app_contoller ){
+		if (isset($this->custom_app_contoller) && $this->custom_app_contoller) {
 			$custom_app_contoller_method = lcfirst(str_replace(' ', '', ucwords(preg_replace('/[\s_]+/', ' ', str_replace(['-', '_'], ' ', $curr_entity->type)))));
 
 			if (method_exists($this->custom_app_contoller, $custom_app_contoller_method)) {
@@ -83,11 +102,11 @@ class Pages extends MasterWeb
 		if (appIsFile($this->base_view_filesystem . 'page-default.php')) {
 			$this->web_ui_date->__set('master_view', 'default');
 			return view($this->base_view_namespace . 'page-default', $this->web_ui_date->toArray());
-		}else{
+		} else {
 			$this->base_view_namespace = $this->lc5_views_namespace;
 			$this->web_ui_date->__set('master_view', 'lc-default');
 			$this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
-			return view($this->base_view_namespace.'page-default', $this->web_ui_date->toArray());
+			return view($this->base_view_namespace . 'page-default', $this->web_ui_date->toArray());
 		}
 	}
 
