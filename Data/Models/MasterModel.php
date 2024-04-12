@@ -70,18 +70,39 @@ class MasterModel extends Model
 	//----------------------------------------------------------------
 	protected function setDataAppAndLang($data)
 	{
-		if (in_array('lang', $this->allowedFields)) {
-			if ($curr_lc_lang = session()->get('curr_lc_lang')) {
-				if (isset($data['data']['lang'])) {
-					// dd($data['data']);
-				} else {
-					$data['data']['lang'] = $curr_lc_lang;
+		if ($this->is_for_frontend) {
+
+			$curr_lang = defined('__locale__') ? __locale__ : session()->get('curr_lc_lang');
+			$curr_app = defined('__web_app_id__') ? __web_app_id__ : session()->get('curr_lc_app');
+
+			if (in_array('lang', $this->allowedFields)) {
+				if (isset($curr_lang) && $curr_lang != null && $curr_lang != '') {
+					if (isset($data['data']['lang'])) {
+						// dd($data['data']);
+					} else {
+						$data['data']['lang'] = $curr_lang;
+					}
 				}
 			}
-		}
-		if (in_array('id_app', $this->allowedFields)) {
-			if ($curr_lc_app = session()->get('curr_lc_app')) {
-				$data['data']['id_app'] = $curr_lc_app;
+			if (in_array('id_app', $this->allowedFields)) {
+				if ($curr_app) {
+					$data['data']['id_app'] = $curr_app;
+				}
+			}
+		} else {
+			if (in_array('lang', $this->allowedFields)) {
+				if ($curr_lc_lang = session()->get('curr_lc_lang')) {
+					if (isset($data['data']['lang'])) {
+						// dd($data['data']);
+					} else {
+						$data['data']['lang'] = $curr_lc_lang;
+					}
+				}
+			}
+			if (in_array('id_app', $this->allowedFields)) {
+				if ($curr_lc_app = session()->get('curr_lc_app')) {
+					$data['data']['id_app'] = $curr_lc_app;
+				}
 			}
 		}
 		return $data;
