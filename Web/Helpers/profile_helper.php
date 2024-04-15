@@ -293,6 +293,20 @@ function appIsFile(string $path)
     return FALSE;
 }
 
+
+
+function customOrDefaultViewFragment(string $path, string $defaultLcNamespace = 'Lc5')
+{
+    $defaultLcNamespaceFullPath =  $defaultLcNamespace . DIRECTORY_SEPARATOR . "Web" . DIRECTORY_SEPARATOR . "Views";
+    if (appIsFile('Views' . DIRECTORY_SEPARATOR . ((getenv('custom.web_base_folder')) ?  getenv('custom.web_base_folder') . '/' : '') . $path . '.php')) {
+        return $path;
+    } else if (is_file(ROOTPATH . DIRECTORY_SEPARATOR . $defaultLcNamespaceFullPath . DIRECTORY_SEPARATOR . $path . '.php')) {
+        return "\\".$defaultLcNamespaceFullPath.DIRECTORY_SEPARATOR .$path;
+    }
+
+    throw \CodeIgniter\Exceptions\FrameworkException::forInvalidFile('View file not found - ' . $path . '.php - ');
+}
+
 //--------------------------------------------------
 //--------------------------------------------------
 //--------------------------------------------------
