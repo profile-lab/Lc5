@@ -42,6 +42,7 @@ class Migrate extends \CodeIgniter\Controller
 		$seeder->call('\Lc5\Data\Database\Seeds\Language');
 		$seeder->call('\Lc5\Data\Database\Seeds\Sitemenus');
 		$seeder->call('\Lc5\Data\Database\Seeds\ShopAliquote');
+		$seeder->call('\Lc5\Data\Database\Seeds\ShopSettings');
 	}
 
 	//
