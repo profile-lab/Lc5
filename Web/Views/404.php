@@ -3,8 +3,16 @@
 <article>
     <div class="row">
         <div class="myIn">
-            <h2><?= lang('Errors.pageNotFound') ?>
+            <h1><?= lang('Errors.pageNotFound') ?></h1>
+            <p>
+                <?php if (ENVIRONMENT !== 'production') : ?>
+                    <?= nl2br(esc($message)) ?>
+                <?php else : ?>
+                    <?= lang('Errors.sorryCannotFind') ?>
+                <?php endif; ?>
+            </p>
         </div>
+    </div>
 </article>
 
 

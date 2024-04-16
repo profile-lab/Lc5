@@ -34,7 +34,7 @@ class Pages extends MasterWeb
 	}
 
 	//--------------------------------------------------------------------
-	public function error404()
+	public function error404($error = null)
 	{
 		$curr_entity = new \stdClass();
 		$curr_entity->titolo = 'Errore 404';
@@ -44,6 +44,8 @@ class Pages extends MasterWeb
 
 		$this->web_ui_date->fill((array)$curr_entity);
 		$this->web_ui_date->__set('master_view', '404');
+		$this->web_ui_date->__set('message', lang('Contenuto non trovato'));
+
 		if (appIsFile($this->base_view_filesystem . '404.php')) {
 			return view($this->base_view_namespace . '404', $this->web_ui_date->toArray());
 		}
