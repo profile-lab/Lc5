@@ -169,6 +169,20 @@ if (env('custom.hide_lc_cms') === TRUE) {
 					$routes->add('create',  'LcTools::uploadFilesBkpCreate', ['as' => 'lc_tools_uploadfiles_create']);
 					$routes->add('',  'LcTools::uploadFilesBkpIndex', ['as' => 'lc_tools_uploadfiles']);
 				});
+				$routes->group('file-formats', function ($routes) {
+					$routes->add('export',  'LcTools::fileFormatsExport', ['as' => 'lc_tools_file_format_export']);
+					$routes->add('elimina/(:any)/(:any)',  'LcTools::fileFormatsElimina/$1/$2', ['as' => 'lc_tools_file_format_export_delete_item']);
+					$routes->add('downloads/(:any)/(:any)',  'LcTools::fileFormatsScarica/$1/$2', ['as' => 'lc_tools_file_format_export_download_item']);
+					$routes->add('import/(:any)',  'LcTools::fileFormatsImport/$1', ['as' => 'lc_tools_file_format_export_import']);
+					$routes->add('',  'LcTools::fileFormats', ['as' => 'lc_tools_file_format']);
+				});
+				$routes->group('page-and-paragraphs', function ($routes) {
+					$routes->add('export',  'LcTools::pagesAndParagraphsExport', ['as' => 'lc_tools_page_par_config_export']);
+					$routes->add('elimina/(:any)/(:any)',  'LcTools::pagesAndParagraphsElimina/$1/$2', ['as' => 'lc_tools_page_par_config_export_delete_item']);
+					$routes->add('downloads/(:any)/(:any)',  'LcTools::pagesAndParagraphsScarica/$1/$2', ['as' => 'lc_tools_page_par_config_export_download_item']);
+					$routes->add('import/(:any)',  'LcTools::pagesAndParagraphsImport/$1', ['as' => 'lc_tools_page_par_config_export_import']);
+					$routes->add('',  'LcTools::pagesAndParagraphs', ['as' => 'lc_tools_page_par_config']);
+				});
 
 
 

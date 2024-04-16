@@ -9,6 +9,7 @@ use Mysqldump\Mysqldump as Mysqldump;
 
 class LcTools extends MasterLc
 {
+    private $fileformats_save_folder = WRITEPATH . 'uploads/file-formats/';
     private $database_save_folder = WRITEPATH . 'uploads/dump/';
     private $files_save_folder = WRITEPATH . 'uploads/files/';
     //--------------------------------------------------------------------
@@ -36,6 +37,7 @@ class LcTools extends MasterLc
         $tools_list[] = (object)['nome' => 'Files Backup', 'route' => route_to($this->route_prefix . '_uploadfiles')];
         $tools_list[] = (object)['nome' => 'Aggiorna struttura Database', 'route' => route_to('lc_update_db')];
         $tools_list[] = (object)['nome' => 'Struttura database', 'route' => route_to('lc_tables_structure')];
+        $tools_list[] = (object)['nome' => 'File Formats', 'route' => route_to($this->route_prefix . '_file_format')];
         $this->lc_ui_date->list = $tools_list;
         // 
         return view('Lc5\Cms\Views\lc-tools/index', $this->lc_ui_date->toArray());
@@ -56,7 +58,7 @@ class LcTools extends MasterLc
             $scanned_directory = array_diff(scandir($this->files_save_folder), array('..', '.'));
             foreach ($scanned_directory as $key => $value) {
                 $file = new \CodeIgniter\Files\File($this->files_save_folder . $value);
-                $megabytes = $file->getSizeByUnit('mb'); 
+                $megabytes = $file->getSizeByUnit('mb');
                 $extension = strtolower(pathinfo($value, PATHINFO_EXTENSION));
                 $nome_file_str = str_replace('.' . $extension, '', $value);
                 $dump_files_list[] = (object)[
@@ -72,7 +74,7 @@ class LcTools extends MasterLc
         // 
         return view('Lc5\Cms\Views\lc-tools/files/index', $this->lc_ui_date->toArray());
     }
-    
+
     //--------------------------------------------------------------------
     public function uploadFilesBkpCreate()
     {
@@ -120,7 +122,6 @@ class LcTools extends MasterLc
             $zip->close();
             echo 'Archiving is sucessful!';
             return redirect()->route($this->route_prefix . '_uploadfiles');
-
         } else {
             echo 'Error, can\'t create a zip file!';
         }
@@ -146,7 +147,7 @@ class LcTools extends MasterLc
             exit;
         }
     }
-    
+
     //--------------------------------------------------------------------
     public function uploadFilesBkpDelete($filename)
     {
@@ -170,7 +171,7 @@ class LcTools extends MasterLc
             $scanned_directory = array_diff(scandir($this->database_save_folder), array('..', '.'));
             foreach ($scanned_directory as $key => $value) {
                 $file = new \CodeIgniter\Files\File($this->database_save_folder . $value);
-                $megabytes = $file->getSizeByUnit('mb'); 
+                $megabytes = $file->getSizeByUnit('mb');
                 $extension = strtolower(pathinfo($value, PATHINFO_EXTENSION));
                 $nome_file_str = str_replace('.' . $extension, '', $value);
                 $dump_files_list[] = (object)[
@@ -260,4 +261,160 @@ class LcTools extends MasterLc
         unlink($file);
         return redirect()->route($this->route_prefix . '_db');
     }
+
+
+
+    //--------------------------------------------------------------------
+    //------------- FILE FORMATS -----------------------------------------
+    //--------------------------------------------------------------------
+
+    //--------------------------------------------------------------------
+    public function fileFormats()
+    {
+        $this->lc_ui_date->__set('module_name', 'Lc Tools - File Formats');
+        $dump_files_list = [];
+        if (is_dir($this->fileformats_save_folder)) {
+            $scanned_directory = array_diff(scandir($this->fileformats_save_folder), array('..', '.'));
+            foreach ($scanned_directory as $key => $value) {
+                $file = new \CodeIgniter\Files\File($this->fileformats_save_folder . $value);
+                $megabytes = $file->getSizeByUnit('mb');
+                $extension = strtolower(pathinfo($value, PATHINFO_EXTENSION));
+                $nome_file_str = str_replace('.' . $extension, '', $value);
+                $dump_files_list[] = (object)[
+                    'value' => $value,
+                    'megabytes' => $megabytes,
+                    'download' => route_to($this->route_prefix . '_file_format_export_download_item', $nome_file_str, $extension),
+                    'importa' => route_to($this->route_prefix . '_file_format_export_import', $nome_file_str),
+                    'delete' => route_to($this->route_prefix . '_file_format_export_delete_item', $nome_file_str, $extension),
+                ];
+            }
+        }
+        $this->lc_ui_date->list = $dump_files_list;
+        // 
+        return view('Lc5\Cms\Views\lc-tools/file-formats/index', $this->lc_ui_date->toArray());
+    }
+    
+    //--------------------------------------------------------------------
+    public function fileFormatsExport()
+    {
+        $this->lc_ui_date->__set('module_name', 'Lc Tools - File Formats');
+
+        if (!is_dir($this->fileformats_save_folder)) {
+            mkdir($this->fileformats_save_folder, 0777, true);
+        }
+        $table_name = 'mediaformats';
+        $database = env('database.default.database');
+        // 
+        $file_content_str = '';
+        $db = \Config\Database::connect();
+		if ($table_name) {
+			if ($db->tableExists($table_name)) {
+                $fields = $db->getFieldData($table_name);
+                if(count($fields) > 0){
+                    $file_content_str .= 'INSERT INTO `' . $table_name . '` (';
+                }
+                $contaFields = 0;
+                foreach ($fields as $field) {
+                    $file_content_str .=($contaFields>0 ? ', ' : '') . '`' . $field->name . '`';    
+                    $contaFields++;
+                }
+                
+                $file_content_str .= ') VALUES' . "\n";
+                $query = $db->table($table_name)->get();
+
+                $contaRows = 0;
+                foreach ($query->getResult() as $row) {
+                    $file_content_str .= (( $contaRows > 0 ) ? ",\n" : "") . '(';
+                    $contaFields = 0;
+                    foreach ($fields as $field) {
+                        $file_content_str .= ($contaFields>0 ? ', ' : '');
+                        if($field->type == 'int'){
+                            $file_content_str .= $row->{$field->name};
+                        }else if($field->type == 'timestamp'){
+                            if(trim($row->{$field->name}) && $row->{$field->name} != '0000-00-00 00:00:00'){
+                                $file_content_str .= "'" . $row->{$field->name} . "'";
+                            }else{
+                                $file_content_str .= "NULL";
+                            }
+                        }else{
+                            $file_content_str .= "'" . $row->{$field->name} . "'";
+                        }
+                        $contaFields++;
+                    }
+                    $file_content_str .= ")";
+                    $contaRows++;
+                }
+                $file_content_str .= ";";
+            }
+        }
+        // 
+        $nome_sql_file = 'file_formats_' . date("Y-m-d_His") . '-'.$database.'.sql';
+        $save_sql_file_path = $this->fileformats_save_folder . $nome_sql_file;
+        try {
+            $fp = fopen($save_sql_file_path, 'a+');
+            fwrite($fp, $file_content_str);
+            fclose($fp);
+            // 
+            return redirect()->route($this->route_prefix . '_file_format');
+        } catch (\Exception $e) {
+            echo 'error on file write error: ' . $e->getMessage();
+        }
+    }
+
+    //--------------------------------------------------------------------
+    public function fileFormatsElimina($filename, $extension)
+    {
+        $file = $this->fileformats_save_folder . $filename . '.' . $extension;
+        unlink($file);
+        return redirect()->route($this->route_prefix . '_file_format');
+    }
+    
+    //--------------------------------------------------------------------
+    public function fileFormatsScarica($filename, $extension)
+    {
+        $file = $this->fileformats_save_folder . $filename . '.' . $extension;
+
+        if (file_exists($file)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename=' . basename($file));
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            ob_clean();
+            flush();
+            readfile($file);
+            exit;
+        }
+    }
+    
+    //--------------------------------------------------------------------
+    public function fileFormatsImport($filename)
+    {
+        $table_name = 'mediaformats';
+
+        $this->lc_ui_date->__set('module_name', 'Lc Tools - File Formats');
+        $file = $this->fileformats_save_folder . $filename . '.sql';
+        if (file_exists($file)) {
+            $sql = file_get_contents($file);
+            $db = \Config\Database::connect();
+            // $db->transStart();
+            $db->query('TRUNCATE TABLE `'.$table_name.'`;');
+            $db->query('ALTER TABLE `'.$table_name.'` AUTO_INCREMENT = 1;');
+            $db->query($sql);
+            $db->transComplete();
+            if ($db->transStatus() === FALSE) {
+                dd('error on import');
+            } else {
+                // unlink($file);
+                return redirect()->route($this->route_prefix . '_file_format');
+            }
+        }
+        dd('file not found');
+        return redirect()->route($this->route_prefix . '_file_format');
+
+    }
+    
 }
