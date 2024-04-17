@@ -295,7 +295,7 @@ function appIsFile(string $path)
 
 
 
-function customOrDefaultViewFragment(string $path, string $defaultLcNamespace = 'Lc5')
+function customOrDefaultViewFragment(string $path, string $defaultLcNamespace = 'Lc5', $errorReturnType = 'Exceptions')
 {
     $defaultLcNamespaceFullPath =  $defaultLcNamespace . DIRECTORY_SEPARATOR . "Web" . DIRECTORY_SEPARATOR . "Views";
     if (appIsFile('Views' . DIRECTORY_SEPARATOR . ((getenv('custom.web_base_folder')) ?  getenv('custom.web_base_folder') . '/' : '') . $path . '.php')) {
@@ -303,8 +303,10 @@ function customOrDefaultViewFragment(string $path, string $defaultLcNamespace = 
     } else if (is_file(ROOTPATH . DIRECTORY_SEPARATOR . $defaultLcNamespaceFullPath . DIRECTORY_SEPARATOR . $path . '.php')) {
         return "\\".$defaultLcNamespaceFullPath.DIRECTORY_SEPARATOR .$path;
     }
-
-    throw \CodeIgniter\Exceptions\FrameworkException::forInvalidFile('View file not found - ' . $path . '.php - ');
+    if($errorReturnType == 'Exceptions'){
+        throw \CodeIgniter\Exceptions\FrameworkException::forInvalidFile('View file not found - ' . $path . '.php');
+    }
+    return FALSE;
 }
 
 //--------------------------------------------------
