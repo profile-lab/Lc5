@@ -9,6 +9,7 @@ use Mysqldump\Mysqldump as Mysqldump;
 
 class LcTools extends MasterLc
 {
+    private $pages_structure_save_folder = WRITEPATH . 'uploads/pages-structure/';
     private $fileformats_save_folder = WRITEPATH . 'uploads/file-formats/';
     private $database_save_folder = WRITEPATH . 'uploads/dump/';
     private $files_save_folder = WRITEPATH . 'uploads/files/';
@@ -38,6 +39,7 @@ class LcTools extends MasterLc
         $tools_list[] = (object)['nome' => 'Aggiorna struttura Database', 'route' => route_to('lc_update_db')];
         $tools_list[] = (object)['nome' => 'Struttura database', 'route' => route_to('lc_tables_structure')];
         $tools_list[] = (object)['nome' => 'File Formats', 'route' => route_to($this->route_prefix . '_file_format')];
+        $tools_list[] = (object)['nome' => 'Struttura pagine', 'route' => route_to($this->route_prefix . '_page_structure')];
         $this->lc_ui_date->list = $tools_list;
         // 
         return view('Lc5\Cms\Views\lc-tools/index', $this->lc_ui_date->toArray());
@@ -293,7 +295,7 @@ class LcTools extends MasterLc
         // 
         return view('Lc5\Cms\Views\lc-tools/file-formats/index', $this->lc_ui_date->toArray());
     }
-    
+
     //--------------------------------------------------------------------
     public function fileFormatsExport()
     {
@@ -307,36 +309,36 @@ class LcTools extends MasterLc
         // 
         $file_content_str = '';
         $db = \Config\Database::connect();
-		if ($table_name) {
-			if ($db->tableExists($table_name)) {
+        if ($table_name) {
+            if ($db->tableExists($table_name)) {
                 $fields = $db->getFieldData($table_name);
-                if(count($fields) > 0){
+                if (count($fields) > 0) {
                     $file_content_str .= 'INSERT INTO `' . $table_name . '` (';
                 }
                 $contaFields = 0;
                 foreach ($fields as $field) {
-                    $file_content_str .=($contaFields>0 ? ', ' : '') . '`' . $field->name . '`';    
+                    $file_content_str .= ($contaFields > 0 ? ', ' : '') . '`' . $field->name . '`';
                     $contaFields++;
                 }
-                
+
                 $file_content_str .= ') VALUES' . "\n";
                 $query = $db->table($table_name)->get();
 
                 $contaRows = 0;
                 foreach ($query->getResult() as $row) {
-                    $file_content_str .= (( $contaRows > 0 ) ? ",\n" : "") . '(';
+                    $file_content_str .= (($contaRows > 0) ? ",\n" : "") . '(';
                     $contaFields = 0;
                     foreach ($fields as $field) {
-                        $file_content_str .= ($contaFields>0 ? ', ' : '');
-                        if($field->type == 'int'){
+                        $file_content_str .= ($contaFields > 0 ? ', ' : '');
+                        if ($field->type == 'int') {
                             $file_content_str .= $row->{$field->name};
-                        }else if($field->type == 'timestamp'){
-                            if(trim($row->{$field->name}) && $row->{$field->name} != '0000-00-00 00:00:00'){
+                        } else if ($field->type == 'timestamp') {
+                            if (trim($row->{$field->name}) && $row->{$field->name} != '0000-00-00 00:00:00') {
                                 $file_content_str .= "'" . $row->{$field->name} . "'";
-                            }else{
+                            } else {
                                 $file_content_str .= "NULL";
                             }
-                        }else{
+                        } else {
                             $file_content_str .= "'" . $row->{$field->name} . "'";
                         }
                         $contaFields++;
@@ -348,7 +350,7 @@ class LcTools extends MasterLc
             }
         }
         // 
-        $nome_sql_file = 'file_formats_' . date("Y-m-d_His") . '-'.$database.'.sql';
+        $nome_sql_file = 'file_formats_' . date("Y-m-d_His") . '-' . $database . '.sql';
         $save_sql_file_path = $this->fileformats_save_folder . $nome_sql_file;
         try {
             $fp = fopen($save_sql_file_path, 'a+');
@@ -368,7 +370,7 @@ class LcTools extends MasterLc
         unlink($file);
         return redirect()->route($this->route_prefix . '_file_format');
     }
-    
+
     //--------------------------------------------------------------------
     public function fileFormatsScarica($filename, $extension)
     {
@@ -389,7 +391,7 @@ class LcTools extends MasterLc
             exit;
         }
     }
-    
+
     //--------------------------------------------------------------------
     public function fileFormatsImport($filename)
     {
@@ -401,8 +403,8 @@ class LcTools extends MasterLc
             $sql = file_get_contents($file);
             $db = \Config\Database::connect();
             // $db->transStart();
-            $db->query('TRUNCATE TABLE `'.$table_name.'`;');
-            $db->query('ALTER TABLE `'.$table_name.'` AUTO_INCREMENT = 1;');
+            $db->query('TRUNCATE TABLE `' . $table_name . '`;');
+            $db->query('ALTER TABLE `' . $table_name . '` AUTO_INCREMENT = 1;');
             $db->query($sql);
             $db->transComplete();
             if ($db->transStatus() === FALSE) {
@@ -414,7 +416,188 @@ class LcTools extends MasterLc
         }
         dd('file not found');
         return redirect()->route($this->route_prefix . '_file_format');
-
     }
-    
+
+
+    //--------------------------------------------------------------------
+    //------------- PAGE STRUCTURE ---------------------------------------
+    //--------------------------------------------------------------------
+
+    // pages_structure_save_folder
+    // pages-structure
+
+    //--------------------------------------------------------------------
+    public function pagesStructure()
+    {
+        $this->lc_ui_date->__set('module_name', 'Lc Tools - Pages Structure');
+        $dump_files_list = [];
+        if (is_dir($this->pages_structure_save_folder)) {
+            $scanned_directory = array_diff(scandir($this->pages_structure_save_folder), array('..', '.'));
+            foreach ($scanned_directory as $key => $value) {
+                $file = new \CodeIgniter\Files\File($this->pages_structure_save_folder . $value);
+                $megabytes = $file->getSizeByUnit('mb');
+                $extension = strtolower(pathinfo($value, PATHINFO_EXTENSION));
+                $nome_file_str = str_replace('.' . $extension, '', $value);
+                $dump_files_list[] = (object)[
+                    'value' => $value,
+                    'megabytes' => $megabytes,
+                    'download' => route_to($this->route_prefix . '_page_structure_export_download_item', $nome_file_str, $extension),
+                    'importa' => route_to($this->route_prefix . '_page_structure_export_import', $nome_file_str),
+                    'delete' => route_to($this->route_prefix . '_page_structure_export_delete_item', $nome_file_str, $extension),
+                ];
+            }
+        }
+        $this->lc_ui_date->list = $dump_files_list;
+        // 
+        return view('Lc5\Cms\Views\lc-tools/pages-structure/index', $this->lc_ui_date->toArray());
+    }
+    //--------------------------------------------------------------------
+    public function pagesStructureExport()
+    {
+        $this->lc_ui_date->__set('module_name', 'Lc Tools - File Formats');
+
+        if (!is_dir($this->pages_structure_save_folder)) {
+            mkdir($this->pages_structure_save_folder, 0777, true);
+        }
+        $table_names = ['pagestypes', 'rowsstyles', 'rows_extra_styles', 'rowscolors', 'rowcomponents', 'poststypes', 'custom_fields_keys'];
+        $database = env('database.default.database');
+        // 
+        $file_content_str = '';
+        $db = \Config\Database::connect();
+        if ($table_names && is_array($table_names) && count($table_names) > 0) {
+            foreach ($table_names as $table_name) {
+                if ($table_name) {
+                    if ($db->tableExists($table_name)) {
+                        $fields = $db->getFieldData($table_name);
+                        $query = $db->table($table_name)->get();
+                        $table_query_result = $query->getResult();
+                        if (count($fields) > 0 && count($table_query_result) > 0) {
+                            $file_content_str .= 'INSERT INTO `' . $table_name . '` (';
+                            $contaFields = 0;
+                            foreach ($fields as $field) {
+                                $file_content_str .= ($contaFields > 0 ? ', ' : '') . '`' . $field->name . '`';
+                                $contaFields++;
+                            }
+
+                            $file_content_str .= ') VALUES' . "\n";
+
+                            $contaRows = 0;
+                            foreach ($table_query_result as $row) {
+                                $file_content_str .= (($contaRows > 0) ? ",\n" : "") . '(';
+                                $contaFields = 0;
+                                foreach ($fields as $field) {
+                                    $file_content_str .= ($contaFields > 0 ? ', ' : '');
+                                    if ($field->type == 'int') {
+
+                                        if (trim($row->{$field->name}) && $row->{$field->name} != '') {
+                                            $file_content_str .= $row->{$field->name};
+                                        } else {
+                                            $file_content_str .= "NULL";
+                                        }
+
+                                    } else if ($field->type == 'timestamp') {
+                                        if (trim($row->{$field->name}) && $row->{$field->name} != '0000-00-00 00:00:00') {
+                                            $file_content_str .= "'" . $row->{$field->name} . "'";
+                                        } else {
+                                            $file_content_str .= "NULL";
+                                        }
+                                    } else {
+                                        $file_content_str .= "'" . $row->{$field->name} . "'";
+                                    }
+                                    $contaFields++;
+                                }
+                                $file_content_str .= ")";
+                                $contaRows++;
+                            }
+                            $file_content_str .= ";\n";
+                        }
+                    }
+                }
+            }
+        }
+        // 
+        $nome_sql_file = 'pages_structure_' . date("Y-m-d_His") . '-' . $database . '.sql';
+        $save_sql_file_path = $this->pages_structure_save_folder . $nome_sql_file;
+        try {
+            $fp = fopen($save_sql_file_path, 'a+');
+            fwrite($fp, $file_content_str);
+            fclose($fp);
+            // 
+            return redirect()->route($this->route_prefix . '_page_structure');
+        } catch (\Exception $e) {
+            echo 'error on file write error: ' . $e->getMessage();
+        }
+    }
+    //--------------------------------------------------------------------
+    public function pagesStructureElimina($filename, $extension)
+    {
+        $file = $this->pages_structure_save_folder . $filename . '.' . $extension;
+        unlink($file);
+        return redirect()->route($this->route_prefix . '_page_structure');
+    }
+
+    //--------------------------------------------------------------------
+    public function pagesStructureScarica($filename, $extension)
+    {
+        $file = $this->pages_structure_save_folder . $filename . '.' . $extension;
+
+        if (file_exists($file)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename=' . basename($file));
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            ob_clean();
+            flush();
+            readfile($file);
+            exit;
+        }
+    }
+    //--------------------------------------------------------------------
+    public function pagesStructureImport($filename)
+    {
+        $table_names = ['pagestypes', 'rowsstyles', 'rows_extra_styles', 'rowscolors', 'rowcomponents', 'poststypes', 'custom_fields_keys'];
+
+
+        $this->lc_ui_date->__set('module_name', 'Lc Tools - File Formats');
+        $file = $this->pages_structure_save_folder . $filename . '.sql';
+        if (file_exists($file)) {
+            $all_sql = file_get_contents($file);
+            $db = \Config\Database::connect();
+            
+            if($table_names && is_array($table_names) && count($table_names) > 0){
+                foreach($table_names as $table_name){
+                    $db->query('TRUNCATE TABLE `' . $table_name . '`;');
+                    $db->query('ALTER TABLE `' . $table_name . '` AUTO_INCREMENT = 1;');
+                }
+            }
+            $errors= [];
+            $all_sql_array = explode(';', $all_sql);
+            foreach ($all_sql_array as $sql) {
+                $sql = trim($sql);
+                if ($sql) {
+                    $db->transStart();
+                    $db->query($sql);
+                    $db->transComplete();
+                    if ($db->transStatus() === FALSE) {
+                        $errors[] = $sql;
+                    }
+                }
+            }
+            // $db->transStart();
+            // $db->query($sql);
+            // $db->transComplete();
+            if ($errors && count($errors) > 0){
+                dd('error on import');
+            } else {
+                // unlink($file);
+                return redirect()->route($this->route_prefix . '_page_structure');
+            }
+        }
+        dd('file not found');
+        return redirect()->route($this->route_prefix . '_page_structure');
+    }
 }

@@ -4,7 +4,7 @@
     <h1><?= $module_name ?></h1>
     <div class="d-flex align-items-center">
         <div>
-            <a class="btn btn-primary" href="<?= site_url(route_to('lc_tools_page_par_config_export')) ?>">Crea Backup adesso</a>
+            <a class="btn btn-primary" href="<?= site_url(route_to('lc_tools_page_structure_export')) ?>">Crea Backup adesso</a>
         </div>
     </div>
 </div>

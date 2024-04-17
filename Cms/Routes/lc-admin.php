@@ -176,12 +176,12 @@ if (env('custom.hide_lc_cms') === TRUE) {
 					$routes->add('import/(:any)',  'LcTools::fileFormatsImport/$1', ['as' => 'lc_tools_file_format_export_import']);
 					$routes->add('',  'LcTools::fileFormats', ['as' => 'lc_tools_file_format']);
 				});
-				$routes->group('page-and-paragraphs', function ($routes) {
-					$routes->add('export',  'LcTools::pagesAndParagraphsExport', ['as' => 'lc_tools_page_par_config_export']);
-					$routes->add('elimina/(:any)/(:any)',  'LcTools::pagesAndParagraphsElimina/$1/$2', ['as' => 'lc_tools_page_par_config_export_delete_item']);
-					$routes->add('downloads/(:any)/(:any)',  'LcTools::pagesAndParagraphsScarica/$1/$2', ['as' => 'lc_tools_page_par_config_export_download_item']);
-					$routes->add('import/(:any)',  'LcTools::pagesAndParagraphsImport/$1', ['as' => 'lc_tools_page_par_config_export_import']);
-					$routes->add('',  'LcTools::pagesAndParagraphs', ['as' => 'lc_tools_page_par_config']);
+				$routes->group('pages-structure', function ($routes) {
+					$routes->add('export',  'LcTools::pagesStructureExport', ['as' => 'lc_tools_page_structure_export']);
+					$routes->add('elimina/(:any)/(:any)',  'LcTools::pagesStructureElimina/$1/$2', ['as' => 'lc_tools_page_structure_export_delete_item']);
+					$routes->add('downloads/(:any)/(:any)',  'LcTools::pagesStructureScarica/$1/$2', ['as' => 'lc_tools_page_structure_export_download_item']);
+					$routes->add('import/(:any)',  'LcTools::pagesStructureImport/$1', ['as' => 'lc_tools_page_structure_export_import']);
+					$routes->add('',  'LcTools::pagesStructure', ['as' => 'lc_tools_page_structure']);
 				});
 
 
