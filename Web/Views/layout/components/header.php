@@ -5,6 +5,11 @@
         </a>
         <?= (isset($app->app_claim) && trim($app->app_claim)) ? '<div class="site_claim">'.$app->app_claim.'</div>' : '' ?>
     </div>
+    <div class="hamburger">
+        <div class="hamburger-box hamburger--elastic">
+            <div class="hamburger-inner"></div>
+        </div>
+    </div>
     <nav class="navbar site_navbar">
         <?php if (isset($site_menus['main-menu'])) { ?>
             <?= printSiteMenu($site_menus['main-menu'])  ?>
