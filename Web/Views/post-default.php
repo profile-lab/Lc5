@@ -1,17 +1,17 @@
-<?= $this->extend($base_view_folder . 'layout/body') ?>
+<?= $this->extend(customOrDefaultViewFragment('layout/body')) ?>
 <?= $this->section('content') ?>
 <article>
-    <header>
+    <section>
         <div class="myIn">
             <?= h1($titolo) ?>
             <?= h2($sottotitolo) ?>
         </div>
-    </header>
+    </section>
     <div class="myIn">
         <?= single_img($main_img_path) ?>
         <?= txt($testo) ?>
         <?php if (isset($gallery_obj) && count($gallery_obj) > 0) { ?>
-            <?= view($base_view_folder . 'components/slider', ['gallery_obj' => $gallery_obj]) ?>
+            <?= view(customOrDefaultViewFragment('components/slider'), ['gallery_obj' => $gallery_obj]) ?>
         <?php } ?>
     </div>
 </article>

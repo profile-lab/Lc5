@@ -1,4 +1,4 @@
-<?= $this->extend($base_view_folder . 'layout/body') ?>
+<?= $this->extend(customOrDefaultViewFragment('layout/body')) ?>
 <?= $this->section('content') ?>
 <article>
     <header>
@@ -8,16 +8,7 @@
     </header>
 </article>
 <?php if (isset($posts_archive) && is_iterable($posts_archive) && count($posts_archive) > 0) { ?>
-    <div class="myIn">
-        <div class="card_listing_cnt">
-            <?php foreach ($posts_archive as $single) { ?>
-                <?= view($base_view_folder . 'components/post-listing-card', ['single_items' => $single]) ?>
-            <?php } ?>
-        </div>
-        <?php if (isset($pager)) { ?>
-            <?= $pager->links() ?>
-        <?php } ?>
-    </div>
+    <?= view(customOrDefaultViewFragment('components/posts-archive-list'), ['posts_archive' => $posts_archive]) ?>
 <?php } ?>
 <?= $this->endSection() ?>
 <?= $this->section('footer_script') ?>

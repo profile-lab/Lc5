@@ -120,18 +120,12 @@ class Posts extends MasterWeb
         }
         $this->web_ui_date->fill((array)$curr_entity);
 
-
         //
-        if (appIsFile($this->base_view_filesystem . 'post-archive-' . $curr_entity->val . '.php')) {
-            return view($this->base_view_namespace . 'post-archive-' .  $curr_entity->val, $this->web_ui_date->toArray());
-        }
-        if (appIsFile($this->base_view_filesystem . 'post-archive-default.php')) {
-            return view($this->base_view_namespace . 'post-archive-default', $this->web_ui_date->toArray());
-        } else {
-            $this->base_view_namespace = $this->lc5_views_namespace;
-            $this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
-            return view($this->base_view_namespace . 'post-archive-default', $this->web_ui_date->toArray());
-        }
+		if($viewFilePath = customOrDefaultViewFragment('post-archive-' . $curr_entity->val, 'Lc5', false)){
+			return view($viewFilePath, $this->web_ui_date->toArray());
+		}else{
+			return view(customOrDefaultViewFragment('post-archive-default'), $this->web_ui_date->toArray());
+		}
     }
 
     //--------------------------------------------------------------------
@@ -191,15 +185,13 @@ class Posts extends MasterWeb
         // 
         $this->web_ui_date->entity_rows = $this->getEntityRows($curr_entity->id, 'posts');
         //
-        if (appIsFile($this->base_view_filesystem . 'post-' . $curr_post_type->val . '.php')) {
-            return view($this->base_view_namespace . 'post-' .  $curr_post_type->val, $this->web_ui_date->toArray());
-        } else if (appIsFile($this->base_view_filesystem . 'post-default.php')) {
-            return view($this->base_view_namespace . 'post-default', $this->web_ui_date->toArray());
-        } else {
-            $this->base_view_namespace = $this->lc5_views_namespace;
-            $this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
-            return view($this->base_view_namespace . 'post-default', $this->web_ui_date->toArray());
-        }
+
+        //
+		if($viewFilePath = customOrDefaultViewFragment('post-' . $curr_post_type->val, 'Lc5', false)){
+			return view($viewFilePath, $this->web_ui_date->toArray());
+		}else{
+			return view(customOrDefaultViewFragment('post-default'), $this->web_ui_date->toArray());
+		}
     }
 
     //--------------------------------------------------------------------

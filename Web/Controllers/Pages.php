@@ -45,13 +45,9 @@ class Pages extends MasterWeb
 		$this->web_ui_date->fill((array)$curr_entity);
 		$this->web_ui_date->__set('master_view', '404');
 		$this->web_ui_date->__set('message', lang('Contenuto non trovato'));
-
-		if (appIsFile($this->base_view_filesystem . '404.php')) {
-			return view($this->base_view_namespace . '404', $this->web_ui_date->toArray());
-		}
-		$this->base_view_namespace = $this->lc5_views_namespace;
-		$this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
-		return view($this->base_view_namespace . '404', $this->web_ui_date->toArray());
+		$this->web_ui_date->__set('error', $error);
+		// 
+		return view(customOrDefaultViewFragment('404'), $this->web_ui_date->toArray());
 	}
 
 	//--------------------------------------------------------------------
@@ -91,24 +87,17 @@ class Pages extends MasterWeb
 		// 
 		if (isset($this->custom_app_contoller) && $this->custom_app_contoller) {
 			$custom_app_contoller_method = lcfirst(str_replace(' ', '', ucwords(preg_replace('/[\s_]+/', ' ', str_replace(['-', '_'], ' ', $curr_entity->type)))));
-
 			if (method_exists($this->custom_app_contoller, $custom_app_contoller_method)) {
 				$this->custom_app_contoller->{$custom_app_contoller_method}($this);
 			}
 		}
 		//
-		if (appIsFile($this->base_view_filesystem . 'page-' . $curr_entity->type . '.php')) {
+		if($viewFilePath = customOrDefaultViewFragment('page-' . $curr_entity->type, 'Lc5', false)){
 			$this->web_ui_date->__set('master_view', $curr_entity->type);
-			return view($this->base_view_namespace . 'page-' .  $curr_entity->type, $this->web_ui_date->toArray());
-		}
-		if (appIsFile($this->base_view_filesystem . 'page-default.php')) {
+			return view($viewFilePath, $this->web_ui_date->toArray());
+		}else{
 			$this->web_ui_date->__set('master_view', 'default');
-			return view($this->base_view_namespace . 'page-default', $this->web_ui_date->toArray());
-		} else {
-			$this->base_view_namespace = $this->lc5_views_namespace;
-			$this->web_ui_date->__set('master_view', 'lc-default');
-			$this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
-			return view($this->base_view_namespace . 'page-default', $this->web_ui_date->toArray());
+			return view(customOrDefaultViewFragment('page-default'), $this->web_ui_date->toArray());
 		}
 	}
 

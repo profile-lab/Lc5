@@ -205,13 +205,7 @@ class MasterWeb extends BaseController
 
 
 		if ($is_in_maintenance) {
-			if (appIsFile($this->base_view_filesystem  . 'maintenance.php')) {
-				return view($this->base_view_namespace . 'maintenance', $this->web_ui_date->toArray());
-			} else {
-				$this->base_view_namespace = $this->lc5_views_namespace;
-				$this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
-				return view($this->base_view_namespace . 'maintenance', $this->web_ui_date->toArray());
-			}
+			return view(customOrDefaultViewFragment('maintenance'), $this->web_ui_date->toArray());
 		}
 
 		return FALSE;
@@ -264,15 +258,13 @@ class MasterWeb extends BaseController
 			// 
 			$row->guid = url_title($row->nome, '-', TRUE);
 			if ($row->type != 'component') {
-				if (appIsFile($this->base_view_filesystem . 'rows/' . $row->type . '-' . $row->css_class . '.php')) {
-					$row->view = $this->base_view_namespace . 'rows/' . $row->type . '-' . $row->css_class;
-				} else if (appIsFile($this->base_view_filesystem . 'rows/' . $row->type . '.php')) {
-					$row->view = $this->base_view_namespace . 'rows/' . $row->type;
-				} else {
-					$row->view = $this->lc5_views_namespace . 'rows/' . $row->type;
+				if($viewFilePath = customOrDefaultViewFragment('rows/' . $row->type . '-' . $row->css_class, 'Lc5', false)){
+					$row->view = $viewFilePath;
+				}else{
+					$row->view = customOrDefaultViewFragment('rows/' . $row->type, 'Lc5');
 				}
 			} else {
-				if (appIsFile($this->base_view_filesystem . 'rows/php-component/' . $row->component . '.php')) {
+				if($viewFilePath = customOrDefaultViewFragment('rows/php-component/' . $row->component, 'Lc5', false)){
 					if (isset($row->dynamic_component)) {
 						if (isset($row->dynamic_component->before_func) && trim($row->dynamic_component->before_func)) {
 							if (function_exists($row->dynamic_component->before_func)) {
@@ -281,16 +273,14 @@ class MasterWeb extends BaseController
 							} elseif (method_exists($this, $row->dynamic_component->before_func)) {
 								// Method in controller web
 								$row->method_data = $this->{$row->dynamic_component->before_func}($row);
+							}else{
+								throw \CodeIgniter\Exceptions\FrameworkException::forInvalidFile('Method not found - ' . $row->dynamic_component->before_func . ' check custom_frontend_helper and Web Controllers');
 							}
 						}
 					}
-					$row->view = $this->base_view_namespace . 'rows/php-component/' . $row->component;
+					$row->view = $viewFilePath;
 				} else {
-					if (is_file($this->base_view_filesystem . 'rows/php-component/empty.php')) {
-						$row->view = $this->base_view_namespace . 'rows/php-component/empty';
-					} else {
-						$row->view = $this->lc5_views_namespace . 'rows/php-component/empty';
-					}
+					$row->view = customOrDefaultViewFragment('rows/php-component/empty');
 				}
 			}
 		}
