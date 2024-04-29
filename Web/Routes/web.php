@@ -1,9 +1,16 @@
 <?php
 
 $req = \Config\Services::request();
+
+if (env('custom.no_add_maintainer_action') === true) {    
+    // dd(env('custom.no_add_maintainer_action'));
+} else {
+    $routes->add('add-maintainer', '\Lc5\Web\Controllers\Pages::addMaintainer');
+}
+
 if (!$req->isCLI()) {
     $uri =$req->getUri();
-    $supportedLocales = config(App::class)->{'supportedLocales'};
+    $supportedLocales = config("APP")->{'supportedLocales'};
     $supportedLocalesWithoutDefault = array_diff($supportedLocales, array($req->getDefaultLocale()));
 	if (in_array($uri->getSegment(1), $supportedLocalesWithoutDefault)) {
 		//
@@ -14,14 +21,6 @@ if (!$req->isCLI()) {
 		$routes->add('{locale}/(:any)', '\Lc5\Web\Controllers\Pages::page/$1', ['as' => $uri->getSegment(1) . 'web_page']);
 		$routes->add('{locale}', '\Lc5\Web\Controllers\Pages::index', ['as' => $uri->getSegment(1) . 'web_homepage']);
 	}
-}
-
-
-
-if (env('custom.no_add_maintainer_action') === true) {    
-    // dd(env('custom.no_add_maintainer_action'));
-} else {
-    $routes->add('add-maintainer', '\Lc5\Web\Controllers\Pages::addMaintainer');
 }
 
 // 
