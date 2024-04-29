@@ -23,7 +23,7 @@ class Admins extends MasterLc
 		$admins_model = new AdminsModel();
 		$curr_entity = new LoginDati();
 		// 
-		if ($request->getMethod() == 'post') {
+		if ($request->getPost()) {
 			$validate_rules = [
 				'email' => ['label' => 'Email', 'rules' => 'required|valid_email'],
 				'password' => ['label' => 'Password', 'rules' => 'required']
@@ -75,7 +75,7 @@ class Admins extends MasterLc
 		// 
 
 		$curr_entity = new LoginDati();
-		if ($request->getMethod() == 'post') {
+		if ($request->getPost()) {
 			$validate_rules = [
 				'email' => ['label' => 'Email', 'rules' => 'required|valid_email'],
 				'password' => ['label' => 'Password', 'rules' => 'required|min_length[8]']

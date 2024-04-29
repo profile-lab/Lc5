@@ -34,7 +34,7 @@ class CmsApi extends MasterLc
         // 
         $video_model = new VimeoVideosModel();
         $request = \Config\Services::request();
-        if ($request->getMethod() == 'post') {
+        if ($request->getPost()) {
             $returnObject = (object)[
                 'status' => 500,
                 'body' => (object)[
@@ -199,7 +199,7 @@ class CmsApi extends MasterLc
         $video_model = new VimeoVideosModel();
         $video_entity = new VimeoVideo();
         $request = \Config\Services::request();
-        if ($request->getMethod() == 'post') {
+        if ($request->getPost()) {
             $returnObject = (object)[
                 'status' => 500,
                 'body' => (object)[
@@ -292,7 +292,7 @@ class CmsApi extends MasterLc
         $video_model = new VimeoVideosModel();
         $video_entity = new VimeoVideo();
         $request = \Config\Services::request();
-        if ($request->getMethod() == 'post') {
+        if ($request->getPost()) {
             $returnObject = (object)[
                 'status' => 500,
                 'body' => (object)[
@@ -427,7 +427,7 @@ class CmsApi extends MasterLc
         // 
         $video_model = new VimeoVideosModel();
         $request = \Config\Services::request();
-        if ($request->getMethod() == 'post') {
+        if ($request->getPost()) {
             $returnObject = (object)[
                 'status' => 500,
                 'body' => (object)[

@@ -74,7 +74,7 @@ class PostsTags extends MasterLc
 		// 	'nome' => ['label' => 'Nome', 'rules' => 'required'],
 		// ];
 		// $is_falied = TRUE;
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$my_nome = $this->req->getPost('nome');
 			$my_val = url_title(trim($my_nome), '-', TRUE);
 			// 
@@ -112,7 +112,7 @@ class PostsTags extends MasterLc
 		// 
 		// dd($this->post_attributes); 
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
 			];
@@ -159,7 +159,7 @@ class PostsTags extends MasterLc
 		// 
 		// dd($this->post_attributes); 
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
 			];

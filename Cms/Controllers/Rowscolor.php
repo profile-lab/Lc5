@@ -45,7 +45,7 @@ class Rowscolor extends MasterLc
 		$rows_colors_model = new RowcolorModel();
 		$curr_entity = new RowscolorEntity();
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
 			];
@@ -78,7 +78,7 @@ class Rowscolor extends MasterLc
 		// 
 
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
 			];

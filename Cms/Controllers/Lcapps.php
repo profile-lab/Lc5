@@ -44,7 +44,7 @@ class Lcapps extends MasterLc
 		$lcapps_model = new LcappsModel();
 		$curr_entity = new Entity();
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
 			];
@@ -117,7 +117,7 @@ class Lcapps extends MasterLc
 			}
 		}
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
 			];

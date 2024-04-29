@@ -45,7 +45,7 @@ class RowExtraStyles extends MasterLc
 		$rows_colors_model = new RowextrastyleModel();
 		$curr_entity = new RowsextrastyleEntity();
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
 			];
@@ -78,7 +78,7 @@ class RowExtraStyles extends MasterLc
 		// 
 
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
 			];

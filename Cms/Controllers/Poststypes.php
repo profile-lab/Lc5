@@ -85,7 +85,7 @@ class Poststypes extends MasterLc
 		}
 
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$post_type_post_attributes = [];
 			$field_settings = [];
 			foreach ($this->post_attributes as $post_attr) {
@@ -151,7 +151,7 @@ class Poststypes extends MasterLc
 			}
 		}
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$post_type_post_attributes = [];
 			$field_settings = [];
 			foreach ($this->post_attributes as $post_attr) {

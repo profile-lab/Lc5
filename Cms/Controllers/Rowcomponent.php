@@ -45,7 +45,7 @@ class Rowcomponent extends MasterLc
 		$rows_component_model = new RowcomponentsModel();
 		$curr_entity = new RowcomponentEntity();
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
 			];
@@ -90,7 +90,7 @@ class Rowcomponent extends MasterLc
 		// 
 
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
 			];

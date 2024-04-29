@@ -46,7 +46,7 @@ class {class} extends MasterLc
         //
         $curr_entity = new {entity_class}();
         //
-        if ($this->req->getMethod() == 'post') {
+        if ($this->req->getPost()) {
             $validate_rules = [
                 'titolo' => ['label' => 'Titolo', 'rules' => 'required'],
             ];
@@ -80,7 +80,7 @@ class {class} extends MasterLc
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
         // 
-        if ($this->req->getMethod() == 'post') {
+        if ($this->req->getPost()) {
             $validate_rules = [
                 'titolo' => ['label' => 'Titolo', 'rules' => 'required'],
             ];

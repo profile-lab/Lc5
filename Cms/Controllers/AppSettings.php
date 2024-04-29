@@ -38,7 +38,7 @@ class AppSettings extends MasterLc
         // 
 
         // 
-        if ($this->req->getMethod() == 'post') {
+        if ($this->req->getPost()) {
             $validate_rules = [
                 'save' => ['label' => 'Save', 'rules' => 'required'],
                 // 'nome' => ['label' => 'Nome', 'rules' => 'required'],
@@ -79,7 +79,7 @@ class AppSettings extends MasterLc
     // 	$app_settings_model = new AppSettingsModel();
     // 	$curr_entity = new AppSettingEntity();
     // 	// 
-    // 	if ($this->req->getMethod() == 'post') {
+    // 	if ($this->req->getPost()) {
     // 		$validate_rules = [
     // 			'nome' => ['label' => 'Nome', 'rules' => 'required'],
     // 		];

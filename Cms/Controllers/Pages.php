@@ -66,7 +66,7 @@ class Pages extends MasterLc
 		$this->lc_ui_date->parents = $this->pageListByLevel(0, '', $curr_entity->id);
 		$this->lc_ui_date->pages_types = $this->getModuleTypes();
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				// 'nome' => ['label' => 'Nome', 'rules' => 'required'],
 				'titolo' => ['label' => 'Titolo', 'rules' => 'required'],
@@ -126,7 +126,7 @@ class Pages extends MasterLc
 			$curr_entity->public = 1;
 		}
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
 				// 'titolo' => ['label' => 'Titolo', 'rules' => 'required'],

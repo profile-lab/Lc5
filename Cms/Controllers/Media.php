@@ -58,7 +58,7 @@ class Media extends MasterLc
 		$media_model = new MediaModel();
 		$curr_entity = new MediaEntity();
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			// dd($_FILES['file_up']);
 			$file_up = $this->request->getFile('file_up');
 			$validate_rules = [
@@ -203,7 +203,7 @@ class Media extends MasterLc
 
 		// dd($curr_entity);
 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'naturalWidth' => ['rules' => 'required'],
 				'naturalHeight' => ['rules' => 'required'],
@@ -336,7 +336,7 @@ class Media extends MasterLc
 		// 
 
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
 				// 'file_up' => ['label' => 'File da caricare', 'rules' => 'required'],
@@ -402,7 +402,7 @@ class Media extends MasterLc
 		$media_model = new MediaModel();
 		$curr_entity = new MediaEntity();
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'file' => ['label' => 'File da caricare', 'rules' => 'uploaded[file]|max_size[file,10000]|ext_in[file,jpeg,jpg,png,gif,svg,docx,pdf,mp4]'],
 			];

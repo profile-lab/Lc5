@@ -45,7 +45,7 @@ class Pagestype extends MasterLc
 		$pagestype_model = new PagestypeModel();
 		$curr_entity = new PagestypeEntity();
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
 			];
@@ -78,7 +78,7 @@ class Pagestype extends MasterLc
 		// 
 
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
 			];

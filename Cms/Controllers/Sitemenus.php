@@ -48,7 +48,7 @@ class Sitemenus extends MasterLc
 		$all_page_list = $this->pageListByLevel();
 		$this->lc_ui_date->all_page_list = $all_page_list;
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
 			];
@@ -95,7 +95,7 @@ class Sitemenus extends MasterLc
 		$this->lc_ui_date->all_page_list = $all_page_list;
 
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
 			];

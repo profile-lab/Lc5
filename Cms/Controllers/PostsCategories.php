@@ -63,7 +63,7 @@ class PostsCategories extends MasterLc
 		// 
 		// dd($this->post_attributes); 
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				// 'nome' => ['label' => 'Nome', 'rules' => 'required'],
 				'titolo' => ['label' => 'Titolo', 'rules' => 'required'],
@@ -111,7 +111,7 @@ class PostsCategories extends MasterLc
 			$curr_entity->public = 1;
 		}
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				// 'nome' => ['label' => 'Nome', 'rules' => 'required'],
 				'titolo' => ['label' => 'Titolo', 'rules' => 'required'],

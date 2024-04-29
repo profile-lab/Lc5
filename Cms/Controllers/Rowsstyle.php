@@ -61,7 +61,7 @@ class Rowsstyle extends MasterLc
 			$post_type_rows_attributes[] = $post_attr;
 		}
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$post_type_rows_attributes = [];
 			$field_settings = [];
 			foreach ($this->rows_attributes as $post_attr) {
@@ -140,7 +140,7 @@ class Rowsstyle extends MasterLc
 			}
 		}
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$post_type_rows_attributes = [];
 			$field_settings = [];
 			foreach ($this->rows_attributes as $post_attr) {

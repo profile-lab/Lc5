@@ -55,7 +55,7 @@ class CustomFieldsKeys extends MasterLc
 		$custom_fields_key_model = new CustomFieldsKeysModel();
 		$curr_entity = new CustomFieldsKeyEntity();
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
@@ -101,7 +101,7 @@ class CustomFieldsKeys extends MasterLc
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
 				'val' => ['label' => 'Valore', 'rules' => 'required'],

@@ -44,7 +44,7 @@ class AdminUsers extends MasterLc
         $admins_model = new AdminsModel();
         $curr_entity = new Admin();
         // 
-        if ($this->req->getMethod() == 'post') {
+        if ($this->req->getPost()) {
             $validate_rules = [
                 'name' => ['label' => 'Nome', 'rules' => 'required'],
                 'email' => ['label' => 'Email', 'rules' => 'required|valid_email|is_unique[admins.email]'],
@@ -99,7 +99,7 @@ class AdminUsers extends MasterLc
         // 
 
         // 
-        if ($this->req->getMethod() == 'post') {
+        if ($this->req->getPost()) {
             $validate_rules = [
                 'name' => ['label' => 'Nome', 'rules' => 'required'],
                 'email' => ['label' => 'Email', 'rules' => 'required|valid_email'],

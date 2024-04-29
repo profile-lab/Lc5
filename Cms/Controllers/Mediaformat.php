@@ -50,7 +50,7 @@ class Mediaformat extends MasterLc
 		$mediaformat_model = new MediaformatModel();
 		$curr_entity = new MediaformatEntity();
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
 			];
@@ -83,7 +83,7 @@ class Mediaformat extends MasterLc
 		// 
 
 		// 
-		if ($this->req->getMethod() == 'post') {
+		if ($this->req->getPost()) {
 			$validate_rules = [
 				'nome' => ['label' => 'Nome', 'rules' => 'required'],
 			];
