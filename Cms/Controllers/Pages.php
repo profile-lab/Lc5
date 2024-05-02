@@ -139,7 +139,13 @@ class Pages extends MasterLc
 				if ($curr_entity->created_at == $curr_entity->updated_at) {
 					$curr_entity->status = 1;
 				}
-				$curr_entity->public = $this->req->getPost('public') ? 1 : 0 ;
+				// $curr_entity->public = $this->req->getPost('public') ? 1 : 0 ;
+				if($this->req->getPost('public')){
+					$curr_entity->status = 1;
+					$curr_entity->public = 1;
+				}else{
+					$curr_entity->public = 0;
+				}
 				// 
 				$pages_model->save($curr_entity);
 				// 
