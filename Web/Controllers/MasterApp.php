@@ -417,8 +417,9 @@ class MasterApp extends BaseController
 		if (!env('custom.email.MailGunSigningKey') || !env('custom.email.MailGunDomain')) {
 			return FALSE;
 		}
-		if (class_exists('\Mailgun\Mailgun')) {
-			$mg = \Mailgun\Mailgun::create(env('custom.email.MailGunSigningKey'), 'https://api.eu.mailgun.net'); // For EU servers
+		$refMailGunClass = '\Mailgun\Mailgun';
+		if (class_exists($refMailGunClass)) {
+			$mg = $refMailGunClass::create(env('custom.email.MailGunSigningKey'), 'https://api.eu.mailgun.net'); // For EU servers
 			$mailGun_message = $mg->messages()->send(env('custom.email.MailGunDomain'), [
 				'from'    => env('custom.from_address'), //env('custom.from_name')
 				'to'      => $toAddress,
