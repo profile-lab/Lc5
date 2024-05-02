@@ -53,7 +53,8 @@ class MasterWeb extends MasterApp
 		$is_in_maintenance = FALSE;
 		if (((ENVIRONMENT != 'production' && env('custom.maintenance_mode') != 'DISABLED') || env('custom.maintenance_mode') == 'ACTIVE') || ($is_in_maintenance_mode = $this->web_ui_date->app->is_in_maintenance_mode)) {
 			$admins = \Config\Services::admins();
-			if ($this->req->getPath() == 'add-maintainer') {
+			// if ($this->req->getPath() == 'add-maintainer') {
+			if(in_array($this->req->getPath(), $this->exclude_maintenance_paths)){	
 				return FALSE;
 			} elseif (session()->__get('maintainer_user')) {
 				return FALSE;
