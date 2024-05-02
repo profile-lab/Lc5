@@ -27,7 +27,7 @@ class MasterWeb extends MasterApp
 			define('__base_assets_folder__', $this->base_assets_folder);
 		}
 		// 
-		$this->web_ui_date = new WebUiData();
+		$this->web_ui_date = new WebUiData($this->currentapp);
 
 
 		if ($maintenance_view = $this->checkIsInMaintenance()) {			
@@ -51,7 +51,7 @@ class MasterWeb extends MasterApp
 	{
 		// 
 		$is_in_maintenance = FALSE;
-		if (((ENVIRONMENT != 'production' && env('custom.maintenance_mode') != 'DISABLED') || env('custom.maintenance_mode') == 'ACTIVE') || ($is_in_maintenance_mode = $this->web_ui_date->app->is_in_maintenance_mode)) {
+		if (((ENVIRONMENT != 'production' && env('custom.maintenance_mode') != 'DISABLED') || env('custom.maintenance_mode') == 'ACTIVE') || ($this->currentapp->is_in_maintenance_mode)) {
 			$admins = \Config\Services::admins();
 			// if ($this->req->getPath() == 'add-maintainer') {
 			if(in_array($this->req->getPath(), $this->exclude_maintenance_paths)){	

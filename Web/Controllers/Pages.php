@@ -2,6 +2,7 @@
 
 namespace Lc5\Web\Controllers;
 
+use Config\Services;
 use Lc5\Data\Models\PagesModel;
 use Lc5\Data\Models\PostsModel;
 use Lc5\Data\Models\PoststypesModel;
@@ -91,11 +92,25 @@ class Pages extends MasterWeb
 				$this->custom_app_contoller->{$custom_app_contoller_method}($this);
 			}
 		}
-		//
-		if($viewFilePath = customOrDefaultViewFragment('page-' . $curr_entity->type, 'Lc5', false)){
+		// 
+		if (isset($this->shop_settings_data) && $this->shop_settings_data) {
+			$this->web_ui_date->__set('shop_settings_data', $this->shop_settings_data);
+			if (trim($this->shop_settings_data->shop_home)) {
+				$shop_home_guid = trim(str_replace(['/'], '', $this->shop_settings_data->shop_home));
+				if ($shop_home_guid == $curr_entity->guid) {
+					$refShopClass = 'LcShop\Web\Controllers\Shop';
+					if (class_exists($refShopClass)) {
+						$shopClass = new $refShopClass();
+						return $shopClass->index();
+					}
+				}
+			}
+		}
+		// 
+		if ($viewFilePath = customOrDefaultViewFragment('page-' . $curr_entity->type, 'Lc5', false)) {
 			$this->web_ui_date->__set('master_view', $curr_entity->type);
 			return view($viewFilePath, $this->web_ui_date->toArray());
-		}else{
+		} else {
 			$this->web_ui_date->__set('master_view', 'default');
 			return view(customOrDefaultViewFragment('page-default'), $this->web_ui_date->toArray());
 		}
