@@ -77,6 +77,7 @@ _If doesn't works, checke /writable folder permission_
             //
             'Lc5\Cms'   => ROOTPATH . 'Lc5/Cms',
             'Lc5\Data'   => ROOTPATH . 'Lc5/Data',
+            'Lc5\Api'   => ROOTPATH . 'Lc5/Api',
             'Lc5\Web'   => ROOTPATH . 'Lc5/Web',
             //
             'Vimeo'    => ROOTPATH . 'Lc5/Cms/ThirdParty/Vimeo',
@@ -106,12 +107,21 @@ _If doesn't works, checke /writable folder permission_
 
 #### Add LC5 services in App\Config\Services.php
 
+        //--------------------------------------------------------------------
         public static function admins($getShared = true)
         {
-            if ($getShared){
-                    return static::getSharedInstance('admins');
-            }
-            return new \Lc5\Cms\Controllers\Admins();
+                if ($getShared) {
+                return static::getSharedInstance('admins');
+                }
+                return new \Lc5\Cms\Controllers\Admins();
+        }
+        //--------------------------------------------------------------------
+        public static function apiservices($getShared = true)
+        {
+                if ($getShared) {
+                return static::getSharedInstance('apiservices');
+                }
+                return new \Lc5\Api\Controllers\ApiServices();
         }
 
 #### Add LC5 AppCustom routes in App\Config\Routes.php
