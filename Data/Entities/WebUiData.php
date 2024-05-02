@@ -3,42 +3,39 @@
 namespace Lc5\Data\Entities;
 
 use CodeIgniter\Entity\Entity;
-use Config\Services;
 use Lc5\Data\Models\MenusModel;
 use Lc5\Data\Models\LanguagesModel;
-use Lc5\Data\Models\LcappsModel;
-use Lc5\Data\Models\AppSettingsModel;
-use stdClass;
+
 
 class WebUiData extends Entity
 {
-    public function __construct()
+    public function __construct($app = null)
 	{
         
         parent::__construct();
       
-        if(! defined('__web_app_id__')){
-            throw new \CodeIgniter\Exceptions\ConfigException();
-            throw new \Exception("APP NON TROVATA");
+        // if(! defined('__web_app_id__')){
+        //     throw new \CodeIgniter\Exceptions\ConfigException();
+        //     throw new \Exception("APP NON TROVATA");
 
-        }
-        $app = new stdClass();
-		$lcapps_model = new LcappsModel();
-	    if(!$app_base_data = $lcapps_model->asObject()->find(__web_app_id__)){
-            throw new \Exception("Nessuna informazione relativa all'app selezionata è stata trovata nel database.");
-        }	
-        // 
-        $app_settings_model = new AppSettingsModel();
-        // ->select('address, app_claim, app_description, copy, email, entity_free_values, facebook, instagram, maps, phone, piva, seo_title, shop, twitter')
-        if (!$app_settings = $app_settings_model->asObject()->where('id_app', $app_base_data->id)->where('lang', __locale__)->first()) {
-            throw new \Exception("App settings not found.");
-        }
-        unset($app_settings->id);
-        unset($app_settings->lang);
-        unset($app_settings->created_at);
-        unset($app_settings->updated_at);
+        // }
+        // $app = new stdClass();
+		// $lcapps_model = new LcappsModel();
+	    // if(!$app_base_data = $lcapps_model->asObject()->find(__web_app_id__)){
+        //     throw new \Exception("Nessuna informazione relativa all'app selezionata è stata trovata nel database.");
+        // }	
+        // // 
+        // $app_settings_model = new AppSettingsModel();
+        // // ->select('address, app_claim, app_description, copy, email, entity_free_values, facebook, instagram, maps, phone, piva, seo_title, shop, twitter')
+        // if (!$app_settings = $app_settings_model->asObject()->where('id_app', $app_base_data->id)->where('lang', __locale__)->first()) {
+        //     throw new \Exception("App settings not found.");
+        // }
+        // unset($app_settings->id);
+        // unset($app_settings->lang);
+        // unset($app_settings->created_at);
+        // unset($app_settings->updated_at);
 
-        $app = (object) array_merge((array) $app_base_data, (array) $app_settings);
+        // $app = (object) array_merge((array) $app_base_data, (array) $app_settings);
     
         // 
         // 

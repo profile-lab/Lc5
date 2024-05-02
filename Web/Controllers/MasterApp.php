@@ -13,16 +13,16 @@ use Lc5\Data\Models\PostTagsModel;
 use Lc5\Data\Models\PoststypesModel;
 use stdClass;
 
-use CodeIgniter\Email\Email;
+use Lc5\Data\Models\LcappsModel;
+use Lc5\Data\Models\AppSettingsModel;
 
-use function PHPUnit\Framework\fileExists;
 
 // use Mailgun\Mailgun;
 
 class MasterApp extends BaseController
 {
 
-    protected $exclude_maintenance_paths = ['add-maintainer', 'payment-stripe-webhook'];
+	protected $exclude_maintenance_paths = ['add-maintainer', 'payment-stripe-webhook'];
 
 
 	protected $redex_codfis = "/^(?:[A-Z][AEIOU][AEIOUX]|[AEIOU]X{2}|[B-DF-HJ-NP-TV-Z]{2}[A-Z]){2}(?:[\dLMNP-V]{2}(?:[A-EHLMPR-T](?:[04LQ][1-9MNP-V]|[15MR][\dLMNP-V]|[26NS][0-8LMNP-U])|[DHPS][37PT][0L]|[ACELMRT][37PT][01LM]|[AC-EHLMPR-T][26NS][9V])|(?:[02468LNQSU][048LQU]|[13579MPRTV][26NS])B[26NS][9V])(?:[A-MZ][1-9MNP-V][\dLMNP-V]{2}|[A-M][0L](?:[1-9MNP-V][\dLMNP-V]|[0L][1-9MNP-V]))[A-Z]$/i";
@@ -36,45 +36,83 @@ class MasterApp extends BaseController
 	protected $is_api = false;
 
 	public $custom_app_contoller = null;
+	public $shop_settings_data = null;
 
 	protected $send_mail_config;
-    protected $form_result = null;
-    protected $form_post_data = null;
+	protected $form_result = null;
+	protected $form_post_data = null;
+
+	protected $currentapp = null;
 
 
 	//--------------------------------------------------------------------
 	public function __construct()
 	{
-        // d(MasterApp::class);
+		// d(MasterApp::class);
 		$this->req = \Config\Services::request();
 		$locale = $this->req->getLocale();
-		if(!defined('__locale__')){
+		if (!defined('__locale__')) {
 			define('__locale__', $locale);
 		}
-		if(!defined('__default_locale__')){
+		if (!defined('__default_locale__')) {
 			define('__default_locale__', $this->req->getDefaultLocale());
 		}
-		if(!defined('__locale_uri__')){
+		if (!defined('__locale_uri__')) {
 			define('__locale_uri__', (__locale__ != getenv('app.defaultLocale')) ? __locale__ : '');
 		}
-        // 
-		if(!defined('__web_app_id__')){
+		// 
+		if (!defined('__web_app_id__')) {
 			define('__web_app_id__', getenv('custom.web_app_id'));
 		}
-		if(!defined('__post_per_page__')){
+		if (!defined('__post_per_page__')) {
 			define('__post_per_page__', (getenv('custom.post_per_page')) ?: 25);
 		}
+		// 
+		// 
+		if (!defined('__web_app_id__')) {
+			throw new \CodeIgniter\Exceptions\ConfigException();
+			throw new \Exception("APP NON TROVATA");
+		}
+		$app = new stdClass();
+		$lcapps_model = new LcappsModel();
+		if (!$app_base_data = $lcapps_model->asObject()->find(__web_app_id__)) {
+			throw new \Exception("Nessuna informazione relativa all'app selezionata è stata trovata nel database.");
+		}
+		// 
+		$app_settings_model = new AppSettingsModel();
+		// ->select('address, app_claim, app_description, copy, email, entity_free_values, facebook, instagram, maps, phone, piva, seo_title, shop, twitter')
+		if (!$app_settings = $app_settings_model->asObject()->where('id_app', $app_base_data->id)->where('lang', __locale__)->first()) {
+			throw new \Exception("App settings not found.");
+		}
+		unset($app_settings->id);
+		unset($app_settings->lang);
+		unset($app_settings->created_at);
+		unset($app_settings->updated_at);
+
+		$this->currentapp = (object) array_merge((array) $app_base_data, (array) $app_settings);
+		// 
 		// 
 		$this->send_mail_config = $this->getEnvEmailConfig();
 		// 
 
 
-		
-
-
-		if (file_exists(APPPATH . 'Controllers/CustomAppContoller.php')) {
-			$this->custom_app_contoller = new \App\Controllers\CustomAppContoller($this);
+		// 
+		$refShopSettingsModel = '\LcShop\Data\Models\ShopSettingsModel';
+		if (class_exists($refShopSettingsModel)) {
+			$shop_settings_model = new $refShopSettingsModel();
+			$this->shop_settings_data = $shop_settings_model
+				->select(['id', 'id_app', 'shop_home', 'products_has_childs'])
+				->where('id_app', __web_app_id__)->asObject()->first();
 		}
+		// 
+		$refCustomAppContoller = 'App\Controllers\CustomAppContoller';
+		if (class_exists($refCustomAppContoller)) {
+			$this->custom_app_contoller = new $refCustomAppContoller($this);
+		}
+
+		// if (file_exists(APPPATH . 'Controllers/CustomAppContoller.php')) {
+		// 	$this->custom_app_contoller = new \App\Controllers\CustomAppContoller($this);
+		// }
 
 
 		if ($this->req->getPost()) {
@@ -83,10 +121,10 @@ class MasterApp extends BaseController
 				$this->form_result = $form_result;
 			} else {
 				$form_result = $this->parseFormPostData($this->req->getPost());
-                $this->form_result = $form_result;
+				$this->form_result = $form_result;
 			}
 			$form_post_data = (object) $this->req->getPost();
-            $this->form_post_data = $form_post_data;
+			$this->form_post_data = $form_post_data;
 		}
 	}
 
@@ -114,7 +152,7 @@ class MasterApp extends BaseController
 		$return_obj->is_send = FALSE;
 		$user_mess = new stdClass();
 		$user_mess->type = 'ko';
-		$user_mess->title = $this->appLabelMethod('Si è verificato un errore', $this->web_ui_date->app->labels);
+		$user_mess->title = $this->appLabelMethod('Si è verificato un errore', $this->currentapp->labels);
 		$user_mess->content = '';
 		if ($post_data) {
 			if (isset($post_data['to_addres'])) {
@@ -134,8 +172,8 @@ class MasterApp extends BaseController
 						}
 					}
 					if (count($field_errors) > 0) {
-						$user_mess->title = $this->appLabelMethod("Errore!. Controlla i campi richiesti", $this->web_ui_date->app->labels);
-						$user_mess->content = $this->appLabelMethod("<ul>" . $field_errors_html_list . "</ul>", $this->web_ui_date->app->labels);
+						$user_mess->title = $this->appLabelMethod("Errore!. Controlla i campi richiesti", $this->currentapp->labels);
+						$user_mess->content = $this->appLabelMethod("<ul>" . $field_errors_html_list . "</ul>", $this->currentapp->labels);
 						$return_obj->user_mess = $user_mess;
 						return $return_obj;
 					}
@@ -155,22 +193,35 @@ class MasterApp extends BaseController
 			$htmlbody = str_replace('{{email}}', $post_data['email'], $htmlbody);
 			$htmlbody = str_replace('{{tel}}', $post_data['tel'], $htmlbody);
 			$htmlbody = str_replace('{{message}}', nl2br($post_data['message']), $htmlbody);
-			$email_subject = 'Richiesta info da ' . '=?UTF-8?B?'.base64_encode(env('custom.app_name')).'?=';
+			$email_subject = 'Richiesta info da ' . '=?UTF-8?B?' . base64_encode(env('custom.app_name')) . '?=';
 			if ($this->inviaEmail($toAddress, $email_subject, $htmlbody)) {
 				$user_mess->type = 'ok';
-				$user_mess->title = $this->appLabelMethod('Email inviata con successo', $this->web_ui_date->app->labels);
-				$user_mess->content = $this->appLabelMethod('La sua richiesta è stata presa in carico dal nostro team. Grazie!', $this->web_ui_date->app->labels);
+				$user_mess->title = $this->appLabelMethod('Email inviata con successo', $this->currentapp->labels);
+				$user_mess->content = $this->appLabelMethod('La sua richiesta è stata presa in carico dal nostro team. Grazie!', $this->currentapp->labels);
 				$return_obj->is_send = TRUE;
 			} else {
-				$user_mess->title = $this->appLabelMethod("Si è verificato un errore durante l'invio della mail", $this->web_ui_date->app->labels);
-				$user_mess->content = $this->appLabelMethod("L'errore è stato segnalato e stiamo lavorando per risolvere il problema, riprova più tardi", $this->web_ui_date->app->labels);
+				$user_mess->title = $this->appLabelMethod("Si è verificato un errore durante l'invio della mail", $this->currentapp->labels);
+				$user_mess->content = $this->appLabelMethod("L'errore è stato segnalato e stiamo lavorando per risolvere il problema, riprova più tardi", $this->currentapp->labels);
 			}
 		}
 		$return_obj->user_mess = $user_mess;
 		return $return_obj;
 	}
 
-	
+
+
+	//--------------------------------------------------------------------
+	protected function getShopProductsArchive()
+	{
+		$shop_action_class_path = 'LcShop\Web\Controllers\ShopAction';
+		if (class_exists($shop_action_class_path)) {
+			$shop_action = new $shop_action_class_path();
+			return $shop_action->getShopProductsArchive();
+		}
+		return false;
+	}
+
+
 
 	//--------------------------------------------------------------------
 	protected function getEntityRows($parent, $modulo)
@@ -219,13 +270,13 @@ class MasterApp extends BaseController
 			// 
 			$row->guid = url_title($row->nome, '-', TRUE);
 			if ($row->type != 'component') {
-				if($viewFilePath = customOrDefaultViewFragment('rows/' . $row->type . '-' . $row->css_class, 'Lc5', false)){
+				if ($viewFilePath = customOrDefaultViewFragment('rows/' . $row->type . '-' . $row->css_class, 'Lc5', false)) {
 					$row->view = $viewFilePath;
-				}else{
+				} else {
 					$row->view = customOrDefaultViewFragment('rows/' . $row->type, 'Lc5');
 				}
 			} else {
-				if($viewFilePath = customOrDefaultViewFragment('rows/php-component/' . $row->component, 'Lc5', false)){
+				if ($viewFilePath = customOrDefaultViewFragment('rows/php-component/' . $row->component, 'Lc5', false)) {
 					if (isset($row->dynamic_component)) {
 						if (isset($row->dynamic_component->before_func) && trim($row->dynamic_component->before_func)) {
 							if (function_exists($row->dynamic_component->before_func)) {
@@ -234,7 +285,7 @@ class MasterApp extends BaseController
 							} elseif (method_exists($this, $row->dynamic_component->before_func)) {
 								// Method in controller web
 								$row->method_data = $this->{$row->dynamic_component->before_func}($row);
-							}else{
+							} else {
 								throw \CodeIgniter\Exceptions\FrameworkException::forInvalidFile('Method not found - ' . $row->dynamic_component->before_func . ' check custom_frontend_helper and Web Controllers');
 							}
 						}
