@@ -2,11 +2,15 @@
 
 namespace Lc5\Api\Controllers;
 
+use CodeIgniter\API\ResponseTrait;
 use Lc5\Web\Controllers\MasterApp;
 use stdClass;
 
 class MasterApi extends MasterApp
 {
+	
+	use ResponseTrait;
+
 	protected $apiservices = null;
 	protected $rest_data = null;
 	//--------------------------------------------------------------------
@@ -35,26 +39,40 @@ class MasterApi extends MasterApp
 		// $this->web_ui_date->__set('form_post_data', $this->form_post_data);
 	}
 
-	// //--------------------------------------------------------------------
-	// protected function checkIsInMaintenance()
-	// {
-	// 	// 
-	// 	$is_in_maintenance = FALSE;
-	// 	if (((ENVIRONMENT != 'production' && env('custom.maintenance_mode') != 'DISABLED') || env('custom.maintenance_mode') == 'ACTIVE') || ($is_in_maintenance_mode = $this->web_ui_date->app->is_in_maintenance_mode)) {
-	// 		$admins = \Config\Services::admins();
-	// 		if ($this->req->getPath() == 'add-maintainer') {
-	// 			return FALSE;
-	// 		} elseif (session()->__get('maintainer_user')) {
-	// 			return FALSE;
-	// 		} elseif (!isset($admins) || !$admins->user_id()) {
-	// 			$is_in_maintenance = TRUE;
-	// 		}
-	// 	}
-	// 	// 
-	// 	if ($is_in_maintenance) {
-	// 		return view(customOrDefaultViewFragment('maintenance'), $this->web_ui_date->toArray());
-	// 	}
-	// 	return FALSE;
-	// }
+	//--------------------------------------------------------------------
+	public function sendResponse ($data, $statusCode = 200, $message = 'Not Found')
+	{
+		$response = [
+			'status' => $statusCode,
+			'error' => null,
+			'message' => $message,
+            'data' => $data
+		];
+		return $this->respond($response, $statusCode);
+	}
+
+	//--------------------------------------------------------------------
+	public function exitNotFound ()
+	{
+		$response = [
+			'status' => 404,
+			'error' => 'Not Found',
+			'message' => 'Not Found'
+		];
+		return $this->respond($response, 404, 'Not Found');
+	}
+
+	//--------------------------------------------------------------------
+	protected function exitUnauthorized()
+	{
+		header("HTTP/1.1 401 Unauthorized");
+		$response = [
+			'status' => 401,
+			'error' => 'Unauthorized',
+			'message' => 'Unauthorized'
+		];
+		return json_encode($response);
+		// return $this->respond($response, 401, 'Unauthorized');
+	}
 	
 }

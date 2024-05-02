@@ -18,29 +18,28 @@ final class PagesApi extends MasterApi
 	public function __construct()
 	{
 		$this->response = Services::response();
-		$request = \Config\Services::request();
+		$request = Services::request();
 		$app_api_key = $request->header('x-api-key');
 		if (!$app_api_key && ENVIRONMENT == 'development') {
 			$app_api_key = $request->getGet('x-api-key');
 		}
-		$lcapps_model = new LcappsModel();
-		if ($current_app_by_apikey = $lcapps_model->select(['id', 'apikey', 'nome', 'domain', 'is_in_maintenance_mode', 'status'])->where('apikey', $app_api_key)->asObject()->first()) {
-			if (!defined('__web_app_id__')) {
-				define('__web_app_id__', $current_app_by_apikey->id);
-			} else {
-				define('__web_app_id__', 000);
-				define('__is_unauthorized__', 'Unauthorized');
+		$appStatus = 'unauthorized';
+		if ($app_api_key) {
+			$lcapps_model = new LcappsModel();
+			if ($current_app_by_apikey = $lcapps_model->select(['id', 'apikey', 'nome', 'domain', 'is_in_maintenance_mode', 'status'])->where('apikey', $app_api_key)->asObject()->first()) {
+				$appStatus = 'active';
+				if (!defined('__web_app_id__')) {
+					define('__web_app_id__', $current_app_by_apikey->id);
+				}
 			}
-		} else {
-			define('__web_app_id__', 000);
-			define('__is_unauthorized__', 'Unauthorized');
 		}
-		parent::__construct(true);
-
-
-		// '99bcbc09-baeb185f3a19bc72ceb2-a2f6927f-44d78fa0';
-		// 'bb8ca12b-e6137428019aeac0ddc5-a8913461-0f7cdb4f';
 		// 
+		parent::__construct(true);
+		// 
+		if ($appStatus == 'unauthorized') {
+			define('__is_unauthorized__', 'Unauthorized');			
+			exit($this->exitUnauthorized());
+		}
 	}
 
 
@@ -64,7 +63,7 @@ final class PagesApi extends MasterApi
 			$qb->where('is_home', 1);
 		}
 		if (!$curr_entity = $qb->first()) {
-			return $this->apiservices->exitNotFound();
+			return $this->exitNotFound();
 		}
 		// 
 		if ($curr_entity->is_posts_archive) {
@@ -84,6 +83,7 @@ final class PagesApi extends MasterApi
 		$this->rest_data->entity = $curr_entity;
 		// 
 		$this->rest_data->entity_rows = $this->getEntityRows($curr_entity->id, 'pages');
+		// $this->rest_data = null;
 		// 
 		if (isset($this->custom_app_contoller) && $this->custom_app_contoller) {
 			$custom_app_contoller_method = lcfirst(str_replace(' ', '', ucwords(preg_replace('/[\s_]+/', ' ', str_replace(['-', '_'], ' ', $curr_entity->type)))));
@@ -105,16 +105,9 @@ final class PagesApi extends MasterApi
 		// }
 		// 
 		if ($this->rest_data) {
-			$response = [
-				'status' => 200,
-				'error' => null,
-				'message' => null,
-				'data' => $this->rest_data
-			];
-			return $this->respond($response, 200);
-			// return $this->apiservices->respond($this->rest_data);			
+			return $this->sendResponse($this->rest_data);			
 		}
 
-		return $this->apiservices->exitNotFound();
+		return $this->exitNotFound();
 	}
 }
