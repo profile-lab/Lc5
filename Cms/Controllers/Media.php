@@ -48,7 +48,6 @@ class Media extends MasterLc
 		}
 		$media_model->delete($curr_entity->id);
 		return redirect()->route($this->route_prefix);
-
 	}
 
 	//--------------------------------------------------------------------
@@ -118,7 +117,7 @@ class Media extends MasterLc
 
 	//--------------------------------------------------------------------
 	public function rigeneraAllFormati($id)
-	{	
+	{
 		// 
 		$media_model = new MediaModel();
 		if (!$curr_entity = $media_model->find($id)) {
@@ -127,13 +126,12 @@ class Media extends MasterLc
 		// $mediaformat_model = new MediaformatModel();
 
 		$formati =  $this->getImgFormati();
-		foreach($formati as $formato){
+		foreach ($formati as $formato) {
 			$this->makeFormato($curr_entity->path, $formato, 'uploads');
 		}
 
 		// 
 		return redirect()->route($this->route_prefix . '_edit', [$curr_entity->id]);
-
 	}
 
 	//--------------------------------------------------------------------
@@ -250,7 +248,7 @@ class Media extends MasterLc
 					imagejpeg($final_img, FCPATH . '' . $folder . '/' . (trim($formato['folder']) ? $formato['folder'] . '/' : '') . $curr_entity->path);
 				}
 
-				
+
 
 				$image = \Config\Services::image()->withFile(FCPATH . '' . $folder . '/' . (trim($formato['folder']) ? $formato['folder'] . '/' : '') . $curr_entity->path);
 				if ($formato['w'] > 0 && $formato['h'] > 0) {
@@ -397,39 +395,42 @@ class Media extends MasterLc
 	//--------------------------------------------------------------------
 	public function ajaxUpload()
 	{
-
 		// 
 		$media_model = new MediaModel();
 		$curr_entity = new MediaEntity();
 		// 
-		if ($this->req->getPost()) {
-			$validate_rules = [
-				'file' => ['label' => 'File da caricare', 'rules' => 'uploaded[file]|max_size[file,10000]|ext_in[file,jpeg,jpg,png,gif,svg,docx,pdf,mp4]'],
-			];
+		$validation = \Config\Services::validation();
+		$validation->setRules([
+			'file' => 'uploaded[file]|max_size[file,10000]|ext_in[file,jpeg,jpg,png,gif,svg,docx,pdf,mp4],'
+		]);
+		if ($validation->withRequest($this->req)->run() == FALSE) {
 
-			$err_mess = NULL;
+			return $this->respond(['error' => $this->validator->getErrors()], 400);
+			exit();
+		}
+
+
+
+
+
+
+		$err_mess = NULL;
+
+		if ($file_up = $this->req->getFile('file')) {
 			$curr_entity->fill($this->req->getPost());
-			if ($this->validate($validate_rules)) {
 
-				if ($file_up = $this->request->getFile('file')) {
-					if ($file_up->isValid() && !$file_up->hasMoved()) {
-						$curr_entity->nome = str_replace('.' . $file_up->getExtension(), '', $file_up->getName());
-						$curr_entity->tipo_file = $file_up->getExtension();
-						$curr_entity->mime = $file_up->getMimeType();
-						$curr_entity->is_image = ($this->fileType($curr_entity->tipo_file) == 'image');
-						if ($file_path = $this->uploadFile($file_up, NULL, $curr_entity->is_image, $curr_entity->mime)) {
-							$curr_entity->path = $file_path['path'];
-							if ($curr_entity->is_image) {
-								$curr_entity->image_width = $file_path['image_width'];
-								$curr_entity->image_height = $file_path['image_height'];
-								$curr_entity->formati = $file_path['formati'];
-							}
-						} else {
-							$err_mess = 'Errore durante l\'upload del file';
-						}
+			if ($file_up->isValid() && !$file_up->hasMoved()) {
+				$curr_entity->nome = str_replace('.' . $file_up->getExtension(), '', $file_up->getName());
+				$curr_entity->tipo_file = $file_up->getExtension();
+				$curr_entity->mime = $file_up->getMimeType();
+				$curr_entity->is_image = ($this->fileType($curr_entity->tipo_file) == 'image');
+				if ($file_path = $this->uploadFile($file_up, NULL, $curr_entity->is_image, $curr_entity->mime)) {
+					$curr_entity->path = $file_path['path'];
+					if ($curr_entity->is_image) {
+						$curr_entity->image_width = $file_path['image_width'];
+						$curr_entity->image_height = $file_path['image_height'];
+						$curr_entity->formati = $file_path['formati'];
 					}
-				}
-				if (!$err_mess) {
 					$curr_entity->status = 1;
 					$curr_entity->id_app = 1;
 
@@ -441,13 +442,17 @@ class Media extends MasterLc
 					$new_entity = $media_model->find($new_id);
 					// 
 					return $this->respondCreated($new_entity);
-					// return $this->respondCreated();
+				} else {
+					$err_mess = 'Errore durante l\'upload del file';
 				}
-			} else {
-				$err_mess = $this->lc_parseValidator($this->validator->getErrors());
-				return $this->failValidationError($err_mess);
 			}
 		}
+
+
+
+		return $this->respond(['error' => 'Unauthorized'], 401);
+		return $this->respond(['error' => $err_mess], 400);
+
 		// 
 		$this->lc_ui_date->entity = $curr_entity;
 		return $this->respondNoContent();
