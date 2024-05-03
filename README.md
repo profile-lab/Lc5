@@ -115,14 +115,7 @@ _If doesn't works, checke /writable folder permission_
                 }
                 return new \Lc5\Cms\Controllers\Admins();
         }
-        //--------------------------------------------------------------------
-        public static function apiservices($getShared = true)
-        {
-                if ($getShared) {
-                return static::getSharedInstance('apiservices');
-                }
-                return new \Lc5\Api\Controllers\ApiServices();
-        }
+       
 
 #### Add LC5 AppCustom routes in App\Config\Routes.php
 

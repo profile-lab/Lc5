@@ -11,7 +11,6 @@ class MasterApi extends MasterApp
 	
 	use ResponseTrait;
 
-	protected $apiservices = null;
 	protected $rest_data = null;
 	//--------------------------------------------------------------------
 	public function __construct()
@@ -20,7 +19,6 @@ class MasterApi extends MasterApp
 		parent::__construct();
 
 		$this->rest_data = new stdClass();
-		$this->apiservices = \Config\Services::apiservices();
 
 
 		//
