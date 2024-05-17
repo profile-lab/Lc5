@@ -23,7 +23,6 @@ class Pagestype extends MasterLc
 		// 
 		$this->lc_ui_date->__set('currernt_module', 'tools');
 		$this->lc_ui_date->__set('currernt_module_action', 'pagestype');
-		
 	}
 
 	//--------------------------------------------------------------------
@@ -86,7 +85,9 @@ class Pagestype extends MasterLc
 			$curr_entity->fill($this->req->getPost());
 			// 
 			if ($this->validate($validate_rules)) {
-				$pagestype_model->save($curr_entity);
+				if ($curr_entity->hasChanged()) {
+					$pagestype_model->save($curr_entity);
+				}
 				// 
 				return redirect()->route($this->route_prefix . '_edit', [$curr_entity->id]);
 			} else {
