@@ -73,7 +73,7 @@
                     <div class="bg-light p-4 px-lg-1 py-lg-1 rounded">
                         <div class="col-5 col-sm-auto text-right save_sb_cnt">
                             <?= (isset($frontend_guid) && trim($frontend_guid)) ? '<a class="external_link_page" href="' . $frontend_guid . '" target="_blank">Vai alla pagina <span class="oi oi-external-link"></span></a>' : '' ?>
-                            <button type="submit" name="save" value="save" class="btn btn-primary bottone_salva btn_save_after_proc"><span class="oi oi-check"></span>Salva</button>
+                            <button type="submit" class="btn btn-primary bottone_salva btn_save_after_proc"><span class="oi oi-check"></span>Salva</button>
                         </div>
 
                         <div class="col-sm-8 col-lg-12">

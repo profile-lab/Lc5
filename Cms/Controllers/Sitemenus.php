@@ -54,8 +54,10 @@ class Sitemenus extends MasterLc
 			];
 			$curr_entity->fill($this->req->getPost());
 			if ($this->validate($validate_rules)) {
-				$curr_entity->id_app = 1;
-				$menus_model->save($curr_entity);
+				// $curr_entity->id_app = 1;
+				if ($curr_entity->hasChanged()) { 
+					$menus_model->save( $curr_entity );
+				}
 				// 
 				$new_id = $menus_model->getInsertID();
 				// 
@@ -102,7 +104,9 @@ class Sitemenus extends MasterLc
 			$curr_entity->fill($this->req->getPost());
 			// 
 			if ($this->validate($validate_rules)) {
-				$menus_model->save($curr_entity);
+				if ($curr_entity->hasChanged()) { 
+					$menus_model->save( $curr_entity );
+				}
 				// 
 				return redirect()->route($this->route_prefix . '_edit', [$curr_entity->id]);
 			} else {

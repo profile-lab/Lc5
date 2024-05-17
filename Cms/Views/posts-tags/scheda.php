@@ -15,7 +15,7 @@
                 <?php } ?>
             </div>
             <div class="col-5 col-sm-auto text-right">
-                <button type="submit" name="save" value="save" class="btn btn-primary btn_save_after_proc"><span class="oi oi-check"></span>Salva</button>
+                <button type="submit" class="btn btn-primary btn_save_after_proc"><span class="oi oi-check"></span>Salva</button>
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
     <?= user_mess($ui_mess, $ui_mess_type) ?>
     <div class="settings_header">
         <h1><?= $module_name ?></h1>
-        <button type="submit" name="save" value="save" class="btn bottone_salva btn-primary"><span class="oi oi-check"></span>Salva</button>
+        <button type="submit" class="btn bottone_salva btn-primary"><span class="oi oi-check"></span>Salva</button>
     </div>
     <div class="row form-row">
         <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Nome', 'name' => 'nome', 'value' => $entity->nome, 'width' => 'col-md-6', 'placeholder' => 'Nome']]) ?>

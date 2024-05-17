@@ -12,7 +12,7 @@
             </div>
             <div class="row first-row">
                 <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Titolo', 'name' => 'titolo', 'value' => $entity->titolo, 'width' => 'col-md-12', 'placeholder' => 'Titolo']]) ?>
-                <button type="submit" name="save" value="save" class="btn btn-primary bottone_salva"><span class="oi oi-check"></span>Crea</button>
+                <button type="submit" class="btn btn-primary bottone_salva"><span class="oi oi-check"></span>Crea</button>
             </div>
         </div>
     </div>

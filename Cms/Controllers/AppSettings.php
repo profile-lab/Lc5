@@ -47,7 +47,9 @@ class AppSettings extends MasterLc
             $curr_entity->fill($this->req->getPost());
             // 
             if ($this->validate($validate_rules)) {
-                $app_settings_model->save($curr_entity);
+                if ($curr_entity->hasChanged()) { 
+                    $app_settings_model->save( $curr_entity );
+                }
                 // 
                 return redirect()->route($this->route_prefix, [$curr_entity->id]);
             } else {
@@ -59,47 +61,6 @@ class AppSettings extends MasterLc
         $this->lc_ui_date->entity = $curr_entity;
         return view('Lc5\Cms\Views\app-settings/scheda', $this->lc_ui_date->toArray());
     }
-
-    // //--------------------------------------------------------------------
-    // public function index()
-    // {
-    // 	// 
-    // 	$app_settings_model = new AppSettingsModel();
-    // 	// 
-    // 	$list = $app_settings_model->findAll();
-    // 	$this->lc_ui_date->list = $list;
-    // 	// 
-    // 	return view('Lc5\Cms\Views\app-settings/index', $this->lc_ui_date->toArray());
-    // }
-
-    // //--------------------------------------------------------------------
-    // public function newpost()
-    // {
-    // 	// 
-    // 	$app_settings_model = new AppSettingsModel();
-    // 	$curr_entity = new AppSettingEntity();
-    // 	// 
-    // 	if ($this->req->getPost()) {
-    // 		$validate_rules = [
-    // 			'nome' => ['label' => 'Nome', 'rules' => 'required'],
-    // 		];
-    // 		$curr_entity->fill($this->req->getPost());
-    // 		if ($this->validate($validate_rules)) {
-    // 			$curr_entity->id_app = 1;
-    // 			$app_settings_model->save($curr_entity);
-    // 			// 
-    // 			$new_id = $app_settings_model->getInsertID();
-    // 			// 
-    // 			return redirect()->route($this->route_prefix . '_edit', [$new_id]);
-    // 		} else {
-    // 			$this->lc_ui_date->ui_mess =  $this->lc_parseValidator($this->validator->getErrors());
-    // 			$this->lc_ui_date->ui_mess_type = 'alert alert-danger';
-    // 		}
-    // 	}
-    // 	// 
-    // 	$this->lc_ui_date->entity = $curr_entity;
-    // 	return view('Lc5\Cms\Views\app-settings/scheda', $this->lc_ui_date->toArray());
-    // }
 
 
 }

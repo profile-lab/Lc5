@@ -57,8 +57,9 @@ class {class} extends MasterLc
 				// $curr_entity->status = 0;
 				// $curr_entity->public = 0;
                 //
-
-                $this->module_model->save($curr_entity);
+                if ($curr_entity->hasChanged()) { 
+                    $this->module_model->save( $curr_entity );
+				}
                 // 
                 $new_id = $this->module_model->getInsertID();
                 return redirect()->route($this->route_prefix . '_edit', [$new_id]);
@@ -92,8 +93,9 @@ class {class} extends MasterLc
 				// }
 				// $curr_entity->public = $this->req->getPost('public') ? 1 : 0 ;
 				// 
-
-                $this->module_model->save($curr_entity);
+                if ($curr_entity->hasChanged()) { 
+                    $this->module_model->save( $curr_entity );
+				}
                 // 
                 return redirect()->route($this->route_prefix . '_edit', [$curr_entity->id]);
             } else {

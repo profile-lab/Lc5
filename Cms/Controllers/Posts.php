@@ -133,8 +133,9 @@ class Posts extends MasterLc
 				$curr_entity->data_pub = $myTime;
 
 
-
-				$posts_model->save($curr_entity);
+				if ($curr_entity->hasChanged()) { 
+					$posts_model->save( $curr_entity );
+				}
 				// 
 				$new_id = $posts_model->getInsertID();
 				// 
@@ -205,7 +206,9 @@ class Posts extends MasterLc
 				$curr_entity->public = $this->req->getPost('public') ? 1 : 0 ;
 				// 
 				$curr_entity->post_type = $post_type_entity->id;
-				$posts_model->save($curr_entity);
+				if ($curr_entity->hasChanged()) { 
+					$posts_model->save( $curr_entity );
+				}
 				// 
 				$this->editEntityRows($curr_entity->id, 'posts');
 				// 

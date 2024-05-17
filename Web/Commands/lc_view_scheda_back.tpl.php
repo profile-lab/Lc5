@@ -15,7 +15,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="bg-light rounded">
-                    <button type="submit" name="save" value="save" class="btn bottone_salva btn-primary"><span class="oi oi-check"></span>Salva</button>
+                    <button type="submit" class="btn bottone_salva btn-primary"><span class="oi oi-check"></span>Salva</button>
 
                     
                     </div>

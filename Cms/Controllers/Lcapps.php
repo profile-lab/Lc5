@@ -50,7 +50,9 @@ class Lcapps extends MasterLc
 			];
 			$curr_entity->fill($this->req->getPost());
 			if ($this->validate($validate_rules)) {
-				$lcapps_model->save($curr_entity);
+				if ($curr_entity->hasChanged()) { 
+					$lcapps_model->save( $curr_entity );
+				}
 				// 
 				$new_id = $lcapps_model->getInsertID();
 
@@ -126,7 +128,9 @@ class Lcapps extends MasterLc
 			// dd($curr_entity);
 			// 
 			if ($this->validate($validate_rules)) {
-				$lcapps_model->save($curr_entity);
+				if ($curr_entity->hasChanged()) { 
+					$lcapps_model->save( $curr_entity );
+				}
 				// 
 				return redirect()->route($this->route_prefix . '_edit', [$curr_entity->id]);
 			} else {

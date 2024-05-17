@@ -83,8 +83,12 @@ class Rowsstyle extends MasterLc
 			$curr_entity->fill($this->req->getPost());
 			$curr_entity->fields_config = json_encode((object) ['fields' => $field_settings]);
 			if ($this->validate($validate_rules)) {
-				$curr_entity->id_app = 1;
-				$rows_style_model->save($curr_entity);
+				if ($curr_lc_app = session()->get('curr_lc_app')) {
+                    $curr_entity->id_app = $curr_lc_app;
+                }
+				if ($curr_entity->hasChanged()) { 
+					$rows_style_model->save( $curr_entity );
+				}
 				// 
 				$new_id = $rows_style_model->getInsertID();
 				// 
@@ -164,7 +168,9 @@ class Rowsstyle extends MasterLc
 			$curr_entity->fields_config = json_encode((object) ['fields' => $field_settings]);
 			// 
 			if ($this->validate($validate_rules)) {
-				$rows_style_model->save($curr_entity);
+				if ($curr_entity->hasChanged()) { 
+					$rows_style_model->save( $curr_entity );
+				}
 				// 
 				return redirect()->route($this->route_prefix . '_edit', [$curr_entity->id]);
 			} else {

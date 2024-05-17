@@ -107,8 +107,10 @@ class Poststypes extends MasterLc
 			$curr_entity->fill($this->req->getPost());
 			$curr_entity->fields_config = json_encode((object) ['fields' => $field_settings]);
 			if ($this->validate($validate_rules)) {
-				$curr_entity->id_app = 1;
-				$poststypes_model->save($curr_entity);
+				// $curr_entity->id_app = 1;
+				if ($curr_entity->hasChanged()) { 
+					$poststypes_model->save( $curr_entity );
+				}
 				// 
 				$new_id = $poststypes_model->getInsertID();
 				// 
@@ -174,7 +176,9 @@ class Poststypes extends MasterLc
 			$curr_entity->fields_config = json_encode((object) ['fields' => $field_settings]);
 			// 
 			if ($this->validate($validate_rules)) {
-				$poststypes_model->save($curr_entity);
+				if ($curr_entity->hasChanged()) { 
+					$poststypes_model->save( $curr_entity );
+				}
 				// 
 				return redirect()->route($this->route_prefix . '_edit', [$curr_entity->id]);
 			} else {

@@ -84,13 +84,15 @@ class Admins extends MasterLc
 			$curr_entity->fill($request->getPost());
 			$curr_entity->name = 'AppAdmin';
 			$curr_entity->status = 1;
-			$curr_entity->id_app = 1;
+			// $curr_entity->id_app = 1;
 			if ($this->validate($validate_rules)) {
 				$user = $admins_model->where('email', $request->getPost('email'))->where('status', 1)->first();
 				if ($user) {
 					$errMess = 'Utente trovato';
 				} else {
-					$admins_model->save($curr_entity);
+					if ($curr_entity->hasChanged()) { 
+						$admins_model->save( $curr_entity );
+					}
 					return redirect()->route('lc_login');
 				}
 			} else {

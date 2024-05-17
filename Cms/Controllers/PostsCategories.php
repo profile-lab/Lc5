@@ -76,7 +76,9 @@ class PostsCategories extends MasterLc
 				$curr_entity->public = 0;
 				$curr_entity->post_type = $post_type_entity->id;
 				// $curr_entity->id_app = 1;
-				$postscat_model->save($curr_entity);
+				if ($curr_entity->hasChanged()) { 
+					$postscat_model->save( $curr_entity );
+				}
 				// 
 				$new_id = $postscat_model->getInsertID();
 				// 
@@ -124,7 +126,9 @@ class PostsCategories extends MasterLc
 				}
 				$curr_entity->public = $this->req->getPost('public') ? 1 : 0 ;
 				if ($curr_entity->hasChanged()) {
-					$postscat_model->save($curr_entity);
+					if ($curr_entity->hasChanged()) { 
+						$postscat_model->save( $curr_entity );
+					}
 				}
 				// 
 				return redirect()->route($this->route_prefix . '_edit', [$post_type_val, $curr_entity->id]);

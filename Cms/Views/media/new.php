@@ -14,7 +14,7 @@
                     <?php } ?>
                 </div>
                 <div class="col-auto">
-                    <button type="submit" name="save" value="save" class="btn btn-primary"><span class="oi oi-check"></span>Salva</button>
+                    <button type="submit" class="btn btn-primary"><span class="oi oi-check"></span>Salva</button>
                 </div>
             </div>
         </div>

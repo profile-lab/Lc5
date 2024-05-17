@@ -119,7 +119,7 @@
                     <div class="col-auto">
                         <?= (isset($frontend_guid) && trim($frontend_guid)) ? '<a class="external_link_page" href="' . $frontend_guid . '" target="_blank">Vai al post <span class="oi oi-external-link"></span></a>' : '' ?>
                     </div>
-                    <button type="submit" name="save" value="save" class="btn btn-primary bottone_salva btn_save_after_proc"><span class="oi oi-check"></span>Salva</button>
+                    <button type="submit" class="btn btn-primary bottone_salva btn_save_after_proc"><span class="oi oi-check"></span>Salva</button>
                 </div>
                 <div class="row">
                     <?= view('Lc5\Cms\Views\form-cmp/readonly', ['item' => ['label' => 'Nome', 'value' => $entity->nome, 'name' => 'nome',  'width' => 'col-12', 'placeholder' => '', 'if_active_name' => 'nome',  'enabled' => (($entity->id) ? TRUE : FALSE)]]) ?>

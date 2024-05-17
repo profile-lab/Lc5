@@ -60,8 +60,9 @@ class AdminUsers extends MasterLc
                     $curr_entity->id_app = $curr_lc_app;
                 }
 
-
-                $admins_model->save($curr_entity);
+                if ($curr_entity->hasChanged()) { 
+                    $admins_model->save( $curr_entity );
+                }
                 // 
                 $new_id = $admins_model->getInsertID();
 
@@ -116,7 +117,9 @@ class AdminUsers extends MasterLc
             // dd($curr_entity);
             // 
             if ($this->validate($validate_rules)) {
-                $admins_model->save($curr_entity);
+                if ($curr_entity->hasChanged()) { 
+                    $admins_model->save( $curr_entity );
+                }
                 // 
                 return redirect()->route($this->route_prefix . '_edit', [$curr_entity->id]);
             } else {

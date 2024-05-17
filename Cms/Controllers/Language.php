@@ -52,7 +52,9 @@ class Language extends MasterLc
 			if ($this->validate($validate_rules)) {
 				$curr_entity->id_app = $this->getCurrApp();
 				// dd($curr_entity);
-				$languages_model->save($curr_entity);
+				if ($curr_entity->hasChanged()) { 
+					$languages_model->save( $curr_entity );
+				}
 				// 
 				$new_id = $languages_model->getInsertID();
 				// 
@@ -89,7 +91,9 @@ class Language extends MasterLc
 			$curr_entity->fill($this->req->getPost());
 			// 
 			if ($this->validate($validate_rules)) {
-				$languages_model->save($curr_entity);
+				if ($curr_entity->hasChanged()) { 
+					$languages_model->save( $curr_entity );
+				}
 				// 
 				return redirect()->route($this->route_prefix . '_edit', [$curr_entity->id]);
 			} else {

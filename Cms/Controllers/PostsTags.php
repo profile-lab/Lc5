@@ -125,7 +125,9 @@ class PostsTags extends MasterLc
 				if(!$this->req->getPost('val')){
 					$curr_entity->val = url_title(trim($this->req->getPost('nome')), '-', TRUE);				
 				}
-				$post_tags_model->save($curr_entity);
+				if ($curr_entity->hasChanged()) { 
+					$post_tags_model->save( $curr_entity );
+				}
 				// 
 				$new_id = $post_tags_model->getInsertID();
 				// 
@@ -171,7 +173,9 @@ class PostsTags extends MasterLc
 					$curr_entity->val = url_title(trim($this->req->getPost('nome')), '-', TRUE);				
 				}
 				if($curr_entity->hasChanged('nome') || $curr_entity->hasChanged('val')){
-					$post_tags_model->save($curr_entity);
+					if ($curr_entity->hasChanged()) { 
+						$post_tags_model->save( $curr_entity );
+					}
 				}
 				// 
 				return redirect()->route($this->route_prefix . '_edit', [$post_type_val, $curr_entity->id]);

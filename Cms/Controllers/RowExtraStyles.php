@@ -51,8 +51,10 @@ class RowExtraStyles extends MasterLc
 			];
 			$curr_entity->fill($this->req->getPost());
 			if ($this->validate($validate_rules)) {
-				$curr_entity->id_app = 1;
-				$rows_colors_model->save($curr_entity);
+				// $curr_entity->id_app = 1;
+				if ($curr_entity->hasChanged()) { 
+					$rows_colors_model->save( $curr_entity );
+				}
 				// 
 				$new_id = $rows_colors_model->getInsertID();
 				// 
@@ -86,7 +88,9 @@ class RowExtraStyles extends MasterLc
 			$curr_entity->fill($this->req->getPost());
 			// 
 			if ($this->validate($validate_rules)) {
-				$rows_colors_model->save($curr_entity);
+				if ($curr_entity->hasChanged()) { 
+					$rows_colors_model->save( $curr_entity );
+				}
 				// 
 				return redirect()->route($this->route_prefix . '_edit', [$curr_entity->id]);
 			} else {

@@ -66,7 +66,7 @@
         <div class="media_sb">
         <div class="media_sb_in">
             <div class="row">
-	            <button type="submit" name="save" value="save" class="btn bottone_salva btn-primary"><span class="oi oi-check"></span>Salva</button>
+	            <button type="submit" class="btn bottone_salva btn-primary"><span class="oi oi-check"></span>Salva</button>
 	            <?php if (isset($entity->path) && trim($entity->path) && trim($entity->is_image)) { ?>
 		            <div class="form-group col-md-2">
 		                <div class="col-auto">

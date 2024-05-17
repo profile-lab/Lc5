@@ -93,9 +93,10 @@ class Media extends MasterLc
 				}
 				if (!$err_mess) {
 					$curr_entity->status = 1;
-					$curr_entity->id_app = 1;
-
-					$media_model->save($curr_entity);
+					// $curr_entity->id_app = 1;
+					if ($curr_entity->hasChanged()) { 
+						$media_model->save( $curr_entity );
+					}
 					// 
 					$new_id = $media_model->getInsertID();
 					// 
@@ -362,7 +363,9 @@ class Media extends MasterLc
 						}
 					}
 				}
-				$media_model->save($curr_entity);
+				if ($curr_entity->hasChanged()) { 
+					$media_model->save( $curr_entity );
+				}
 				// 
 				return redirect()->route($this->route_prefix . '_edit', [$curr_entity->id]);
 			} else {
@@ -432,9 +435,10 @@ class Media extends MasterLc
 						$curr_entity->formati = $file_path['formati'];
 					}
 					$curr_entity->status = 1;
-					$curr_entity->id_app = 1;
-
-					$media_model->save($curr_entity);
+					// $curr_entity->id_app = 1;
+					if ($curr_entity->hasChanged()) { 
+						$media_model->save( $curr_entity );
+					}
 					// 
 					$new_id = $media_model->getInsertID();
 					$curr_entity->id = $new_id;

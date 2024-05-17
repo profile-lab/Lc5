@@ -77,7 +77,9 @@ class Pages extends MasterLc
 				$curr_entity->nome = $curr_entity->titolo;
 				$curr_entity->status = 0;
 				$curr_entity->public = 0;
-				$pages_model->save($curr_entity);
+				if ($curr_entity->hasChanged()) { 
+					$pages_model->save( $curr_entity );
+				}
 				// 
 				$new_id = $pages_model->getInsertID();
 				// 
@@ -147,7 +149,9 @@ class Pages extends MasterLc
 					$curr_entity->public = 0;
 				}
 				// 
-				$pages_model->save($curr_entity);
+				if ($curr_entity->hasChanged()) { 
+					$pages_model->save( $curr_entity );
+				}
 				// 
 				$this->editEntityRows($curr_entity->id, 'pages');
 				// 
@@ -186,7 +190,9 @@ class Pages extends MasterLc
 			$pages_model->save($up_data);
 		}
 		$curr_entity->is_home = 1;
-		$pages_model->save($curr_entity);
+		if ($curr_entity->hasChanged()) { 
+			$pages_model->save( $curr_entity );
+		}
 		return redirect()->route($this->route_prefix);
 	}
 
