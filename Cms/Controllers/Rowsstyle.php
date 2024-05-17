@@ -167,8 +167,9 @@ class Rowsstyle extends MasterLc
 			$curr_entity->fill($this->req->getPost());
 			$curr_entity->fields_config = json_encode((object) ['fields' => $field_settings]);
 			// 
+			// dd($curr_entity);
 			if ($this->validate($validate_rules)) {
-				if ($curr_entity->hasChanged()) { 
+				if ($rows_style_model->myModelHasChanged($curr_entity)) { 
 					$rows_style_model->save( $curr_entity );
 				}
 				// 

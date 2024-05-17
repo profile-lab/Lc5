@@ -68,6 +68,19 @@ class MasterModel extends Model
 	}
 
 	//----------------------------------------------------------------
+	public function myModelHasChanged($__curr_entity)
+	{
+		$has_changed = false;
+		foreach($this->allowedFields as $field) {			
+			if ($__curr_entity->hasChanged($field)) {
+				$has_changed = true;
+				break;
+			}
+		}
+		return $has_changed;
+	}
+
+	//----------------------------------------------------------------
 	protected function setDataAppAndLang($data)
 	{
 		if ($this->is_for_frontend) {
