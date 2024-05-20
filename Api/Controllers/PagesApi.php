@@ -41,7 +41,7 @@ final class PagesApi extends MasterApi
 		// 
 		if ($appStatus == 'unauthorized') {
 			define('__is_unauthorized__', 'Unauthorized');			
-			exit($this->exitUnauthorized());
+			exit($this->exitUnauthorized($app_api_key));
 		}
 	}
 

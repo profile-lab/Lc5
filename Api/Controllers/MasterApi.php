@@ -61,13 +61,14 @@ class MasterApi extends MasterApp
 	}
 
 	//--------------------------------------------------------------------
-	protected function exitUnauthorized()
+	protected function exitUnauthorized($app_api_key = null)
 	{
 		header("HTTP/1.1 401 Unauthorized");
 		$response = [
 			'status' => 401,
 			'error' => 'Unauthorized',
-			'message' => 'Unauthorized'
+			'message' => 'Unauthorized',
+			'app_api_key' => $app_api_key
 		];
 		return json_encode($response);
 		// return $this->respond($response, 401, 'Unauthorized');
