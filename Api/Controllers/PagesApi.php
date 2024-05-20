@@ -22,7 +22,10 @@ final class PagesApi extends MasterApi
 		$app_api_key = $request->header('x-api-key');
 		if (!$app_api_key && ENVIRONMENT == 'development') {
 			$app_api_key = $request->getGet('x-api-key');
+		}else{
+			$app_api_key = trim(str_replace(['Bearer ', 'bearer ', 'X-Api-Key:'], '', $app_api_key));
 		}
+		// exit('app_api_key: ' . $app_api_key);
 		$appStatus = 'unauthorized';
 		if ($app_api_key) {
 			$lcapps_model = new LcappsModel();
