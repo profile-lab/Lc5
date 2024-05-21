@@ -87,6 +87,18 @@ final class PagesApi extends MasterApi
 		$this->rest_data->entity = $curr_entity;
 		// 
 		$this->rest_data->entity_rows = $this->getEntityRows($curr_entity->id, 'pages');
+		if($this->rest_data->entity_rows){
+			foreach ($this->rest_data->entity_rows as $currentrow) {
+				$currentrow->masterEntityData = (object) [
+					'nome' => $curr_entity->nome,
+					'type' => $curr_entity->type,
+					'guid' => $curr_entity->guid,
+					'titolo' => $curr_entity->titolo,
+					'parent' => $curr_entity->parent,
+				];
+			}
+
+		}
 		// $this->rest_data = null;
 		// 
 		if (isset($this->custom_app_contoller) && $this->custom_app_contoller) {
