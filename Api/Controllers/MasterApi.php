@@ -8,14 +8,14 @@ use stdClass;
 
 class MasterApi extends MasterApp
 {
-	
+
 	use ResponseTrait;
 
 	protected $rest_data = null;
 	//--------------------------------------------------------------------
 	public function __construct()
 	{
-		
+
 		parent::__construct();
 
 		$this->rest_data = new stdClass();
@@ -38,19 +38,19 @@ class MasterApi extends MasterApp
 	}
 
 	//--------------------------------------------------------------------
-	public function sendResponse ($data, $statusCode = 200, $message = 'Not Found')
+	public function sendResponse($data, $statusCode = 200, $message = 'Not Found')
 	{
 		$response = [
 			'status' => $statusCode,
 			'error' => null,
 			'message' => $message,
-            'data' => $data
+			'data' => $data
 		];
 		return $this->respond($response, $statusCode);
 	}
 
 	//--------------------------------------------------------------------
-	public function exitNotFound ()
+	public function exitNotFound()
 	{
 		$response = [
 			'status' => 404,
@@ -61,17 +61,17 @@ class MasterApi extends MasterApp
 	}
 
 	//--------------------------------------------------------------------
-	protected function exitUnauthorized($app_api_key = null)
+	protected function exitUnauthorized($app_api_key = null, $appStatus = null)
 	{
 		header("HTTP/1.1 401 Unauthorized");
 		$response = [
 			'status' => 401,
 			'error' => 'Unauthorized',
 			'message' => 'Unauthorized',
-			'app_api_key' => $app_api_key
+			// 'app_api_key' => $app_api_key,
+			// 'appStatus' => $appStatus,
 		];
 		return json_encode($response);
 		// return $this->respond($response, 401, 'Unauthorized');
 	}
-	
 }

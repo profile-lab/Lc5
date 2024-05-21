@@ -28,6 +28,7 @@ final class PagesApi extends MasterApi
 		// exit('app_api_key: ' . $app_api_key);
 		$appStatus = 'unauthorized';
 		if ($app_api_key) {
+			// $appStatus = 'unauthorized_1';
 			$lcapps_model = new LcappsModel();
 			if ($current_app_by_apikey = $lcapps_model->select(['id', 'apikey', 'nome', 'domain', 'is_in_maintenance_mode', 'status'])->where('apikey', $app_api_key)->asObject()->first()) {
 				$appStatus = 'active';
@@ -41,7 +42,7 @@ final class PagesApi extends MasterApi
 		// 
 		if ($appStatus == 'unauthorized') {
 			define('__is_unauthorized__', 'Unauthorized');			
-			exit($this->exitUnauthorized($app_api_key));
+			exit($this->exitUnauthorized($app_api_key, $appStatus));
 		}
 	}
 
