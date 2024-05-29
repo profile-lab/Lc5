@@ -38,7 +38,7 @@ class MasterApi extends MasterApp
 	}
 
 	//--------------------------------------------------------------------
-	public function sendResponse($data, $statusCode = 200, $message = 'Not Found')
+	public function sendResponse($data, $statusCode = 200, $message = '')
 	{
 		$response = [
 			'status' => $statusCode,
