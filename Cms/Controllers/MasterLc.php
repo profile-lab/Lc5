@@ -474,7 +474,8 @@ class MasterLc extends BaseController
 				}
 				$menu_data_arr[$plugin_key] = (object) [
 					'label' => $plugin_module->label,
-					'route' => site_url(route_to($plugin_module->route)),
+					// 'route' => site_url(route_to($plugin_module->route)),
+					'route' => route_to($plugin_module->route),
 					'module' => $plugin_module->module,
 					'ico' => $plugin_module->ico,
 					// 'items' =>$plugin_module_items_array,
