@@ -128,7 +128,7 @@ function printChildrenMenuItems($childrens, $menu_name, $depth = 0, $current_url
             $return_html .= '<li class="' . (($has_submenu == true) ? 'has_submenu' : 'last_child_depth') . '">';
             $return_html .= '<a ' . $menu_item_target_attr . ' class="menu-item-' . $c_row->id . ' menu-item-type-' . $c_row->type . ' ';
             $return_html .= ((isset($c_row->is_home) && $c_row->is_home == 1) ? 'link_home' : '') . ' ';
-            $return_html .= (checkIsCurrentUrl($current_url, $c_row->parameter, $c_row->is_home)) ? ' is_current ' : '';
+            $return_html .= (checkIsCurrentUrl($current_url, $c_row->parameter, (isset($c_row->is_home)) ? $c_row->is_home : null)) ? ' is_current ' : '';
             $return_html .= $menu_name . '-' . $c_row->id . '" href="' . $menu_item_url . '">' . $c_row->label . '</a>';
             // 
             $return_html .= $sub_menu_code;
