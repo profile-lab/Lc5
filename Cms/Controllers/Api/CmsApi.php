@@ -189,6 +189,11 @@ class CmsApi extends MasterLc
                 $rel_item_model = new \Lc5\Data\Models\PagesModel();
             } else if ($rel_item_type = 'posts') {
                 $rel_item_model = new \Lc5\Data\Models\PostsModel();
+            }else if($rel_item_type != ''){
+                $classNameSpace = str_replace('_', '\\', $rel_item_type);
+                if(class_exists($classNameSpace)){
+                    $rel_item_model = new $classNameSpace();
+                }
             }
             // 
             if ($rel_item_model) {
@@ -227,7 +232,9 @@ class CmsApi extends MasterLc
                         if ($rel_item_entity) {
                             $rel_item_entity->vimeo_video_id = $id_video_vimeo;
                             // $rel_item_entity->vimeo_video_url = null;
-                            $rel_item_model->allowCallbacks(FALSE)->save($rel_item_entity);
+                            if($rel_item_entity->hasChanged()){
+                                $rel_item_model->allowCallbacks(FALSE)->save($rel_item_entity);
+                            }
                         }
 
                         // // 
@@ -282,6 +289,11 @@ class CmsApi extends MasterLc
                 $rel_item_model = new \Lc5\Data\Models\PagesModel();
             } else if ($rel_item_type = 'posts') {
                 $rel_item_model = new \Lc5\Data\Models\PostsModel();
+            }else if($rel_item_type != ''){
+                $classNameSpace = str_replace('_', '\\', $rel_item_type);
+                if(class_exists($classNameSpace)){
+                    $rel_item_model = new $classNameSpace();
+                }
             }
             // 
             if ($rel_item_model) {
@@ -418,6 +430,11 @@ class CmsApi extends MasterLc
                 $rel_item_model = new \Lc5\Data\Models\PagesModel();
             } else if ($rel_item_type = 'posts') {
                 $rel_item_model = new \Lc5\Data\Models\PostsModel();
+            }else if($rel_item_type != ''){
+                $classNameSpace = str_replace('_', '\\', $rel_item_type);
+                if(class_exists($classNameSpace)){
+                    $rel_item_model = new $classNameSpace();
+                }
             }
             // 
             if ($rel_item_model) {
