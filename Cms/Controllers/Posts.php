@@ -75,7 +75,7 @@ class Posts extends MasterLc
 		// 
 		$post_type_entity = $this->getPostType($post_type_val);
 		// 
-		$list = $posts_model->where('post_type', $post_type_entity->id)->findAll();
+		$list = $posts_model->where('post_type', $post_type_entity->id)->orderBy('id', 'DESC')->findAll();
 		foreach ($list as $s_post) {
 			$s_post->frontend_guid = null;
 			if ($app_domain = $this->getAppDataField('domain')) {
