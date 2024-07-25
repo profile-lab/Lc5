@@ -190,7 +190,7 @@ class CmsApi extends MasterLc
             } else if ($rel_item_type = 'posts') {
                 $rel_item_model = new \Lc5\Data\Models\PostsModel();
             }else if($rel_item_type != ''){
-                $classNameSpace = str_replace('_', '\\', $rel_item_type);
+                $classNameSpace = "App\Models\\$rel_item_type";
                 if(class_exists($classNameSpace)){
                     $rel_item_model = new $classNameSpace();
                 }
@@ -289,8 +289,11 @@ class CmsApi extends MasterLc
                 $rel_item_model = new \Lc5\Data\Models\PagesModel();
             } else if ($rel_item_type = 'posts') {
                 $rel_item_model = new \Lc5\Data\Models\PostsModel();
+            } else if ($rel_item_type = 'corso') {
+                $rel_item_model = new \App\Models\CorsiModel();
+            
             }else if($rel_item_type != ''){
-                $classNameSpace = str_replace('_', '\\', $rel_item_type);
+                $classNameSpace = "App\Models\\$rel_item_type";
                 if(class_exists($classNameSpace)){
                     $rel_item_model = new $classNameSpace();
                 }
@@ -431,7 +434,7 @@ class CmsApi extends MasterLc
             } else if ($rel_item_type = 'posts') {
                 $rel_item_model = new \Lc5\Data\Models\PostsModel();
             }else if($rel_item_type != ''){
-                $classNameSpace = str_replace('_', '\\', $rel_item_type);
+                $classNameSpace = "App\Models\\$rel_item_type";
                 if(class_exists($classNameSpace)){
                     $rel_item_model = new $classNameSpace();
                 }
