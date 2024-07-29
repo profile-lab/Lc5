@@ -180,24 +180,31 @@ class CmsApi extends MasterLc
 
     //--------------------------------------------------------------------
     use ResponseTrait;
-    public function newVideoByUrl($rel_item_type = null, $rel_item_id)
+    public function newVideoByUrl($rel_item_type, $rel_item_id)
     {
         $rel_item_model = null;
         $rel_item_entity = null;
         if ($rel_item_type && $rel_item_id) {
             if ($rel_item_type == 'pages') {
                 $rel_item_model = new \Lc5\Data\Models\PagesModel();
-            } else if ($rel_item_type = 'posts') {
+            } else if ($rel_item_type == 'posts') {
                 $rel_item_model = new \Lc5\Data\Models\PostsModel();
-            }else if($rel_item_type != ''){
+            } else if ($rel_item_type == 'corso') {
+                $rel_item_model = new \App\Models\CorsiModel();
+            } else if ($rel_item_type == 'lezione') {
+                $rel_item_model = new \App\Models\CorsiLezioniModel();
+            } else if ($rel_item_type != '') {
                 $classNameSpace = "App\Models\\$rel_item_type";
-                if(class_exists($classNameSpace)){
+                if (class_exists($classNameSpace)) {
                     $rel_item_model = new $classNameSpace();
                 }
             }
             // 
             if ($rel_item_model) {
-                $rel_item_entity = $rel_item_model->allowCallbacks(FALSE)->select(['id', 'nome', 'vimeo_video_id'])->find($rel_item_id);
+              
+
+                // $rel_item_entity = $rel_item_model->allowCallbacks(FALSE)->select(['id', 'nome', 'vimeo_video_id'])->find($rel_item_id);
+                $rel_item_entity = $rel_item_model->find($rel_item_id);
             }
         }
         // 
@@ -214,65 +221,97 @@ class CmsApi extends MasterLc
             // 
             $video_name = $request->getPost('video_name');
             $id_video_vimeo = $request->getPost('id_video_vimeo');
-            
+
             $video_name = (trim($video_name)) ? $video_name : 'video';
 
-                    if ($id_video_vimeo && $vimeo_resonse = $this->getVideoInfoOnVimeo($id_video_vimeo)) {
+            if ($id_video_vimeo && $vimeo_resonse = $this->getVideoInfoOnVimeo($id_video_vimeo)) {
+                // exit(json_encode($vimeo_resonse));
+
+                $video_vimeo_path = $vimeo_resonse['body']['uri'];
+                $video_entity->vimeo_id = $id_video_vimeo;
+                $video_entity->guid = $id_video_vimeo;
+                $video_entity->vimeo_path = $video_vimeo_path;
+                $video_entity->vimeo_video_status = $vimeo_resonse['body']['status'];
+                $video_entity->vimeo_upload_form_action = $vimeo_resonse['body']['upload']['upload_link'];
+
+                
+
+                $video_entity->nome = $vimeo_resonse['body']['name'];
+                $video_entity->titolo = $vimeo_resonse['body']['name'];
+                // 
+                if ($vimeo_resonse['body']['status'] == 'available') {
+                    // 
+                    $curr_vimeo_video_file_object = $this->getHighResVimeoVideo($vimeo_resonse['body']['files']);
+                    $curr_vimeo_image_file_object = $this->getHighResVimeoImage($vimeo_resonse['body']['pictures']['sizes']);
+                    $curr_vimeo_image_thumb_object = $this->getThumbVimeoImage($vimeo_resonse['body']['pictures']['sizes']);
+                    // 
+                    $video_entity->status = 1;
+                    $video_entity->thumb_path = $curr_vimeo_image_thumb_object->link;
+                    $video_entity->cover_path = $curr_vimeo_image_file_object->link;
+                    $video_entity->video_path = $curr_vimeo_video_file_object->link;
+                    $video_entity->vimeo_size = $curr_vimeo_video_file_object->size;
+                    // 
+                }
+                if ($video_entity->hasChanged()) {
+                    $video_model->save($video_entity);
+                }
 
 
-                        $video_vimeo_path = $vimeo_resonse['body']['uri'];
-                        $video_entity->vimeo_id = $id_video_vimeo;
-                        $video_entity->nome = $video_name;
-                        $video_entity->guid = $id_video_vimeo;
-                        $video_entity->vimeo_path = $video_vimeo_path;
-                        $video_entity->vimeo_video_status = $vimeo_resonse['body']['status'];
-                        $video_entity->vimeo_upload_form_action = $vimeo_resonse['body']['upload']['upload_link'];
-                        $video_model->save($video_entity);
 
-                        if ($rel_item_entity) {
-                            $rel_item_entity->vimeo_video_id = $id_video_vimeo;
-                            // $rel_item_entity->vimeo_video_url = null;
-                            if($rel_item_entity->hasChanged()){
-                                $rel_item_model->allowCallbacks(FALSE)->save($rel_item_entity);
-                            }
-                        }
 
-                        // // 
-                        // $video_entity->vimeo_id = $id_video_vimeo;
-                        // $video_entity->vimeo_path = $video_vimeo_path;
-                        // // $video_entity->lezione_id = $lezione_entity->id;
-                        // $video_entity->vimeo_video_status = $vimeo_resonse['body']['status'];
-                        // $video_entity->vimeo_upload_form_action = $vimeo_resonse['body']['upload']['upload_link'];
-                        // $video_model->save($video_entity);
-                        // // 
-                        // // 
-                        // $rel_item_entity->video_code = $id_video_vimeo;
-                        // $rel_item_model->save($rel_item_entity);
-                        // 
-                        // 
-                        $returnObject = (object)[
-                            'status' => 201,
-                            'body' => (object)[
-                                'video_name' => $video_name,
-                                'video_vimeo_id' => $id_video_vimeo,
-                                'video_uri' => $vimeo_resonse['body']['uri'],
-                                'vimeo_resonse' => $vimeo_resonse,
-                                'video_path' => $video_entity->video_path,
-                                'cover_path' => $video_entity->cover_path,
-                                'vimeo_video_status' => $video_entity->vimeo_video_status,
-                            ]
-                            // 'body' => (object)[
-                            //     'video_name' => $video_name,
-                            //     'video_vimeo_id' => $id_video_vimeo,
-                            //     'video_uri' => $vimeo_resonse['body']['uri'],
-                            //     'vimeo_resonse' => $vimeo_resonse,
-                            //     'video_path' => $video_entity->video_path,
-                            //     'cover_path' => $video_entity->cover_path,
-                            //     'vimeo_video_status' => $video_entity->vimeo_video_status,
-                            // ]
-                        ];
+
+                $video_model->save($video_entity);
+
+
+
+                
+                if ($rel_item_entity) {
+                    $rel_item_entity->vimeo_video_id = $id_video_vimeo;
+                    // $rel_item_entity->vimeo_video_url = null;
+                    $rel_item_entity->is_evi = 1;
+                    if ($rel_item_entity->hasChanged()) {
+                        $rel_item_model->allowCallbacks(FALSE)->save($rel_item_entity);
                     }
-            
+                }
+
+
+               
+                // // 
+                // $video_entity->vimeo_id = $id_video_vimeo;
+                // $video_entity->vimeo_path = $video_vimeo_path;
+                // // $video_entity->lezione_id = $lezione_entity->id;
+                // $video_entity->vimeo_video_status = $vimeo_resonse['body']['status'];
+                // $video_entity->vimeo_upload_form_action = $vimeo_resonse['body']['upload']['upload_link'];
+                // $video_model->save($video_entity);
+                // // 
+                // // 
+                // $rel_item_entity->video_code = $id_video_vimeo;
+                // $rel_item_model->save($rel_item_entity);
+                // 
+                // 
+                $returnObject = (object)[
+                    'status' => 201,
+                    'body' => (object)[
+                        'video_name' => $video_name,
+                        'video_vimeo_id' => $id_video_vimeo,
+                        'video_uri' => $vimeo_resonse['body']['uri'],
+                        'vimeo_resonse' => $vimeo_resonse,
+                        'video_path' => $video_entity->video_path,
+                        'cover_path' => $video_entity->cover_path,
+                        'vimeo_video_status' => $video_entity->vimeo_video_status,
+                    ]
+                    // 'body' => (object)[
+                    //     'video_name' => $video_name,
+                    //     'video_vimeo_id' => $id_video_vimeo,
+                    //     'video_uri' => $vimeo_resonse['body']['uri'],
+                    //     'vimeo_resonse' => $vimeo_resonse,
+                    //     'video_path' => $video_entity->video_path,
+                    //     'cover_path' => $video_entity->cover_path,
+                    //     'vimeo_video_status' => $video_entity->vimeo_video_status,
+                    // ]
+                ];
+            }
+
             return $this->respond($returnObject);
         }
         return $this->respond($this->unauthorizedResult);
@@ -280,21 +319,22 @@ class CmsApi extends MasterLc
 
     //--------------------------------------------------------------------
     use ResponseTrait;
-    public function newTusVimeo($rel_item_type = null, $rel_item_id = null)
+    public function newTusVimeo($rel_item_type, $rel_item_id = null)
     {
         $rel_item_model = null;
         $rel_item_entity = null;
         if ($rel_item_type && $rel_item_id) {
             if ($rel_item_type == 'pages') {
                 $rel_item_model = new \Lc5\Data\Models\PagesModel();
-            } else if ($rel_item_type = 'posts') {
+            } else if ($rel_item_type == 'posts') {
                 $rel_item_model = new \Lc5\Data\Models\PostsModel();
-            } else if ($rel_item_type = 'corso') {
+            } else if ($rel_item_type == 'corso') {
                 $rel_item_model = new \App\Models\CorsiModel();
-            
-            }else if($rel_item_type != ''){
+            } else if ($rel_item_type == 'lezione') {
+                $rel_item_model = new \App\Models\CorsiLezioniModel();
+            } else if ($rel_item_type != '') {
                 $classNameSpace = "App\Models\\$rel_item_type";
-                if(class_exists($classNameSpace)){
+                if (class_exists($classNameSpace)) {
                     $rel_item_model = new $classNameSpace();
                 }
             }
@@ -424,18 +464,22 @@ class CmsApi extends MasterLc
 
     //--------------------------------------------------------------------
     use ResponseTrait;
-    public function removeVideo($rel_item_type = null, $rel_item_id = null)
+    public function removeVideo($rel_item_type, $rel_item_id = null)
     {
         $rel_item_model = null;
         $rel_item_entity = null;
         if ($rel_item_type && $rel_item_id) {
             if ($rel_item_type == 'pages') {
                 $rel_item_model = new \Lc5\Data\Models\PagesModel();
-            } else if ($rel_item_type = 'posts') {
+            } else if ($rel_item_type == 'posts') {
                 $rel_item_model = new \Lc5\Data\Models\PostsModel();
-            }else if($rel_item_type != ''){
+            } else if ($rel_item_type == 'corso') {
+                $rel_item_model = new \App\Models\CorsiModel();
+            } else if ($rel_item_type == 'lezione') {
+                $rel_item_model = new \App\Models\CorsiLezioniModel();
+            } else if ($rel_item_type != '') {
                 $classNameSpace = "App\Models\\$rel_item_type";
-                if(class_exists($classNameSpace)){
+                if (class_exists($classNameSpace)) {
                     $rel_item_model = new $classNameSpace();
                 }
             }
