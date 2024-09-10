@@ -40,22 +40,22 @@ class AppSettings extends MasterLc
         // 
         if ($this->req->getPost()) {
             $validate_rules = [
-                'save' => ['label' => 'Save', 'rules' => 'required'],
+                // 'save' => ['label' => 'Save', 'rules' => 'required'],
                 // 'nome' => ['label' => 'Nome', 'rules' => 'required'],
             ];
             $is_falied = TRUE;
             $curr_entity->fill($this->req->getPost());
             // 
-            if ($this->validate($validate_rules)) {
-                if ($curr_entity->hasChanged()) { 
-                    $app_settings_model->save( $curr_entity );
-                }
-                // 
-                return redirect()->route($this->route_prefix, [$curr_entity->id]);
-            } else {
-                $this->lc_ui_date->ui_mess =  $this->lc_parseValidator($this->validator->getErrors());
-                $this->lc_ui_date->ui_mess_type = 'alert alert-danger';
+            if ($curr_entity->hasChanged()) { 
+                $app_settings_model->save( $curr_entity );
             }
+            // 
+            return redirect()->route($this->route_prefix, [$curr_entity->id]);
+            // if ($this->validate($validate_rules)) {
+            // } else {
+            //     $this->lc_ui_date->ui_mess =  $this->lc_parseValidator($this->validator->getErrors());
+            //     $this->lc_ui_date->ui_mess_type = 'alert alert-danger';
+            // }
         }
         // 
         $this->lc_ui_date->entity = $curr_entity;
