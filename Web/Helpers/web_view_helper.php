@@ -21,6 +21,25 @@ function printLangsMenu($menu, $menu_name = 'languages-menu', $has_flags = FALSE
     return $return_html;
 }
 //--------------------------------------------------
+function langLabel($label, $labels_file = 'Frontend', $force_return = true, $append = '')
+{
+    // con gestione languages codeigniter
+    $key = url_title(trim($label), '_', TRUE);
+    $fullKey = $labels_file . '.' . $key;
+    $retunrLabel =  Lang($fullKey);
+
+    if ($retunrLabel && trim($retunrLabel)) {
+        if (trim($retunrLabel) != $fullKey) {
+            return $retunrLabel . $append;
+        }
+    }
+    if ($force_return) {
+        return $label . $append;
+    }
+    return '';
+}
+
+//--------------------------------------------------
 function appLabel($label, $labels, $force_return = false)
 {
     // isset($app->app_labels)
@@ -144,7 +163,7 @@ function checkIsCurrentUrl($current_url, $url = null, $isHome = false)
     if ($current_url == '' && $isHome == 1) {
         return true;
     }
-    $url = ltrim( $url, '/');
+    $url = ltrim($url, '/');
     if ($current_url != '' && $url != '' && (strpos($current_url, $url) !== false)) {
         return true;
     }
