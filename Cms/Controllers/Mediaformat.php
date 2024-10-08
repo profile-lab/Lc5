@@ -28,6 +28,7 @@ class Mediaformat extends MasterLc
 			(object) ['val' => 'fit', 'nome' => 'Fit'],
 			(object) ['val' => 'scale', 'nome' => 'Scale'],
 			(object) ['val' => '', 'nome' => 'Web'],
+			(object) ['val' => 'in', 'nome' => 'Adatta in (nero)'],
 		]);
 	}
 

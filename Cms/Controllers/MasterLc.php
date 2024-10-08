@@ -1044,18 +1044,33 @@ class MasterLc extends BaseController
 			}
 		}
 		// 
-		$image = \Config\Services::image()->withFile(WRITEPATH . '' . $folder . '/' . $nomefile);
+		$image = \Config\Services::image('gd')->withFile(WRITEPATH . '' . $folder . '/' . $nomefile);
 
 		if ($formato['rule'] == 'crop') {
-			$image->fit($formato['w'], $formato['h'], $position = 'center');
+			$image->fit($formato['w'], $formato['h'], 'center');
 			$image->crop($formato['w'], $formato['h'], $x = null, $y = null, false, 'auto');
+		} elseif ($formato['rule'] == 'in') {
+			$image->resize($formato['w'], $formato['h'], true, 'auto');
+			$newX = null;
+			$newY = null;
+			$newW = $formato['w'];
+			$newH = $formato['h'];
+			$oldW = $image->getWidth();
+			$oldH = $image->getHeight();
+			if ($oldW < $newW) {
+				$newX = (($newW - $oldW) / 2) * -1;
+			}
+			if ($oldH < $newH) {
+				$newY = (($newH - $oldH) / 2) * -1;
+			}
+			$image->crop($formato['w'], $formato['h'], $newX, $newY, false, 'auto');
 		} elseif ($formato['rule'] == 'fit') {
-			$image->fit($formato['w'], $formato['h'], $position = 'center');
+			$image->fit($formato['w'], $formato['h'], 'center');
 		} elseif ($formato['rule'] == 'scale') {
 			$image->resize($formato['w'], $formato['h'], true, 'auto');
 		} else {
 			// $image->resize($image->getWidth(), $image->getHeight(), true, 'auto');
-			$image->fit($image->getWidth(), $image->getHeight(), $position = 'center');
+			$image->fit($image->getWidth(), $image->getHeight(), 'center');
 		}
 		$image->save(FCPATH . $folder . '/' . (trim($formato['folder']) ? $formato['folder'] . '/' : '') . $nomefile, 75); // 90
 		// 
