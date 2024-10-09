@@ -142,7 +142,11 @@ function printChildrenMenuItems($childrens, $menu_name, $depth = 0, $current_url
                 $has_submenu = true;
                 $sub_menu_code  =  printChildrenMenuItems($c_row->children, $menu_name, $depth + 1, $current_url);
             }
-            $menu_item_url = (strpos($c_row->parameter, '://') !== false) ? $c_row->parameter : site_url(__locale_uri__ . $c_row->parameter);
+            if ($c_row->type == 'custom' && $c_row->parameter == '#') {
+                $menu_item_url = $c_row->parameter;
+            } else {
+                $menu_item_url = (strpos($c_row->parameter, '://') !== false) ? $c_row->parameter : site_url(__locale_uri__ . $c_row->parameter);
+            }
             $menu_item_target_attr = (strpos($c_row->parameter, '://') !== false) ? ' target="_blank" ' : '';
             $return_html .= '<li class="' . (($has_submenu == true) ? 'has_submenu' : 'last_child_depth') . '">';
             $return_html .= '<a ' . $menu_item_target_attr . ' class="menu-item-' . $c_row->id . ' menu-item-type-' . $c_row->type . ' ';
