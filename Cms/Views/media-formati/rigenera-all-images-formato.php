@@ -18,9 +18,9 @@
                     <th>Nome</th>
                     <th>W</th>
                     <th>H</th>
-                    <th>Cartella</th>
+                    <th>path</th>
                     <th>Tipo</th>
-                    <th>Azioni</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,33 +30,20 @@
                         <td>
                             <a href="<?= site_url(route_to($route_prefix . '_edit', $item->id)) ?>"><?= $item->nome ?></a>
                         </td>
-                        <td><?= $item->w ?></td>
-                        <td><?= $item->h ?></td>
-                        <td><?= (trim($item->folder))  ? '<i>'.trim($item->folder).'</i>'  : '/' ?></td>
-                        <td><?= $item->rule ?></td>
-                        <td>
-                            <a class="btn btn-primary" href="<?= site_url(route_to($route_prefix . '_edit', $item->id)) ?>">Edit</a>
-                            <a class="btn btn-primary" href="<?= site_url(route_to($route_prefix . '_rebase_all_images_in_format', $item->id)) ?>">Rigenera</a>
-                        </td>
+                        <td><?= $formato->w ?></td>
+                        <td><?= $formato->h ?></td>
+                        <td><?= (trim($item->path))  ? '<i>'.trim($item->path).'</i>'  : '' ?></td>
+                        <td><?= $formato->nome . '/' . $formato->rule ?></td>
+                        <td><?= ($item->rigenerato) ? 'Rigenerato' : 'Non Rigenerato' ?></td>
+                        
                     </tr>
                 <?php } ?>
             </tbody>
         </table>
-        <?php /*
-        
-        <ul>
-            <?php foreach ($list as $item) { ?>
-                <li>
-                    <div class="list_item_row">
-                        <div class="list_item_id"><?= $item->id ?></div>
-                        <div class="list_item_nome">
-                            <a href="<?= site_url(route_to($route_prefix . '_edit', $item->id)) ?>"><?= $item->nome ?></a>
-                        </div>
-                    </div>
-                </li>
-            <?php } ?>
-        </ul>
-        */ ?>
+       <?php if( isset($netxPageUrl) && $netxPageUrl && $netxPageUrl != '' ) { ?>
+       <a class="btn btn-primary generaNextBlock"  href="<?= $netxPageUrl ?>">Next</a>
+
+       <?php } ?>
     </div>
 <?php } else { ?>
 <?php } ?>
@@ -102,8 +89,14 @@
     }
 </style>
 <script type="text/javascript">
-    $(document).ready(function() {
+    var btnNext = document.querySelector('.generaNextBlock');
+    if (btnNext) {
+        btnNext.click();
+    }
+    // document.getElementById("deepakkamat").click()​​​;​
 
-    });
+    // $(document).ready(function() {
+    //     $('.generaNextBlock').click();
+    // });
 </script>
 <?= $this->endSection() ?>

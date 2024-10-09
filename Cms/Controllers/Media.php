@@ -94,8 +94,8 @@ class Media extends MasterLc
 				if (!$err_mess) {
 					$curr_entity->status = 1;
 					// $curr_entity->id_app = 1;
-					if ($curr_entity->hasChanged()) { 
-						$media_model->save( $curr_entity );
+					if ($curr_entity->hasChanged()) {
+						$media_model->save($curr_entity);
 					}
 					// 
 					$new_id = $media_model->getInsertID();
@@ -136,6 +136,35 @@ class Media extends MasterLc
 	}
 
 	//--------------------------------------------------------------------
+	public function rigeneraAllImagesInFormatoFormato($format_id)
+	{
+		$media_model = new MediaModel();
+		// 
+		$list_qb = $media_model->orderBy('id', 'asc');
+		$list = $list_qb->paginate(10);
+		if ($list) {
+			$mediaformat_model = new MediaformatModel();
+			if (!$formato = $mediaformat_model->asArray()->find($format_id)) {
+				throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+			}
+			foreach ($list as $curr_entity) {
+				
+				$this->rigeneraFormatoAction($curr_entity->path, $formato, 'uploads');
+				$curr_entity->rigenerato = true;
+			}
+			$pager =  $list_qb->pager;
+			if($pager->hasMore()){
+				$netxPageUrl = $pager->getNextPageURI();
+				$this->lc_ui_date->netxPageUrl = $netxPageUrl;
+			}
+			$this->lc_ui_date->formato = (object)$formato;
+			$this->lc_ui_date->list = $list;
+		}
+
+		return view('Lc5\Cms\Views\media-formati/rigenera-all-images-formato', $this->lc_ui_date->toArray());
+	}
+
+	//--------------------------------------------------------------------
 	public function rigeneraFormato($id, $format_id)
 	{
 		// 
@@ -148,10 +177,21 @@ class Media extends MasterLc
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
 		// 
-		$this->makeFormato($curr_entity->path, $formato, 'uploads');
+		$this->rigeneraFormatoAction($curr_entity->path, $formato);
+		// $this->makeFormato($curr_entity->path, $formato, 'uploads');
 
 		// 
 		return redirect()->route($this->route_prefix . '_edit', [$curr_entity->id]);
+	}
+	//--------------------------------------------------------------------
+	public function rigeneraFormatoAction($imagePath, $formato)
+	{
+		// dd('rigeneraFormatoAction');
+		// 
+		$this->makeFormato($imagePath, $formato, 'uploads');
+		return;
+		// 
+		// return redirect()->route($this->route_prefix . '_edit', [$curr_entity->id]);
 	}
 	//--------------------------------------------------------------------
 	public function rotate($id, $format_id)
@@ -363,8 +403,8 @@ class Media extends MasterLc
 						}
 					}
 				}
-				if ($curr_entity->hasChanged()) { 
-					$media_model->save( $curr_entity );
+				if ($curr_entity->hasChanged()) {
+					$media_model->save($curr_entity);
 				}
 				// 
 				return redirect()->route($this->route_prefix . '_edit', [$curr_entity->id]);
@@ -436,8 +476,8 @@ class Media extends MasterLc
 					}
 					$curr_entity->status = 1;
 					// $curr_entity->id_app = 1;
-					if ($curr_entity->hasChanged()) { 
-						$media_model->save( $curr_entity );
+					if ($curr_entity->hasChanged()) {
+						$media_model->save($curr_entity);
 					}
 					// 
 					$new_id = $media_model->getInsertID();

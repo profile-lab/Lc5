@@ -207,6 +207,7 @@ if (env('custom.hide_lc_cms') === TRUE) {
 				$routes->match(['get', 'post'], 'edit/(:num)', 'Mediaformat::edit/$1', ['as' => 'lc_media_formati_edit']);
 				$routes->match(['get', 'post'], 'newpost', 'Mediaformat::newpost', ['as' => 'lc_media_formati_new']);
 				$routes->get('', 'Mediaformat::index', ['as' => 'lc_media_formati']);
+				$routes->match(['get', 'post'], 'rebase-all-images/(:num)', 'Media::rigeneraAllImagesInFormatoFormato/$1', ['as' => 'lc_media_formati_rebase_all_images_in_format']);
 			});
 			$routes->get('delete/(:num)', 'Media::delete/$1', ['as' => 'lc_media_delete']);
 			$routes->match(['get'], 'getoriginal/(:num)', 'Media::getOriginal/$1', ['as' => 'lc_media_original']);
