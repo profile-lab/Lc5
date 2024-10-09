@@ -1021,6 +1021,117 @@ class MasterLc extends BaseController
 		}
 	}
 	//--------------------------------------------------------------------
+	private function makeFormatoRuleIn($nomefile, $formato, $folder =  'uploads', $curr_file_mime_type = null)
+	{
+
+		$maxWidth = $formato['w'];;
+		$maxHeight = $formato['h'];;
+
+		// Carica l'immagine originale
+		$originalImage = WRITEPATH . '' . $folder . '/' . $nomefile;
+
+
+
+		// Identifica il tipo di immagine originale
+		$imageInfo = getimagesize($originalImage);
+		$imageType = $imageInfo[2];
+
+		// Carica l'immagine in base al tipo
+		switch ($imageType) {
+			case IMAGETYPE_JPEG:
+				$image = imagecreatefromjpeg($originalImage);
+				break;
+			case IMAGETYPE_PNG:
+				$image = imagecreatefrompng($originalImage);
+				break;
+			case IMAGETYPE_WEBP:
+				$image = imagecreatefromwebp($originalImage);
+				break;
+			default:
+				die('Formato immagine non supportato');
+		}
+
+
+		if (!$image) {
+			die('Errore nel caricamento dell\'immagine');
+		}
+
+		// Ottieni le dimensioni dell'immagine originale
+		$width = imagesx($image);
+		$height = imagesy($image);
+
+		// Calcola le nuove dimensioni mantenendo l'aspect ratio
+		$ratio = $width / $height;
+		if ($maxWidth / $maxHeight > $ratio) {
+			$thumbnailWidth = $maxHeight * $ratio;
+			$thumbnailHeight = $maxHeight;
+		} else {
+			$thumbnailWidth = $maxWidth;
+			$thumbnailHeight = $maxWidth / $ratio;
+		}
+
+		// Crea una nuova immagine vuota per il thumbnail
+		$thumbnail = imagecreatetruecolor($maxWidth, $maxHeight);
+
+		// Riempie il background del thumbnail con un colore (opzionale, ad esempio bianco)
+		$backgroundColor = imagecolorallocate($thumbnail, 255, 255, 255); // Bianco
+		imagefill($thumbnail, 0, 0, $backgroundColor);
+
+
+		// if ($imageType == IMAGETYPE_PNG || $imageType == IMAGETYPE_WEBP) {
+		// 	imagealphablending($thumbnail, false);
+		// 	imagesavealpha($thumbnail, true);
+		// 	$backgroundColor = imagecolorallocatealpha($thumbnail, 0, 0, 0, 127); // Trasparente
+		// 	imagefill($thumbnail, 0, 0, $backgroundColor);
+		// } else {
+		// 	// Riempie il background del thumbnail con un colore (bianco) per JPEG
+		// 	$backgroundColor = imagecolorallocate($thumbnail, 255, 255, 255);
+		// 	imagefill($thumbnail, 0, 0, $backgroundColor);
+		// }
+
+
+		// Calcola la posizione per centrare l'immagine ridimensionata
+		$dstX = ($maxWidth - $thumbnailWidth) / 2;
+		$dstY = ($maxHeight - $thumbnailHeight) / 2;
+
+		// Ridimensiona l'immagine originale e copia il contenuto scalato sul thumbnail, centrato
+		imagecopyresampled(
+			$thumbnail,
+			$image,
+			$dstX,
+			$dstY,
+			0,
+			0,
+			$thumbnailWidth,
+			$thumbnailHeight,
+			$width,
+			$height
+		);
+
+
+		// Salva il thumbnail in un file
+		$thumbnailImage =  FCPATH . $folder . '/' . (trim($formato['folder']) ? $formato['folder'] . '/' : '') . $nomefile;
+
+		switch ($imageType) {
+			case IMAGETYPE_JPEG:
+				imagejpeg($thumbnail, $thumbnailImage, 90); // 90 è la qualità JPEG (0-100)
+				break;
+			case IMAGETYPE_PNG:
+				imagepng($thumbnail, $thumbnailImage, 9); // 0-9 è il livello di compressione PNG
+				break;
+			case IMAGETYPE_WEBP:
+				imagewebp($thumbnail, $thumbnailImage, 90); // 0-100 è la qualità WebP
+				break;
+		}
+
+
+		// Libera la memoria
+		imagedestroy($image);
+		imagedestroy($thumbnail);
+
+		// echo 'Thumbnail creato con successo!';
+	}
+	//--------------------------------------------------------------------
 	protected function makeFormato($nomefile, $formato, $folder =  'uploads', $curr_file_mime_type = null)
 	{
 		if (trim($formato['folder'])) {
@@ -1032,38 +1143,37 @@ class MasterLc extends BaseController
 			($curr_file_mime_type === 'png' || $curr_file_mime_type === 'image/png' || $curr_file_mime_type === 'image/x-png') &&
 			$formato['rule'] === '' && $formato['folder'] === ''
 		) {
-			// $curr_file_mime_type = mime_content_type(WRITEPATH . '' . $folder . '/' . $nomefile);
-			// d('qui-ok--' . $formato['rule'] . ' -' . $formato['folder'] . '- ' . $curr_file_mime_type);
-
 			$file = WRITEPATH . '' . $folder . '/' . $nomefile;
 			$newfile = FCPATH . $folder . '/' . $nomefile;
-
 			if (copy($file, $newfile)) {
-
 				return;
 			}
+		}
+		if ($formato['rule'] == 'in') {
+			$this->makeFormatoRuleIn($nomefile, $formato, $folder, $curr_file_mime_type);
+			return;
 		}
 		// 
 		$image = \Config\Services::image('gd')->withFile(WRITEPATH . '' . $folder . '/' . $nomefile);
 
 		if ($formato['rule'] == 'crop') {
 			$image->fit($formato['w'], $formato['h'], 'center');
-			$image->crop($formato['w'], $formato['h'], $x = null, $y = null, false, 'auto');
-		} elseif ($formato['rule'] == 'in') {
-			$image->resize($formato['w'], $formato['h'], true, 'auto');
-			$newX = null;
-			$newY = null;
-			$newW = $formato['w'];
-			$newH = $formato['h'];
-			$oldW = $image->getWidth();
-			$oldH = $image->getHeight();
-			if ($oldW < $newW) {
-				$newX = (($newW - $oldW) / 2) * -1;
-			}
-			if ($oldH < $newH) {
-				$newY = (($newH - $oldH) / 2) * -1;
-			}
-			$image->crop($formato['w'], $formato['h'], $newX, $newY, false, 'auto');
+			$image->crop($formato['w'], $formato['h'], null, null, false, 'auto');
+			// } elseif ($formato['rule'] == 'in') {
+			// 	$image->resize($formato['w'], $formato['h'], true, 'auto');
+			// 	$newX = null;
+			// 	$newY = null;
+			// 	$newW = $formato['w'];
+			// 	$newH = $formato['h'];
+			// 	$oldW = $image->getWidth();
+			// 	$oldH = $image->getHeight();
+			// 	if ($oldW < $newW) {
+			// 		$newX = (($newW - $oldW) / 2) * -1;
+			// 	}
+			// 	if ($oldH < $newH) {
+			// 		$newY = (($newH - $oldH) / 2) * -1;
+			// 	}
+			// 	$image->crop($formato['w'], $formato['h'], $newX, $newY, false, 'auto');
 		} elseif ($formato['rule'] == 'fit') {
 			$image->fit($formato['w'], $formato['h'], 'center');
 		} elseif ($formato['rule'] == 'scale') {
