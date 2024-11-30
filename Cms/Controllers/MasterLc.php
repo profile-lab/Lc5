@@ -385,9 +385,16 @@ class MasterLc extends BaseController
 	//--------------------------------------------------------------------
 	protected function getLcAdminMenu()
 	{
-		if (class_exists('\LcShop\Cms\Controllers\LcShopConfigs')) {
-			$this->lc_plugin_modules = array_merge($this->lc_plugin_modules, \LcShop\Cms\Controllers\LcShopConfigs::getLcModulesMenu());
-		}
+		$LcShopConfigsClassNamespace = '\LcShop\Cms\Controllers\LcShopConfigs'; 
+        if(class_exists($LcShopConfigsClassNamespace)){
+			$this->lc_plugin_modules = array_merge($this->lc_plugin_modules, $LcShopConfigsClassNamespace::getLcModulesMenu());
+        }
+		// 
+		$LcUsersConfigsClassNamespace = '\LcUsers\Cms\Controllers\LcUsersConfigs'; 
+        if(class_exists($LcUsersConfigsClassNamespace)){
+			$this->lc_plugin_modules = array_merge($this->lc_plugin_modules, $LcUsersConfigsClassNamespace::getLcModulesMenu());
+        }
+		// 
 
 		$posts_icos = ['news' => 'paperclip', 'faq' => 'question-mark'];
 		$menu_data_arr = [];
@@ -625,26 +632,6 @@ class MasterLc extends BaseController
 		];
 		// 
 
-		// Menu 
-		$menu_data_arr['users'] = (object) [
-			'label' => 'Utenti',
-			'route' => site_url(route_to('lc_site_users')),
-			'module' => 'siteusers',
-			'ico' => 'people',
-			'items' => [
-				(object) [
-					'label' => 'Lista Utenti',
-					'route' => site_url(route_to('lc_site_users')),
-					'module_action' => 'index',
-				],
-				(object) [
-					'label' => 'Nuovo Utente',
-					'route' => site_url(route_to('lc_site_users_new')),
-					'module_action' => 'newpost',
-				]
-			]
-		];
-		//
 		// Menu 
 		$menu_data_arr['admins'] = (object) [
 			'label' => 'Admins',
