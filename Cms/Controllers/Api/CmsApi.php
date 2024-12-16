@@ -193,6 +193,8 @@ class CmsApi extends MasterLc
                 $rel_item_model = new \App\Models\CorsiModel();
             } else if ($rel_item_type == 'lezione') {
                 $rel_item_model = new \App\Models\CorsiLezioniModel();
+            } else if ($rel_item_type == 'videolezione') {
+                $rel_item_model = new \App\Models\CorsiVideoLezioniModel();
             } else if ($rel_item_type != '') {
                 $classNameSpace = "App\Models\\$rel_item_type";
                 if (class_exists($classNameSpace)) {
