@@ -191,7 +191,9 @@ class MasterApp extends BaseController
 			$htmlbody = str_replace('{{name}}', $post_data['name'], $htmlbody);
 			$htmlbody = str_replace('{{surname}}', $post_data['surname'], $htmlbody);
 			$htmlbody = str_replace('{{email}}', $post_data['email'], $htmlbody);
-			$htmlbody = str_replace('{{tel}}', $post_data['tel'], $htmlbody);
+			if(isset($post_data['tel']) && trim($post_data['tel'])){
+				$htmlbody = str_replace('{{tel}}', $post_data['tel'], $htmlbody);
+			}
 			$htmlbody = str_replace('{{message}}', nl2br($post_data['message']), $htmlbody);
 			$email_subject = 'Richiesta info da ' . '=?UTF-8?B?' . base64_encode(env('custom.app_name')) . '?=';
 			if ($this->inviaEmail($toAddress, $email_subject, $htmlbody)) {
