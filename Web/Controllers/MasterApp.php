@@ -122,6 +122,14 @@ class MasterApp extends BaseController
 			} else {
 				$form_result = $this->parseFormPostData($this->req->getPost());
 				$this->form_result = $form_result;
+				// if (
+				// 	$form_result &&
+				// 	isset($form_result->is_send) && $form_result->is_send === TRUE &&
+				// 	isset($form_result->redirect_url) && trim($form_result->redirect_url)
+				// ) {
+				// 	return redirect()->to($form_result->redirect_url);
+				// 	exit;
+				// }
 			}
 			$form_post_data = (object) $this->req->getPost();
 			$this->form_post_data = $form_post_data;
@@ -145,6 +153,7 @@ class MasterApp extends BaseController
 	//--------------------------------------------------------------------
 	private function sendMailToInfo()
 	{
+		$redirect_url = null;
 		$requestService = $this->req = \Config\Services::request();
 		$post_data = $requestService->getPost();
 		// 
@@ -191,7 +200,7 @@ class MasterApp extends BaseController
 			$htmlbody = str_replace('{{name}}', $post_data['name'], $htmlbody);
 			$htmlbody = str_replace('{{surname}}', $post_data['surname'], $htmlbody);
 			$htmlbody = str_replace('{{email}}', $post_data['email'], $htmlbody);
-			if(isset($post_data['tel']) && trim($post_data['tel'])){
+			if (isset($post_data['tel']) && trim($post_data['tel'])) {
 				$htmlbody = str_replace('{{tel}}', $post_data['tel'], $htmlbody);
 			}
 			$htmlbody = str_replace('{{message}}', nl2br($post_data['message']), $htmlbody);
@@ -200,7 +209,16 @@ class MasterApp extends BaseController
 				$user_mess->type = 'ok';
 				$user_mess->title = $this->appLabelMethod('Email inviata con successo', $this->currentapp->labels);
 				$user_mess->content = $this->appLabelMethod('La sua richiesta è stata presa in carico dal nostro team. Grazie!', $this->currentapp->labels);
+				$_POST['name'] = null;
+				$_POST['surname'] = null;
+				$_POST['email'] = null;
+				$_POST['tel'] = null;
+				$_POST['message'] = null;
 				$return_obj->is_send = TRUE;
+				$return_obj->redirect_url = $this->req->getUri()->getPath();
+
+				// dd($redirect_url);
+
 			} else {
 				$user_mess->title = $this->appLabelMethod("Si è verificato un errore durante l'invio della mail", $this->currentapp->labels);
 				$user_mess->content = $this->appLabelMethod("L'errore è stato segnalato e stiamo lavorando per risolvere il problema, riprova più tardi", $this->currentapp->labels);
