@@ -177,7 +177,7 @@ class MasterApp extends BaseController
 					foreach ($checkfield_arr as $field_to_check) {
 						if (!isset($post_data[$field_to_check]) || !trim($post_data[$field_to_check])) {
 							$field_errors[$field_to_check] = 'richiesto';
-							$field_errors_html_list .= '<li>Il campo <b>' . $field_to_check . '</b> è richiesto</li>';
+							$field_errors_html_list .= '<li>Il campo <b>' . ((Lang('Frontend.'.$field_to_check) != 'Frontend.'.$field_to_check) ? Lang('Frontend.'.$field_to_check):  $field_to_check) . '</b> è richiesto</li>';
 						}
 					}
 					if (count($field_errors) > 0) {
