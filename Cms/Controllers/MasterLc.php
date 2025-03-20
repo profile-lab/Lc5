@@ -938,23 +938,45 @@ class MasterLc extends BaseController
 	protected function getRowColors()
 	{
 		$rows_colors_model = new RowcolorModel();
-		$dati = $rows_colors_model->findAll();
-		if ($dati) {
-			$dati[] = (object) ['val' => '', 'nome' => 'Nessuno'];
-			return $dati;
+		$datiDb = $rows_colors_model->asObject()->findAll();
+		$dati = [];
+		if ($datiDb) {
+			foreach ($datiDb as $dato) {
+				$dati[] = (object) ['val' => $dato->val, 'nome' => $dato->nome];
+			}
 		}
-		return null;
+		$rows_colors = $this->getProjectSettingsValue('rows_colors');
+		if($rows_colors){
+			foreach($rows_colors as $rows_color){
+				$dati[] = (object) ['val' => $rows_color['val'], 'nome' => $rows_color['nome']];
+			}
+		}
+		if(count($dati) > 0){
+			$dati[] = (object) ['val' => '', 'nome' => 'Nessuno'];
+		}
+		return $dati;
 	}
 	//--------------------------------------------------------------------
 	protected function getRowExtraStyles()
 	{
 		$rows_extra_styles_model = new RowextrastyleModel();
-		$dati = $rows_extra_styles_model->findAll();
-		if ($dati) {
-			$dati[] = (object) ['val' => '', 'nome' => 'Nessuno'];
-			return $dati;
+		$datiDb = $rows_extra_styles_model->asObject()->findAll();
+		$dati = [];
+		if ($datiDb) {
+			foreach ($datiDb as $dato) {
+				$dati[] = (object) ['val' => $dato->val, 'nome' => $dato->nome];
+			}
 		}
-		return null;
+		$rows_extra_styles = $this->getProjectSettingsValue('rows_extra_styles');
+		if($rows_extra_styles){
+			foreach($rows_extra_styles as $row_extra_style){
+				$dati[] = (object) ['val' => $row_extra_style['val'], 'nome' => $row_extra_style['nome']];
+			}
+		}
+		if(count($dati) > 0){
+			$dati[] = (object) ['val' => '', 'nome' => 'Nessuno'];
+		}
+		return $dati;
 	}
 	//--------------------------------------------------------------------
 	protected function getRowStyles($__type = null)
