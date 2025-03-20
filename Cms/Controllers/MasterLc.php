@@ -22,7 +22,6 @@ use Lc5\Data\Models\MediaformatModel;
 use Lc5\Data\Models\PoststypesModel;
 
 use Lc5\Data\Entities\Row;
-
 use Vimeo\Vimeo;
 
 class MasterLc extends BaseController
@@ -48,7 +47,7 @@ class MasterLc extends BaseController
 	// 
 	protected $vimeo_client = null;
 	// 
-
+	protected $project_settings = null;
 	// 
 	// protected $lc_plugin_modules = [];
 	// 
@@ -61,6 +60,7 @@ class MasterLc extends BaseController
 		// d($this->lc_ui_date);
 		$this->req = \Config\Services::request();
 
+		$this->project_settings = $this->getProjectSettings();
 		// 
 		$this->current_app_data = $this->getAppData($this->getCurrApp());
 		$this->default_lc_lang = $this->getDefaultLang();
@@ -124,6 +124,32 @@ class MasterLc extends BaseController
 	//--------------------------------------------------------------------
 	//--------------------------------------------------------------------
 
+	protected function getProjectSettings()
+	{
+		$file_path = ROOTPATH.'project-settings.php'; 
+		if(file_exists($file_path)){       
+			require_once $file_path;
+			$settings_class_name = 'ProjectSettings'; 
+			if(class_exists($settings_class_name)){    
+				$project_settings = new $settings_class_name();
+				return $project_settings;
+			}
+		}
+	}
+
+	//--------------------------------------------------------------------
+	protected function getProjectSettingsValue($key)
+	{
+		if($this->project_settings){
+			$curr_app = $this->getCurrApp();
+			if(isset($this->project_settings->{$key})){
+				if(isset($this->project_settings->{$key}[$curr_app])){
+					return $this->project_settings->{$key}[$curr_app];
+				}
+			}
+		}
+		return null;
+	}
 
 	// //--------------------------------------------------------------------
 	// protected function createBeseShopSettings($__id_app = null)
@@ -222,15 +248,31 @@ class MasterLc extends BaseController
 		$return_css_code = '<style>';
 
 		$rows_style_model = new RowsstyleModel();
-		if ($rows_styles_css_data = $rows_style_model->findAll()) {
+		if ($rows_styles_css_data = $rows_style_model->asObject()->findAll()) {
 			foreach ($rows_styles_css_data as $row_style_data) {
 				$fields_to_hide = [];
 				$entity_fields_conf_byjson = json_decode(($row_style_data->fields_config) ?: '');
 				if (json_last_error() === JSON_ERROR_NONE) {
 					$fields_to_hide = $entity_fields_conf_byjson->fields;
 				}
-				foreach ($fields_to_hide as $key => $val) {
+
+				foreach ($fields_to_hide as $val) {
+					// d($row_style_data->val);
 					$return_css_code .= "div.card-body[meta-type='$row_style_data->val'] .form-field-" . $row_style_data->type . "_" . $val . "{ display: none !important; } ";
+				}
+			}
+		}
+		$rows_config_styles = $this->getProjectSettingsValue('rows_config_styles');
+		if($rows_config_styles){
+			foreach($rows_config_styles as $row_config){
+				$row_style_data = (object) $row_config;
+				$fields_to_hide = [];
+				$entity_fields_conf_byjson = json_decode(($row_style_data->fields_config) ?: '');
+				if (json_last_error() === JSON_ERROR_NONE) {
+					$fields_to_hide = $entity_fields_conf_byjson->fields;
+					foreach ($fields_to_hide as $key => $val) {
+						$return_css_code .= "div.card-body[meta-type='$row_style_data->val'] .form-field-" . $row_style_data->type . "_" . $val . "{ display: none !important; } ";
+					}
 				}
 			}
 		}
@@ -922,7 +964,15 @@ class MasterLc extends BaseController
 		if ($__type) {
 			$qb->whereIn('type', [$__type, '']);
 		}
-		return $qb->findAll();
+		$allRowsStyles = $qb->findAll();
+		$rows_config = $this->getProjectSettingsValue('rows_config_styles');
+		if($rows_config){
+			foreach($rows_config as $row_config){
+				$allRowsStyles[] = (object) $row_config;
+			}
+		}
+
+		return $allRowsStyles;
 	}
 
 	//--------------------------------------------------------------------
