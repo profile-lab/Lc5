@@ -990,6 +990,11 @@ class MasterLc extends BaseController
 		$rows_config = $this->getProjectSettingsValue('rows_config_styles');
 		if($rows_config){
 			foreach($rows_config as $row_config){
+				if($__type){
+					if($row_config['type'] != $__type){
+						continue;
+					}
+				}
 				$allRowsStyles[] = (object) $row_config;
 			}
 		}
