@@ -118,6 +118,8 @@ class WebUiData extends Entity
         // 
         'ui_mess' => null,
         'ui_mess_type' => null,
+        //
+        'asset_version' => '1.0.0',
     ];
 	
 	protected $casts   = [];

@@ -12,7 +12,7 @@ class MasterWeb extends MasterApp
 
 	protected $base_assets_folder = 'assets/web/';
 	public $web_ui_date;
-
+	protected $project_settings = null;
 	//--------------------------------------------------------------------
 	public function __construct()
 	{
@@ -28,6 +28,11 @@ class MasterWeb extends MasterApp
 		}
 		// 
 		$this->web_ui_date = new WebUiData($this->currentapp);
+		$this->project_settings = $this->getProjectSettings($this->currentapp);
+		$asset_version = $this->getProjectSettingsValue('asset_version');
+		if($asset_version){
+			$this->web_ui_date->__set('asset_version', $asset_version);
+		}
 
 
 		if ($maintenance_view = $this->checkIsInMaintenance()) {			
@@ -44,6 +49,34 @@ class MasterWeb extends MasterApp
 			}
 		}
 		$this->web_ui_date->__set('form_post_data', $this->form_post_data);
+	}
+
+	//--------------------------------------------------------------------
+	protected function getProjectSettings()
+	{
+		$file_path = ROOTPATH.'project-settings.php'; 
+		if(file_exists($file_path)){       
+			require_once $file_path;
+			$settings_class_name = 'ProjectSettings'; 
+			if(class_exists($settings_class_name)){    
+				$project_settings = new $settings_class_name();
+				return $project_settings;
+			}
+		}
+	}
+
+	//--------------------------------------------------------------------
+	protected function getProjectSettingsValue($key)
+	{
+		if($this->project_settings){
+			$curr_app = $this->currentapp->id;
+			if(isset($this->project_settings->{$key})){
+				if(isset($this->project_settings->{$key}[$curr_app])){
+					return $this->project_settings->{$key}[$curr_app];
+				}
+			}
+		}
+		return null;
 	}
 
 	//--------------------------------------------------------------------
