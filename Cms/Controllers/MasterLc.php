@@ -931,8 +931,23 @@ class MasterLc extends BaseController
 	//--------------------------------------------------------------------
 	protected function getRowComponents()
 	{
+
 		$rows_components_model = new RowcomponentsModel();
-		return $rows_components_model->findAll();
+		$qb = $rows_components_model->orderBy('nome', 'ASC')->orderBy('nome', 'ASC');
+		$dbRowsComponents = $qb->findAll();
+		if($dbRowsComponents){
+			foreach($dbRowsComponents as $dbRowComponent){
+				$dati[] = $dbRowComponent;
+			}
+		}
+		$rows_components_config = $this->getProjectSettingsValue('rows_components_config');
+		if($rows_components_config){
+			foreach($rows_components_config as $row_component){
+				$dati[] = (object) $row_component;
+			}
+		}
+
+		return $dati;
 	}
 	//--------------------------------------------------------------------
 	protected function getRowColors()

@@ -44,6 +44,9 @@ class MasterApp extends BaseController
 
 	protected $currentapp = null;
 
+	protected $app_project_settings = null;
+
+
 
 	//--------------------------------------------------------------------
 	public function __construct()
@@ -91,6 +94,8 @@ class MasterApp extends BaseController
 
 		$this->currentapp = (object) array_merge((array) $app_base_data, (array) $app_settings);
 		// 
+		$this->app_project_settings = $this->getAppProjectSettings();
+
 		// 
 		$this->send_mail_config = $this->getEnvEmailConfig();
 		// 
@@ -134,6 +139,34 @@ class MasterApp extends BaseController
 			$form_post_data = (object) $this->req->getPost();
 			$this->form_post_data = $form_post_data;
 		}
+	}
+
+	//--------------------------------------------------------------------
+	protected function getAppProjectSettings()
+	{
+		$file_path = ROOTPATH.'project-settings.php'; 
+		if(file_exists($file_path)){       
+			require_once $file_path;
+			$settings_class_name = 'ProjectSettings'; 
+			if(class_exists($settings_class_name)){    
+				$project_settings = new $settings_class_name();
+				return $project_settings;
+			}
+		}
+	}
+
+	//--------------------------------------------------------------------
+	protected function getAppProjectSettingsValue($key)
+	{
+		if($this->app_project_settings){
+			$curr_app = $this->currentapp->id;
+			if(isset($this->app_project_settings->{$key})){
+				if(isset($this->app_project_settings->{$key}[$curr_app])){
+					return $this->app_project_settings->{$key}[$curr_app];
+				}
+			}
+		}
+		return null;
 	}
 
 	//--------------------------------------------------------------------
@@ -297,6 +330,17 @@ class MasterApp extends BaseController
 				}
 			} else {
 				if ($viewFilePath = customOrDefaultViewFragment('rows/php-component/' . $row->component, 'Lc5', false)) {
+					if (!isset($row->dynamic_component)) {
+						$rows_components_config = $this->getAppProjectSettingsValue('rows_components_config');
+						if($rows_components_config && is_array($rows_components_config) && count($rows_components_config) > 0){
+							foreach($rows_components_config as $rows_components_config_item){
+								if($rows_components_config_item['val'] == $row->component){
+									$row->dynamic_component = (object) $rows_components_config_item;
+								}
+							}
+						}
+					}
+
 					if (isset($row->dynamic_component)) {
 						if (isset($row->dynamic_component->before_func) && trim($row->dynamic_component->before_func)) {
 							if (function_exists($row->dynamic_component->before_func)) {
