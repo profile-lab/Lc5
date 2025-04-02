@@ -75,7 +75,7 @@ $t_unique = rand(100, 1000);
 
             </div>
 
-           
+
             <?= view('Lc5\Cms\Views\form-cmp/hidden', ['item' => ['name' => $prefix . 'json_data[]', 'value' => (isset($row->json_data)) ? $row->json_data : '', 'input_class' => 'json_object']]) ?>
             <div class="colonne_items_cnt">
                 <?php if (isset($row->data_object) && is_iterable($row->data_object)) { ?>
@@ -103,26 +103,26 @@ $t_unique = rand(100, 1000);
             <!-- CAMPI CUSTOM FIELD -->
             <?php if (isset($custom_fields_keys_columns_par) && is_array($custom_fields_keys_columns_par) && count($custom_fields_keys_columns_par) > 0) { ?>
                 <div class="col-12 form-field-simple_custom_fields_rows">
-                    <div class="row badge-light border">
-                        <div class="d-flex justify-content-between align-items-center py-3">
-                            <div class="col-auto">
-                                <h6 class="m-0 p-0">Campi custom</h6>
-                            </div>
+                    <div class="custom_fields_component_cnt">
+                        <div class="entity_custom_header_tools">
+                            <h6 class="m-0 p-0">Campi custom</h6>
                             <div class="col-auto">
                                 <button type="button" meta-rel-source-id="custom_field_item_code-columns_par" meta-rel-trg="custom_items_cnt" meta-rel-unique="<?= (isset($row->id)) ? 'uni_' . $row->id : 'uni_' . $t_unique ?>" class="btn btn-sm btn-primary add_custom_item"><span class="oi oi-plus m-0"></span></button>
                             </div>
                         </div>
-                        <?= view('Lc5\Cms\Views\form-cmp/hidden', ['item' => ['name' => $prefix . 'free_values[]', 'value' => (isset($row->free_values)) ? $row->free_values : '', 'input_class' => 'free_values']]) ?>
-                        <div class="row mx-0 custom_items_cnt">
-                            <?php if (isset($row->free_values_object) && is_iterable($row->free_values_object)) { ?>
-                                <?php foreach ($row->free_values_object as $free_values_item) { ?>
-                                    <?= view('Lc5\Cms\Views\part-cmp/custom-field-item', ['item' => [
-                                        'keys_source' => $custom_fields_keys_columns_par,
-                                        'key' => (isset($free_values_item->key)) ? $free_values_item->key : '',
-                                        'value' => (isset($free_values_item->value)) ? $free_values_item->value : ''
-                                    ]]) ?>
+                        <div class="entity_custom_items_cnt">
+                            <?= view('Lc5\Cms\Views\form-cmp/hidden', ['item' => ['name' => $prefix . 'free_values[]', 'value' => (isset($row->free_values)) ? $row->free_values : '', 'input_class' => 'free_values']]) ?>
+                            <div class="custom_items_cnt">
+                                <?php if (isset($row->free_values_object) && is_iterable($row->free_values_object)) { ?>
+                                    <?php foreach ($row->free_values_object as $free_values_item) { ?>
+                                        <?= view('Lc5\Cms\Views\part-cmp/custom-field-item', ['item' => [
+                                            'keys_source' => $custom_fields_keys_columns_par,
+                                            'key' => (isset($free_values_item->key)) ? $free_values_item->key : '',
+                                            'value' => (isset($free_values_item->value)) ? $free_values_item->value : ''
+                                        ]]) ?>
+                                    <?php } ?>
                                 <?php } ?>
-                            <?php } ?>
+                            </div>
                         </div>
                     </div>
                 </div>

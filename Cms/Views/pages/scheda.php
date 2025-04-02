@@ -132,41 +132,5 @@
     });
 </script>
 
-<?php /*
 
-<script type="text/html" id="blocco_simple_par_code" style="display: none;">
-    <?= view('Lc5\Cms\Views\rows-cmp/simple-par', ['row' => (object) []]) ?>
-</script>
-<script type="text/html" id="blocco_columns_par_code" style="display: none;">
-    <?= view('Lc5\Cms\Views\rows-cmp/columns-par', ['row' => (object) []]) ?>
-</script>
-<script type="text/html" id="blocco_gallery_par_code" style="display: none;">
-    <?= view('Lc5\Cms\Views\rows-cmp/gallery-par', ['row' => (object) []]) ?>
-</script>
-<script type="text/html" id="blocco_component_par_code" style="display: none;">
-    <?= view('Lc5\Cms\Views\rows-cmp/component-par', ['row' => (object) []]) ?>
-</script>
-<script type="text/html" id="gallery_item_code" style="display: none;">
-    <?= view('Lc5\Cms\Views\part-cmp/gallery-item', ['row' => (object) []]) ?>
-</script>
-<script type="text/html" id="colonne_item_code" style="display: none;">
-    <?= view('Lc5\Cms\Views\part-cmp/column-item', ['row' => (object) []]) ?>
-</script>
-
-*/ ?>
-<?php /*
-<script type="text/html" id="custom_field_item_code-pages" style="display: none;">
-    <?= view('Lc5\Cms\Views\part-cmp/custom-field-item', ['item' => ['keys_source' => $custom_fields_keys_pages]]) ?>
-</script>
-*/ ?>
-<?php /*
-<script type="text/html" id="custom_field_item_code" style="display: none;">
-    <?= view('Lc5\Cms\Views\part-cmp/custom-field-item', ['item' =>  []]) ?>
-</script>
-*/ ?>
-<?php /*
-<script type="text/html" id="custom_field_item_sidebar_code" style="display: none;">
-    <?= view('Lc5\Cms\Views\part-cmp/custom-field-item-sidebar', ['row' => (object) []]) ?>
-</script>
-*/ ?>
 <?= $this->endSection() ?>
