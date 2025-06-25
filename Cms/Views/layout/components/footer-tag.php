@@ -44,6 +44,10 @@
 
 <script src="<?= '/assets/lc-admin-assets/js/jquery.dm-uploader.min.js' ?>"></script>
 <script src="<?= '/assets/lc-admin-assets/js/selectize.min.js' ?>"></script>
+<script>
+    var thumbs_folder = '<?= env('custom.media_root_path') ?>thumbs/';
+
+</script>
 <script src="<?= '/assets/lc-admin-assets/js/script.js' ?>"></script>
 <script src="<?= '/assets/lc-admin-assets/js/pf-script.js' ?>"?v=11-32></script>
 <script>

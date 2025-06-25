@@ -78,15 +78,14 @@ class PostscategoriesModel extends MasterModel
 					$item->main_img_is_image = $item->main_img_obj->is_image;
 					$item->main_img_type = $item->main_img_obj->tipo_file;
 					if ($item->main_img_obj->is_image) {
-						$item->main_img_thumb = 'uploads/thumbs/' . $item->main_img_obj->path;
+						$item->main_img_thumb = env('custom.media_root_path') . 'thumbs/' . $item->main_img_obj->path;
 					} else {
 						if( $item->main_img_obj->tipo_file == 'svg'){
-							$item->main_img_thumb = ('uploads/' . $item->main_img_obj->path);
+							$item->main_img_thumb = env('custom.media_root_path') . $item->main_img_obj->path;
 						}else{
 							$item->main_img_thumb = $media_model->getThumbForType($item->main_img_obj->tipo_file);
 						}
 					}
-					// $item->main_img_thumb = 'uploads/thumbs/' . $item->main_img_obj->path;
 				}
 			}
 			if (isset($item->alt_img_id) && $item->alt_img_id > 0) {
@@ -95,15 +94,14 @@ class PostscategoriesModel extends MasterModel
 					$item->alt_img_is_image = $item->alt_img_obj->is_image;
 					$item->alt_img_type = $item->alt_img_obj->tipo_file;
 					if ($item->alt_img_obj->is_image) {
-						$item->alt_img_thumb = 'uploads/thumbs/' . $item->alt_img_obj->path;
+						$item->alt_img_thumb = env('custom.media_root_path') . 'thumbs/' . $item->alt_img_obj->path;
 					} else {
 						if( $item->main_img_obj->tipo_file == 'svg'){
-							$item->alt_img_thumb = ('uploads/' . $item->alt_img_obj->path);
+							$item->alt_img_thumb = env('custom.media_root_path') . $item->alt_img_obj->path;
 						}else{
 							$item->alt_img_thumb = $media_model->getThumbForType($item->alt_img_obj->tipo_file);
 						}
 					}
-					// $item->alt_img_thumb = 'uploads/thumbs/' . $item->alt_img_obj->path;
 				}
 			}
 
@@ -119,15 +117,15 @@ class PostscategoriesModel extends MasterModel
 				foreach($gallery_obj_from_json as $key => $val){
 					$c_gall_media_id =str_replace('i@','', $key);
 					if($c_gall_media = $media_model->find($c_gall_media_id)){
-						$updated_gallery_json.= (($conta_trovati>0) ? ',': '').'"'.$key.'":"'.site_url('uploads/thumbs/'.$c_gall_media->path).'"';
+						$updated_gallery_json.= (($conta_trovati>0) ? ',': '').'"'.$key.'":"'.env('custom.media_root_path') . 'thumbs/'.$c_gall_media->path.'"';
 						$gallery_obj[$key] = (object)['id' => $c_gall_media_id, 'src' => $c_gall_media->path ];
 						$gallery_obj[$key]->is_image =  $c_gall_media->is_image;
 						$gallery_obj[$key]->type =  $c_gall_media->tipo_file;
 						if ( $c_gall_media->is_image) {
-							$gallery_obj[$key]->thumb = 'uploads/thumbs/' . $c_gall_media->path;
+							$gallery_obj[$key]->thumb = env('custom.media_root_path') . 'thumbs/' . $c_gall_media->path;
 						} else {
 							if( $c_gall_media->tipo_file == 'svg'){
-								$gallery_obj[$key]->thumb = ('uploads/' . $c_gall_media->path);
+								$gallery_obj[$key]->thumb = env('custom.media_root_path') . $c_gall_media->path;
 							}else{
 								$gallery_obj[$key]->thumb = $media_model->getThumbForType($c_gall_media->tipo_file);
 							}

@@ -1,5 +1,8 @@
 <?php
 //--------------------------------------------------
+
+use function PHPUnit\Framework\stringContains;
+
 function lc_print_children_option($children, $c_value)
 {
     $returnString = '';
@@ -106,9 +109,14 @@ function lc_print_children_sublist($children, $type = 'page')
 }
 
 function mediaExist(string $path)
-{
-    if (is_file(FCPATH . $path)) {
-        return TRUE;
+{   
+    if(strpos( $path, '://') === false){ 
+        // if( stringContains( env('custom.media_root_path')))
+        if (is_file(FCPATH . $path)) {
+            return TRUE;
+        }
+    }else{
+
     }
     return FALSE;
 }

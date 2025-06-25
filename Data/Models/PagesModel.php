@@ -93,15 +93,14 @@ class PagesModel extends MasterModel
 					$item->main_img_is_image = $item->main_img_obj->is_image;
 					$item->main_img_type = $item->main_img_obj->tipo_file;
 					if ($item->main_img_obj->is_image) {
-						$item->main_img_thumb = 'uploads/thumbs/' . $item->main_img_obj->path;
+						$item->main_img_thumb = env('custom.media_root_path') . 'thumbs/' . $item->main_img_obj->path;
 					} else {
 						if ($item->main_img_obj->tipo_file == 'svg') {
-							$item->main_img_thumb = ('uploads/' . $item->main_img_obj->path);
+							$item->main_img_thumb = env('custom.media_root_path') . $item->main_img_obj->path;
 						} else {
 							$item->main_img_thumb = $media_model->getThumbForType($item->main_img_obj->tipo_file);
 						}
 					}
-					// $item->main_img_thumb = 'uploads/thumbs/' . $item->main_img_obj->path;
 				}
 			}
 			if (isset($item->alt_img_id) && $item->alt_img_id > 0) {
@@ -110,15 +109,14 @@ class PagesModel extends MasterModel
 					$item->alt_img_is_image = $item->alt_img_obj->is_image;
 					$item->alt_img_type = $item->alt_img_obj->tipo_file;
 					if ($item->alt_img_obj->is_image) {
-						$item->alt_img_thumb = 'uploads/thumbs/' . $item->alt_img_obj->path;
+						$item->alt_img_thumb = env('custom.media_root_path') . 'thumbs/' . $item->alt_img_obj->path;
 					} else {
 						if ($item->main_img_obj->tipo_file == 'svg') {
-							$item->alt_img_thumb = ('uploads/' . $item->alt_img_obj->path);
+							$item->alt_img_thumb = env('custom.media_root_path') . $item->alt_img_obj->path;
 						} else {
 							$item->alt_img_thumb = $media_model->getThumbForType($item->alt_img_obj->tipo_file);
 						}
 					}
-					// $item->alt_img_thumb = 'uploads/thumbs/' . $item->alt_img_obj->path;
 				}
 			}
 

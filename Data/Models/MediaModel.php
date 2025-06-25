@@ -62,15 +62,17 @@ class MediaModel extends MasterModel
 		if ($item) {
 			// $item->thumb = NULL;
 			if (isset($item->path)) {
-				$item->thumb = '/uploads/thumbs/' . $item->path;
+				$item->thumb = env('custom.media_root_path') . 'thumbs/' . $item->path;
 			}
 			//
 			if (isset($item->is_image)) {
 				if ($item->is_image) {
-					$item->img_thumb = site_url('uploads/thumbs/' . $item->path);
+					// $item->img_thumb = site_url('uploads/thumbs/' . $item->path);
+					$item->img_thumb =  env('custom.media_root_path') . 'thumbs/' . $item->path;
 				} else {
 					if ($item->tipo_file == 'svg') {
-						$item->img_thumb = site_url('uploads/' . $item->path);
+						// $item->img_thumb = site_url('uploads/' . $item->path);
+						$item->img_thumb = env('custom.media_root_path') . $item->path;
 					} else {
 						$item->img_thumb = site_url($this->getThumbForType($item->tipo_file));
 					}

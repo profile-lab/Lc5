@@ -21,7 +21,6 @@ extract($item);
         <?php if (isset($gallery_obj) && is_iterable($gallery_obj) && count($gallery_obj) > 0 ) { ?>
             <?php foreach ($gallery_obj as $img_item) { ?>
                 <img class="preview-img img-thumbnail" src="<?= site_url($img_item->thumb) ?>" alt="placeholder-img" />
-                <?php /* <img class="preview-img img-thumbnail" src="<?= site_url('uploads/thumbs/' . $img_item->src) ?>" alt="placeholder-img" /> */ ?>
             <?php } ?>
         <?php } ?>
         </div>

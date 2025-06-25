@@ -29,7 +29,7 @@
                         'nome' => $item->nome,
                         'is_image' => $item->is_image,
                         'tipo_file' => $item->tipo_file,
-                        'src' => site_url('uploads/thumbs/' . $item->path),
+                        'src' => env('custom.media_root_path') . 'thumbs/' . $item->path,
                         'img_thumb' => $item->img_thumb,
                         'del_link' => site_url(route_to($route_prefix . '_delete', $item->id)),
                     ]

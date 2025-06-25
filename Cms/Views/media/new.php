@@ -29,8 +29,8 @@
         <?php if (isset($entity->path) && trim($entity->path) && trim($entity->is_image)) { ?>
             <div class="form-group col-md-4">
                 <div class="col-auto">
-                    <a href="/uploads/<?= $entity->path ?>?v=<?= rand(0, 100) ?>">
-                        <img src="/uploads/thumbs/<?= $entity->path ?>?v=<?= rand(0, 100) ?>" class="img-thumbnail" />
+                    <a href="<?= env('custom.media_root_path') ?><?= $entity->path ?>?v=<?= rand(0, 100) ?>">
+                        <img src="<?= env('custom.media_root_path') ?>thumbs/<?= $entity->path ?>?v=<?= rand(0, 100) ?>" class="img-thumbnail" />
                     </a>
                 </div>
             </div>
