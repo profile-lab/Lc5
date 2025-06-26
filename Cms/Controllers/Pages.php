@@ -172,8 +172,30 @@ class Pages extends MasterLc
 	//--------------------------------------------------------------------
 	private function getModuleTypes()
 	{
+		$dati = [];
 		$pagestype_model = new PagestypeModel();
-		return $pagestype_model->findAll();
+		$moduleTypes = $pagestype_model->findAll();
+		if ($moduleTypes) {
+			foreach ($moduleTypes as $moduleType) {
+				$dati[] = (object) $moduleType;
+			}
+		}
+
+		// dd($dati);
+	
+		$rows_components_config = $this->getProjectSettingsValue('pages_types');
+		if($rows_components_config){
+			foreach($rows_components_config as $row_component){
+				$dati[] = (object) $row_component;
+			}
+		}
+
+		// dd($dati);
+		return $dati;
+
+
+
+
 	}
 
 	//--------------------------------------------------------------------
