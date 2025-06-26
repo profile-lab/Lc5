@@ -25,8 +25,6 @@
             </div>
             <div class="row first-row">
                 <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Titolo', 'name' => 'titolo', 'value' => $entity->titolo, 'width' => 'col-md-12', 'placeholder' => 'Titolo']]) ?>
-                <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Sottotitolo', 'name' => 'sottotitolo', 'value' => $entity->sottotitolo, 'width' => 'col-md-12', 'placeholder' => 'Sottotitolo']]) ?>
-                
 
                 <?php if ($entity->id) { ?>
                     <?php if (isset($custom_fields_keys_pages) && is_array($custom_fields_keys_pages) && count($custom_fields_keys_pages) > 0) { ?>
