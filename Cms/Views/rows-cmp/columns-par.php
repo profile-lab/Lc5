@@ -9,7 +9,7 @@ $t_unique = rand(100, 1000);
     <div class="card-header">
         <div class="row justify-content-between align-items-center">
             <div class="col-auto">
-                <div class="h6 m-0 p-0">Contenitore colonne</div>
+                <div class="h6 m-0 p-0">Contenitore blocchi</div>
             </div>
             <div class="col-auto">
                 <a href="#" class="par_move_down w_tooltip" data-bs-toggle="tooltip" title="Sposta sotto"><span class="oi oi-chevron-bottom"></span></a>
@@ -87,14 +87,15 @@ $t_unique = rand(100, 1000);
                             'titolo' => (isset($col_item->title)) ? $col_item->title : '',
                             'testo' => (isset($col_item->testo)) ? $col_item->testo : '',
                             'cta' => (isset($col_item->cta)) ? $col_item->cta : '',
-                            'cta_label' => (isset($col_item->cta_label)) ? $col_item->cta_label : ''
+                            'cta_label' => (isset($col_item->cta_label)) ? $col_item->cta_label : '',
+                            'style' => (isset($col_item->style)) ? $col_item->style : '',
                         ]]) ?>
                     <?php } ?>
                 <?php } ?>
                 <div class="a_like_card_cnt">
                     <a href="#" meta-rel-source-id="colonne_item_code" meta-rel-trg="colonne_items_cnt" class="a_like_card add_colonne_item">
                         <div class="a_like_card_link">
-                            <span class="oi oi-plus m-0"></span><br />Aggiungi Colonna
+                            <span class="oi oi-plus m-0"></span><br />Aggiungi Blocco
                         </div>
                     </a>
                 </div>
