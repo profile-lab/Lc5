@@ -35,9 +35,21 @@ extract($item);
                 </div>
             </div>
         </div>
+
+        <?php /*
+        
         <div class="row">
             <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Color', 'name' => 'colonne_item_style', 'input_class' => 'style_column', 'value' => (isset($style)) ? $style : '', 'width' => 'col-md-12', 'placeholder' => 'Color']]) ?>
         </div>
+        
+        */ ?>
+
+        <?php if (isset($rows_colors) && is_iterable($rows_colors) && count($rows_colors) > 0) { ?>
+            <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => 'Colori', 'name' => 'colonne_item_style',  'input_class' => 'style_column', 'value' => (isset($style)) ? $style : '', 'width' => 'col-md-12', 'sources' => $rows_colors, 'no_empty' => false]]) ?>
+        <?php } else { ?>
+            <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Colori', 'name' => 'colonne_item_style', 'input_class' => 'style_column', 'value' => (isset($style)) ? $style : '', 'width' => 'col-md-12', 'placeholder' => 'Color']]) ?>
+        <?php } ?>
+
         <a href="#" class="text-danger del_trg_cnt w_tooltip" meta-rel-trg-cnt="colonne_content-row_item" data-bs-toggle="tooltip" title="Elimina slide">
             <span class="oi oi-trash"></span>
         </a>
