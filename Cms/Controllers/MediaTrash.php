@@ -50,7 +50,7 @@ class MediaTrash extends MasterLc
         $mediaQB = $media_model->select('*');
         $mediaQB->onlyDeleted();
         // 
-        $list = $mediaQB->orderBy('id', 'desc')->findAll( 20 );
+        $list = $mediaQB->orderBy('id', 'desc')->findAll( );
 
         foreach ($list as $item) {
             $this->deleteFile($item->id, true);
