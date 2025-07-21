@@ -42,8 +42,25 @@ class MediaTrash extends MasterLc
         return view('Lc5\Cms\Views\media/cestino', $this->lc_ui_date->toArray());
     }
 
+
     //--------------------------------------------------------------------
-    public function deleteFile($id)
+    public function deleteAllFiles()
+    {
+        $media_model = new MediaModel();
+        $mediaQB = $media_model->select('*');
+        $mediaQB->onlyDeleted();
+        // 
+        $list = $mediaQB->orderBy('id', 'desc')->findAll( 20 );
+
+        foreach ($list as $item) {
+            $this->deleteFile($item->id, true);
+        }
+
+        return redirect()->route($this->route_prefix);
+    }
+
+    //--------------------------------------------------------------------
+    public function deleteFile($id, $only_action = false)
     {
         $media_model = new MediaModel();
         if (!$curr_entity = $media_model->withDeleted()->find($id)) {
@@ -59,17 +76,16 @@ class MediaTrash extends MasterLc
         }
 
         $this->deleteImg($curr_entity->path, null, false);
-
-
-
-        // dd($curr_entity);
-
         $media_model->delete($curr_entity->id, true);
-        $this->lc_ui_date->ui_mess = 'Elemento eliminato con successo.';
-        $this->lc_ui_date->ui_mess_type = 'alert alert-success';
 
+        if ($only_action == false) {
+            $this->lc_ui_date->ui_mess = 'Elemento eliminato con successo.';
+            $this->lc_ui_date->ui_mess_type = 'alert alert-success';
 
-        return redirect()->route($this->route_prefix );
+            return redirect()->route($this->route_prefix);
+        } else {
+            return true;
+        }
     }
     //--------------------------------------------------------------------
     public function resetItem($id)
@@ -110,7 +126,4 @@ class MediaTrash extends MasterLc
         // $path = str_replace('.' . $formato, '', $path);
         // $path = $path . '.' . $formato;
     }
-
-
-   
 }
