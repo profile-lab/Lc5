@@ -24,6 +24,7 @@
                 <tr>
                     <th></th>
                     <th>Nome</th>
+                    <th>Path</th>
                     <th>Tipo</th>
                     <th style="text-align: right;"></th>
                 </tr>
@@ -35,6 +36,7 @@
                             <img src="<?= env('custom.media_root_path') . 'thumbs/' . $item->path ?>" alt="<?= $item->nome ?>" style="width: 70px; height: 70px;">
                         </td>
                         <td>(<?= $item->id ?>) <?= $item->nome ?></td>
+                        <td><?= $item->path ?></td>
                         <td><?= $item->tipo_file ?></td>
                         <td style="text-align: right;">
                             <a class="btn btn-danger" href="<?= route_to($route_prefix . '_delete_file', $item->id) ?>">Elimina definitivamente</a>
