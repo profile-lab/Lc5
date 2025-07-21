@@ -557,6 +557,11 @@ class MasterLc extends BaseController
 					'label' => 'Formati',
 					'route' => site_url(route_to('lc_media_formati')),
 					'module_action' => 'mediaformat',
+				],
+				(object) [
+					'label' => 'Cestino',
+					'route' => site_url(route_to('lc_media_cestino')),
+					'module_action' => 'mediacestino',
 				]
 			]
 		];

@@ -197,6 +197,10 @@ if (env('custom.hide_lc_cms') === TRUE) {
 
 
 		$routes->group('media', function ($routes) {
+			$routes->group('cestino', function ($routes) {
+				$routes->get('delete-file/(:num)', 'MediaTrash::deleteFile/$1', ['as' => 'lc_media_cestino_delete_file']);
+				$routes->get('', 'MediaTrash::index', ['as' => 'lc_media_cestino']);
+			});
 			$routes->group('formati', function ($routes) {
 				$routes->get('delete/(:num)', 'Mediaformat::delete/$1', ['as' => 'lc_media_formati_delete']);
 				$routes->match(['get', 'post'], 'edit/(:num)', 'Mediaformat::edit/$1', ['as' => 'lc_media_formati_edit']);
