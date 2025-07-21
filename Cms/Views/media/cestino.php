@@ -3,7 +3,7 @@
 <div class="d-md-flex justify-content-between align-items-center">
     <h1><?= $module_name ?></h1>
     <div class="d-flex align-items-center">
-        <a class="btn btn-danger" href="<?= route_to($route_prefix . '_delete_all_files') ?>">Elimina tutti i file</a>
+        <a class="btn btn-danger" href="<?= route_to($route_prefix . '_delete_all_files') ?>">Elimina tutti i file (<?= count($list) ?>)</a>
     </div>
 </div>
 
