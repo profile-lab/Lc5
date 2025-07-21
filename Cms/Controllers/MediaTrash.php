@@ -54,11 +54,12 @@ class MediaTrash extends MasterLc
 
             $formati = $this->getImgFormati();
             foreach ($formati as $formato) {
-                $this->deleteImg($curr_entity->path, $formato);
+                $this->deleteImg($curr_entity->path, $formato, true);
             }
         }
 
-        $this->deleteImg($curr_entity->path, null, true);
+        $this->deleteImg($curr_entity->path, null, false);
+
 
 
         // dd($curr_entity);
