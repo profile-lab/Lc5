@@ -936,7 +936,7 @@ class MasterLc extends BaseController
 	//--------------------------------------------------------------------
 	protected function getRowComponents()
 	{
-
+		$dati = [];
 		$rows_components_model = new RowcomponentsModel();
 		$qb = $rows_components_model->orderBy('nome', 'ASC')->orderBy('nome', 'ASC');
 		$dbRowsComponents = $qb->findAll();
