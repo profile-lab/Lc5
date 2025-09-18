@@ -26,8 +26,8 @@ $routes->group('api',  function ($routes) {
 		// $routes->add('archivio/(:segment)', 'Posts::index/$1', ['as' => 'api_posts_archive']);
 		// $routes->add('archivio', 'Posts::archivioDefault', ['as' => 'api_posts_archivie_default']);
 		// 
-		$routes->match(['get', 'post'], 'page/index', '\Lc5\Api\Controllers\PagesApi::index', ['as' => 'api_homepage']);
-		$routes->match(['get', 'post'], 'page/(:any)', '\Lc5\Api\Controllers\PagesApi::page/$1', ['as' => 'api_page']);
+		$routes->match(['GET', 'POST'], 'page/index', '\Lc5\Api\Controllers\PagesApi::index', ['as' => 'api_homepage']);
+		$routes->match(['GET', 'POST'], 'page/(:any)', '\Lc5\Api\Controllers\PagesApi::page/$1', ['as' => 'api_page']);
 
 		// $routes->set404Override('PagesApi::error404');
 		// $routes->setDefaultNamespace('Pages');

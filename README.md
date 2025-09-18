@@ -215,15 +215,15 @@ https://domain.com/lc-admin/first-login
         // Custom LcModule
         $routes->group('lc-admin', ['namespace' => 'App\Controllers\LcCustom', 'filter' => 'admin_auth'], function ($routes) {
             $routes->group('component-name-route', function ($routes) {
-                $routes->match(['get', 'post'], 'newpost', 'ComponentCotrollerName::method', ['as' => 'lc_conponent_name_new']);
-                $routes->match(['get', 'post'], '', 'ComponentCotrollerName::index', ['as' => 'lc_conponent_name']);
+                $routes->match(['GET', 'POST'], 'newpost', 'ComponentCotrollerName::method', ['as' => 'lc_conponent_name_new']);
+                $routes->match(['GET', 'POST'], '', 'ComponentCotrollerName::index', ['as' => 'lc_conponent_name']);
             });
         });
 
         // Frontend Module
         $routes->group('component-name-route', ['namespace' => 'App\Controllers' ], function ($routes) {
-            $routes->match(['get', 'post'], 'newpost', 'ComponentCotrollerName::method', ['as' => 'lc_conponent_name_new']);
-            $routes->match(['get', 'post'], '', 'ComponentCotrollerName::index', ['as' => 'lc_conponent_name']);
+            $routes->match(['GET', 'POST'], 'newpost', 'ComponentCotrollerName::method', ['as' => 'lc_conponent_name_new']);
+            $routes->match(['GET', 'POST'], '', 'ComponentCotrollerName::index', ['as' => 'lc_conponent_name']);
         });
 
 #### Add Lc Menu items in App\Controllers\BaseController->lc_plugin_modules
