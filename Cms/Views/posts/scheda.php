@@ -3,7 +3,7 @@
 <script>
     let count_rows = 0;
 </script>
-<form class="form save_after_proc" method="POST" action="">
+<form class="form save_after_proc" method="POST" action="" enctype="multipart/form-data">
     <?= user_mess($ui_mess, $ui_mess_type) ?>
     <div class="row form-row">
         <div class="scheda_body <?= ($entity->id && $post_type_entity->has_paragraphs) ? 'has_paragraphs' : '' ?>">
@@ -41,6 +41,36 @@
                 <?php } ?>
                 <div class="row">
                     <?= view('Lc5\Cms\Views\form-cmp/html-editor', ['item' => ['label' => 'Testo', 'name' => 'testo', 'value' => (isset($entity->testo)) ? $entity->testo : '', 'width' => 'col-md-12', 'placeholder' => '...']]) ?>
+                    
+                    <?php /* 
+                    // Eccezione per il file audio 
+                    // Crollo se esiste su database il campo media_static_file_url 
+                    // Eccezione usata in eurobet.live per i podcast
+                    d($entity); 
+                    */ 
+                    ?>
+                    <?php if ($entity->id && isset($entity->has_field_media_static_file_url) && $entity->has_field_media_static_file_url == true ) { ?>
+                        <div class="row">
+                            <hr />
+                        </div>
+                        <div class="row form-row">
+                            <?= view('Lc5\Cms\Views\form-cmp/file', ['item' => ['label' => 'Nuovo file Audio', 'name' => 'new_file_media', 'value' => '', 'width' => 'col-md-6', 'placeholder' => 'Nuovo file audio']]) ?>
+                            <?php if ($entity->media_static_file_url && $entity->media_static_file_url != '' && $entity->media_static_file_complete_url && $entity->media_static_file_complete_url) { ?>
+                                <div class="form-group col-md-6">
+                                    <audio controls>
+                                        <source src="/<?= $entity->media_static_file_complete_url ?>" type="audio/mpeg">
+                                        Your browser does not support the audio element.
+                                    </audio>
+
+                                </div>
+                            <?php } ?>
+                        </div>
+                    <?php } ?>
+
+                    <?php /* 
+                    // FINE ECCEZIONE per il file audio 
+                    */ ?>
+
                 </div>
                 <?php if (isset($post_attributes) && is_iterable($post_attributes)) { ?>
                     <div class="row">
@@ -124,7 +154,7 @@
                 <div class="row">
                     <?= view('Lc5\Cms\Views\form-cmp/readonly', ['item' => ['label' => 'Nome', 'value' => $entity->nome, 'name' => 'nome',  'width' => 'col-12', 'placeholder' => '', 'if_active_name' => 'nome',  'enabled' => (($entity->id) ? TRUE : FALSE)]]) ?>
                     <?= view('Lc5\Cms\Views\form-cmp/readonly', ['item' => ['label' => 'Guid', 'value' => $entity->guid, 'width' => 'col-12', 'placeholder' => '', 'if_active_name' => 'guid',  'enabled' => (($entity->id) ? TRUE : FALSE)]]) ?>
-                    <?= view('Lc5\Cms\Views\form-cmp/select', [ 'item' => ['label' => 'Public', 'name' => 'public', 'input_class' => 'public', 'value' => $entity->public, 'width' => 'col-md-12', 'sources' => $bool_values, 'no_empty' => true] ]); ?>
+                    <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => 'Public', 'name' => 'public', 'input_class' => 'public', 'value' => $entity->public, 'width' => 'col-md-12', 'sources' => $bool_values, 'no_empty' => true]]); ?>
                     <?php /*
                     // NON IN USO - VEDI post_attributes
                     <?php if (isset($post_categories) && is_iterable($post_categories)) { ?>

@@ -62,6 +62,17 @@ class PostsModel extends MasterModel
 	protected $beforeDelete         = [];
 	protected $afterDelete          = [];
 
+	public function __construct()
+	{
+		parent::__construct();
+		$db = \Config\Database::connect();
+		if ($db->tableExists('posts')) {
+			if ($db->fieldExists('media_static_file_url','posts')) {
+				$this->allowedFields[] = 'media_static_file_url';
+			}
+		}
+	}
+
 	protected function beforeFind(array $data)
 	{
 		$this->checkAppAndLang();
@@ -92,6 +103,10 @@ class PostsModel extends MasterModel
 			$item->vimeo_video_obj = NULL;
 			if (isset($item->vimeo_video_id) && $item->vimeo_video_id != '') {
 				$item->vimeo_video_obj = $vimeo_video_model->where('vimeo_id', $item->vimeo_video_id)->first();
+			}
+			// 
+			if (isset($item->media_static_file_url) && $item->media_static_file_url != '') {
+				$item->media_static_file_complete_url = 'uploads/' . $item->media_static_file_url;
 			}
 			// 
 			$media_model = new MediaModel();

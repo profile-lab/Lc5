@@ -44,4 +44,15 @@ class Post extends Entity
 		'vimeo_video_id' => null,
         'vimeo_video_url' => null,
 	];
+
+	public function __construct()
+	{
+		$db = \Config\Database::connect();
+		if ($db->tableExists('posts')) {
+			if ($db->fieldExists('media_static_file_url','posts')) {
+				$this->attributes['media_static_file_url'] = null;
+			}
+		}
+		parent::__construct();
+	}
 }

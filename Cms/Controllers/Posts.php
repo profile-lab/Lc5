@@ -133,8 +133,8 @@ class Posts extends MasterLc
 				$curr_entity->data_pub = $myTime;
 
 
-				if ($curr_entity->hasChanged()) { 
-					$posts_model->save( $curr_entity );
+				if ($curr_entity->hasChanged()) {
+					$posts_model->save($curr_entity);
 				}
 				// 
 				$new_id = $posts_model->getInsertID();
@@ -162,6 +162,13 @@ class Posts extends MasterLc
 		if (!$curr_entity = $posts_model->find($id)) {
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
+		// Eccezione per il file audio 
+		// Crollo se esiste su database il campo media_static_file_url 
+		// Eccezione usata in eurobet.live per i podcast
+		if ($posts_model->db->fieldExists('media_static_file_url', $posts_model->table)) {
+			$curr_entity->has_field_media_static_file_url = true;
+		}
+		// FINE ECCEZIONE per il file audio 
 
 		$post_type_entity = $this->getPostType($post_type_val);
 		$curr_entity->bool_values = [
@@ -198,16 +205,32 @@ class Posts extends MasterLc
 			$curr_entity->fill($this->req->getPost());
 			$curr_entity->multi_categories = json_encode($this->req->getPost('multi_categories'));
 			$curr_entity->tags = json_encode($this->req->getPost('tags'));
+
+			// ECCEZIONE per il file audio 
+			if ($posts_model->db->fieldExists('media_static_file_url', $posts_model->table)) {
+				if ($file_up = $this->req->getFile('new_file_media')) {
+					if ($file_up->isValid()) {
+						if ($file_path = $this->uploadFile($file_up, NULL, FALSE, 'uploads')) {
+							$curr_entity->media_static_file_url = $file_path['path'];
+							// d($file_path);
+						}
+					}
+				}
+			}
+			// dd('fine');
+			// FINE ECCEZIONE per il file audio 
+
+
 			if ($this->validate($validate_rules)) {
 				// 
 				if ($curr_entity->created_at == $curr_entity->updated_at) {
 					$curr_entity->status = 1;
 				}
-				$curr_entity->public = $this->req->getPost('public') ? 1 : 0 ;
+				$curr_entity->public = $this->req->getPost('public') ? 1 : 0;
 				// 
 				$curr_entity->post_type = $post_type_entity->id;
-				if ($curr_entity->hasChanged()) { 
-					$posts_model->save( $curr_entity );
+				if ($curr_entity->hasChanged()) {
+					$posts_model->save($curr_entity);
 				}
 				// 
 				$this->editEntityRows($curr_entity->id, 'posts');
