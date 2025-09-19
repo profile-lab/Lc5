@@ -1054,9 +1054,32 @@ class MasterLc extends BaseController
 	//--------------------------------------------------------------------
 	protected function getImgFormati()
 	{
+		$all_formati = [];
 		$mediaformat_model = new MediaformatModel();
-		return $mediaformat_model->asArray()->findAll();
+		$all_formati = $mediaformat_model->select('id, id_app, nome, folder, rule, w, h')->asArray()->findAll();
+		$media_formats_config = $this->getProjectSettingsValue('media_formats');
+		if($media_formats_config){
+			foreach($media_formats_config as $media_format){
+				$all_formati[] = $media_format;
+			}
+		}
+		// dd($all_formati);
+		return $all_formati;
 	}
+	//--------------------------------------------------------------------
+	protected function getImgFormatoById($id)
+	{
+		$all_formati = $this->getImgFormati();
+		if ($all_formati) {
+			foreach ($all_formati as $formato) {
+				if ($formato['id'] == $id) {
+					return $formato;
+				}
+			}
+		}
+		return null;
+	}
+	
 	//--------------------------------------------------------------------
 	public function uploadFile($file_up = null, $nomefile = null, $isImage = FALSE, $curr_file_mime_type = null, $folder =  'uploads')
 	{

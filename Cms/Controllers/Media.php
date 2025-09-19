@@ -148,12 +148,12 @@ class Media extends MasterLc
 				throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 			}
 			foreach ($list as $curr_entity) {
-				
+
 				$this->rigeneraFormatoAction($curr_entity->path, $formato, 'uploads');
 				$curr_entity->rigenerato = true;
 			}
 			$pager =  $list_qb->pager;
-			if($pager->hasMore()){
+			if ($pager->hasMore()) {
 				$netxPageUrl = $pager->getNextPageURI();
 				$this->lc_ui_date->netxPageUrl = $netxPageUrl;
 			}
@@ -172,8 +172,8 @@ class Media extends MasterLc
 		if (!$curr_entity = $media_model->find($id)) {
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
-		$mediaformat_model = new MediaformatModel();
-		if (!$formato = $mediaformat_model->asArray()->find($format_id)) {
+		$formato = $this->getImgFormatoById($format_id);
+		if (!isset($formato)) {
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
 		// 
@@ -201,11 +201,10 @@ class Media extends MasterLc
 		if (!$curr_entity = $media_model->find($id)) {
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
-		$mediaformat_model = new MediaformatModel();
-		if (!$formato = $mediaformat_model->asArray()->find($format_id)) {
+		$formato = $this->getImgFormatoById($format_id);
+		if (!isset($formato)) {
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
-		// 
 
 		$folder = 'uploads';
 		// 
@@ -234,10 +233,11 @@ class Media extends MasterLc
 		if (!$curr_entity = $media_model->find($id)) {
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
-		$mediaformat_model = new MediaformatModel();
-		if (!$formato = $mediaformat_model->asArray()->find($format_id)) {
+		$formato = $this->getImgFormatoById($format_id);
+		if (!isset($formato)) {
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
+
 		// 
 
 		// dd($curr_entity);
