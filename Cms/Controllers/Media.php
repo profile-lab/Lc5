@@ -145,8 +145,15 @@ class Media extends MasterLc
 		if ($list) {
 			$mediaformat_model = new MediaformatModel();
 			if (!$formato = $mediaformat_model->asArray()->find($format_id)) {
+				$media_formats_config = $this->getProjectSettingsValue('media_formats');
+				$formato = $this->getImgFormatoById($format_id);
+
+			}
+
+			if(!$formato){
 				throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 			}
+
 			foreach ($list as $curr_entity) {
 
 				$this->rigeneraFormatoAction($curr_entity->path, $formato, 'uploads');

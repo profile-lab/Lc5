@@ -43,9 +43,11 @@ class Mediaformat extends MasterLc
 		$this->lc_ui_date->static_format_list = [];
 		$media_formats_config = $this->getProjectSettingsValue('media_formats');
 		if ($media_formats_config) {
-			foreach ($media_formats_config as $media_format) {
-				$this->lc_ui_date->static_format_list[] = $media_format;
+			$new_static_format_list = [];
+			foreach ($media_formats_config as $current_media_format) {
+				$new_static_format_list[] = (object) $current_media_format;
 			}
+			$this->lc_ui_date->static_format_list = $new_static_format_list;
 		}
 
 		// 
