@@ -126,11 +126,11 @@ class MasterLc extends BaseController
 
 	protected function getProjectSettings()
 	{
-		$file_path = ROOTPATH.'project-settings.php'; 
-		if(file_exists($file_path)){       
+		$file_path = ROOTPATH . 'project-settings.php';
+		if (file_exists($file_path)) {
 			require_once $file_path;
-			$settings_class_name = 'ProjectSettings'; 
-			if(class_exists($settings_class_name)){    
+			$settings_class_name = 'ProjectSettings';
+			if (class_exists($settings_class_name)) {
 				$project_settings = new $settings_class_name();
 				return $project_settings;
 			}
@@ -140,10 +140,10 @@ class MasterLc extends BaseController
 	//--------------------------------------------------------------------
 	protected function getProjectSettingsValue($key)
 	{
-		if($this->project_settings){
+		if ($this->project_settings) {
 			$curr_app = $this->getCurrApp();
-			if(isset($this->project_settings->{$key})){
-				if(isset($this->project_settings->{$key}[$curr_app])){
+			if (isset($this->project_settings->{$key})) {
+				if (isset($this->project_settings->{$key}[$curr_app])) {
 					return $this->project_settings->{$key}[$curr_app];
 				}
 			}
@@ -263,8 +263,8 @@ class MasterLc extends BaseController
 			}
 		}
 		$rows_config_styles = $this->getProjectSettingsValue('rows_config_styles');
-		if($rows_config_styles){
-			foreach($rows_config_styles as $row_config){
+		if ($rows_config_styles) {
+			foreach ($rows_config_styles as $row_config) {
 				$row_style_data = (object) $row_config;
 				$fields_to_hide = [];
 				$entity_fields_conf_byjson = json_decode(($row_style_data->fields_config) ?: '');
@@ -427,15 +427,15 @@ class MasterLc extends BaseController
 	//--------------------------------------------------------------------
 	protected function getLcAdminMenu()
 	{
-		$LcShopConfigsClassNamespace = '\LcShop\Cms\Controllers\LcShopConfigs'; 
-        if(class_exists($LcShopConfigsClassNamespace)){
+		$LcShopConfigsClassNamespace = '\LcShop\Cms\Controllers\LcShopConfigs';
+		if (class_exists($LcShopConfigsClassNamespace)) {
 			$this->lc_plugin_modules = array_merge($this->lc_plugin_modules, $LcShopConfigsClassNamespace::getLcModulesMenu());
-        }
+		}
 		// 
-		$LcUsersConfigsClassNamespace = '\LcUsers\Cms\Controllers\LcUsersConfigs'; 
-        if(class_exists($LcUsersConfigsClassNamespace)){
+		$LcUsersConfigsClassNamespace = '\LcUsers\Cms\Controllers\LcUsersConfigs';
+		if (class_exists($LcUsersConfigsClassNamespace)) {
 			$this->lc_plugin_modules = array_merge($this->lc_plugin_modules, $LcUsersConfigsClassNamespace::getLcModulesMenu());
-        }
+		}
 		// 
 
 		$posts_icos = ['news' => 'paperclip', 'faq' => 'question-mark'];
@@ -940,14 +940,14 @@ class MasterLc extends BaseController
 		$rows_components_model = new RowcomponentsModel();
 		$qb = $rows_components_model->orderBy('nome', 'ASC')->orderBy('nome', 'ASC');
 		$dbRowsComponents = $qb->findAll();
-		if($dbRowsComponents){
-			foreach($dbRowsComponents as $dbRowComponent){
+		if ($dbRowsComponents) {
+			foreach ($dbRowsComponents as $dbRowComponent) {
 				$dati[] = $dbRowComponent;
 			}
 		}
 		$rows_components_config = $this->getProjectSettingsValue('rows_components_config');
-		if($rows_components_config){
-			foreach($rows_components_config as $row_component){
+		if ($rows_components_config) {
+			foreach ($rows_components_config as $row_component) {
 				$dati[] = (object) $row_component;
 			}
 		}
@@ -966,12 +966,12 @@ class MasterLc extends BaseController
 			}
 		}
 		$rows_colors = $this->getProjectSettingsValue('rows_colors');
-		if($rows_colors){
-			foreach($rows_colors as $rows_color){
+		if ($rows_colors) {
+			foreach ($rows_colors as $rows_color) {
 				$dati[] = (object) ['val' => $rows_color['val'], 'nome' => $rows_color['nome']];
 			}
 		}
-		if(count($dati) > 0){
+		if (count($dati) > 0) {
 			$dati[] = (object) ['val' => '', 'nome' => 'Nessuno'];
 		}
 		return $dati;
@@ -988,12 +988,12 @@ class MasterLc extends BaseController
 			}
 		}
 		$rows_extra_styles = $this->getProjectSettingsValue('rows_extra_styles');
-		if($rows_extra_styles){
-			foreach($rows_extra_styles as $row_extra_style){
+		if ($rows_extra_styles) {
+			foreach ($rows_extra_styles as $row_extra_style) {
 				$dati[] = (object) ['val' => $row_extra_style['val'], 'nome' => $row_extra_style['nome']];
 			}
 		}
-		if(count($dati) > 0){
+		if (count($dati) > 0) {
 			$dati[] = (object) ['val' => '', 'nome' => 'Nessuno'];
 		}
 		return $dati;
@@ -1008,10 +1008,10 @@ class MasterLc extends BaseController
 		}
 		$allRowsStyles = $qb->findAll();
 		$rows_config = $this->getProjectSettingsValue('rows_config_styles');
-		if($rows_config){
-			foreach($rows_config as $row_config){
-				if($__type){
-					if($row_config['type'] != $__type){
+		if ($rows_config) {
+			foreach ($rows_config as $row_config) {
+				if ($__type) {
+					if ($row_config['type'] != $__type) {
 						continue;
 					}
 				}
@@ -1049,6 +1049,15 @@ class MasterLc extends BaseController
 				$return_data[] = (object) $add_item;
 			}
 		}
+
+		$media_formats_config = $this->getProjectSettingsValue('media_formats');
+		if ($media_formats_config) {
+			foreach ($media_formats_config as $media_format) {
+				$return_data[] = (object) ['val' => $media_format['folder'], 'nome' => $media_format['nome']];
+			}
+		}
+
+
 		return $return_data;
 	}
 	//--------------------------------------------------------------------
@@ -1058,8 +1067,8 @@ class MasterLc extends BaseController
 		$mediaformat_model = new MediaformatModel();
 		$all_formati = $mediaformat_model->select('id, id_app, nome, folder, rule, w, h')->asArray()->findAll();
 		$media_formats_config = $this->getProjectSettingsValue('media_formats');
-		if($media_formats_config){
-			foreach($media_formats_config as $media_format){
+		if ($media_formats_config) {
+			foreach ($media_formats_config as $media_format) {
 				$all_formati[] = $media_format;
 			}
 		}
@@ -1079,7 +1088,7 @@ class MasterLc extends BaseController
 		}
 		return null;
 	}
-	
+
 	//--------------------------------------------------------------------
 	public function uploadFile($file_up = null, $nomefile = null, $isImage = FALSE, $curr_file_mime_type = null, $folder =  'uploads')
 	{

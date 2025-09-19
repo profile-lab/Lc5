@@ -32,7 +32,7 @@
                         </td>
                         <td><?= $item->w ?></td>
                         <td><?= $item->h ?></td>
-                        <td><?= (trim($item->folder))  ? '<i>'.trim($item->folder).'</i>'  : '/' ?></td>
+                        <td><?= (trim($item->folder))  ? '<i>' . trim($item->folder) . '</i>'  : '/' ?></td>
                         <td><?= $item->rule ?></td>
                         <td>
                             <a class="btn btn-primary" href="<?= site_url(route_to($route_prefix . '_edit', $item->id)) ?>">Edit</a>
@@ -42,31 +42,54 @@
                 <?php } ?>
             </tbody>
         </table>
-        <?php /*
-        
-        <ul>
-            <?php foreach ($list as $item) { ?>
-                <li>
-                    <div class="list_item_row">
-                        <div class="list_item_id"><?= $item->id ?></div>
-                        <div class="list_item_nome">
-                            <a href="<?= site_url(route_to($route_prefix . '_edit', $item->id)) ?>"><?= $item->nome ?></a>
-                        </div>
-                    </div>
-                </li>
-            <?php } ?>
-        </ul>
-        */ ?>
     </div>
-<?php } else { ?>
+<?php } ?>
+
+<?php if (count($static_format_list) > 0) { ?>
+    <div class="d-md-flex">
+        <h3>Static Media Formats</h3>
+    </div>
+    <div class="listIndexTableCnt">
+        <table class="listIndexTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>W</th>
+                    <th>H</th>
+                    <th>Cartella</th>
+                    <th>Tipo</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($static_format_list as $item) { ?>
+                    <tr>
+                        <td><?= $item->id ?></td>
+                        <td>
+                            <a href="<?= site_url(route_to($route_prefix . '_edit', $item->id)) ?>"><?= $item->nome ?></a>
+                        </td>
+                        <td><?= $item->w ?></td>
+                        <td><?= $item->h ?></td>
+                        <td><?= (trim($item->folder))  ? '<i>' . trim($item->folder) . '</i>'  : '/' ?></td>
+                        <td><?= $item->rule ?></td>
+                        <td>
+                            <a class="btn btn-primary" href="<?= site_url(route_to($route_prefix . '_rebase_all_images_in_format', $item->id)) ?>">Rigenera</a>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
 <?php } ?>
 
 <?= $this->endSection() ?>
 <?= $this->section('footer_script') ?>
 <style>
-    .listIndexTableCnt{
+    .listIndexTableCnt {
         padding: 1rem 1.5rem;
     }
+
     .listIndexTable {
         width: 100%;
         margin: 0;

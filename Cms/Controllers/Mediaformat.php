@@ -40,6 +40,14 @@ class Mediaformat extends MasterLc
 		// 
 		$list = $mediaformat_model->findAll();
 		$this->lc_ui_date->list = $list;
+		$this->lc_ui_date->static_format_list = [];
+		$media_formats_config = $this->getProjectSettingsValue('media_formats');
+		if ($media_formats_config) {
+			foreach ($media_formats_config as $media_format) {
+				$this->lc_ui_date->static_format_list[] = $media_format;
+			}
+		}
+
 		// 
 		return view('Lc5\Cms\Views\media-formati/index', $this->lc_ui_date->toArray());
 	}
@@ -58,8 +66,8 @@ class Mediaformat extends MasterLc
 			$curr_entity->fill($this->req->getPost());
 			if ($this->validate($validate_rules)) {
 				// $curr_entity->id_app = 1;
-				if ($curr_entity->hasChanged()) { 
-					$mediaformat_model->save( $curr_entity );
+				if ($curr_entity->hasChanged()) {
+					$mediaformat_model->save($curr_entity);
 				}
 				// 
 				$new_id = $mediaformat_model->getInsertID();
@@ -94,8 +102,8 @@ class Mediaformat extends MasterLc
 			$curr_entity->fill($this->req->getPost());
 			// 
 			if ($this->validate($validate_rules)) {
-				if ($curr_entity->hasChanged()) { 
-					$mediaformat_model->save( $curr_entity );
+				if ($curr_entity->hasChanged()) {
+					$mediaformat_model->save($curr_entity);
 				}
 				// 
 				return redirect()->route($this->route_prefix . '_edit', [$curr_entity->id]);
