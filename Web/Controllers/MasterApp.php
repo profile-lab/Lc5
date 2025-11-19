@@ -511,10 +511,10 @@ class MasterApp extends BaseController
 			// $mail->SMTPDebug = \PHPMailer\PHPMailer\SMTP::DEBUG_SERVER;
 			$mail->isSMTP();
 			$mail->Host       = $this->send_mail_config['SMTPHost'];
-			$mail->SMTPAuth   = true;
+			$mail->SMTPAuth   = $this->send_mail_config['SMTPAuth'];
 			$mail->Username   = $this->send_mail_config['SMTPUser'];
 			$mail->Password   = $this->send_mail_config['SMTPPass'];
-			$mail->SMTPSecure = 'tls'; // \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+			$mail->SMTPSecure = $this->send_mail_config['SMTPSsl']; // \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
 			$mail->Port       = $this->send_mail_config['SMTPPort'];
 
 			//Recipients
@@ -549,6 +549,8 @@ class MasterApp extends BaseController
 				'protocol' => env('custom.email.protocol'),
 				'SMTPUser' => env('custom.email.SMTPUser'),
 				'SMTPPass' => env('custom.email.SMTPPass'),
+				'SMTPSsl' => (env('custom.email.SMTPSsl')) ? env('custom.email.SMTPSsl') : 'tls',
+				'SMTPAuth' => (env('custom.email.SMTPAuth')) ? env('custom.email.SMTPAuth') : true,
 				// 'SMTPCrypto' => 'tls',
 				// 'SMTPAuth' => true,
 				// 'SMTPKeepAlive' => true,
