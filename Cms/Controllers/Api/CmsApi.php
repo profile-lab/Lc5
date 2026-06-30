@@ -195,6 +195,8 @@ class CmsApi extends MasterLc
                 $rel_item_model = new \App\Models\CorsiLezioniModel();
             } else if ($rel_item_type == 'videolezione') {
                 $rel_item_model = new \App\Models\CorsiVideoLezioniModel();
+            } else if ($rel_item_type == 'membership_formazione_video') {
+                $rel_item_model = new \App\Models\MembershipFormazioneVideosModel();
             } else if ($rel_item_type != '') {
                 $classNameSpace = "App\Models\\$rel_item_type";
                 if (class_exists($classNameSpace)) {
@@ -336,6 +338,8 @@ class CmsApi extends MasterLc
                 $rel_item_model = new \App\Models\CorsiLezioniModel();
             } else if ($rel_item_type == 'videolezione') {
                 $rel_item_model = new \App\Models\CorsiVideoLezioniModel();
+            } else if ($rel_item_type == 'membership_formazione_video') {
+                $rel_item_model = new \App\Models\MembershipFormazioneVideosModel();
             } else if ($rel_item_type != '') {
                 $classNameSpace = "App\Models\\$rel_item_type";
                 if (class_exists($classNameSpace)) {
@@ -483,6 +487,8 @@ class CmsApi extends MasterLc
                 $rel_item_model = new \App\Models\CorsiLezioniModel();
             } else if ($rel_item_type == 'videolezione') {
                 $rel_item_model = new \App\Models\CorsiVideoLezioniModel();
+            } else if ($rel_item_type == 'membership_formazione_video') {
+                $rel_item_model = new \App\Models\MembershipFormazioneVideosModel();
             } else if ($rel_item_type != '') {
                 $classNameSpace = "App\Models\\$rel_item_type";
                 if (class_exists($classNameSpace)) {
